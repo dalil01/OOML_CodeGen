@@ -1,6 +1,6 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.ClassScope;
+import com.ooml_codegen.models.enums.ClassAccessModifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +9,15 @@ public class Class {
 
 	private final String name;
 	private final Package cPackage;
-	private final ClassScope scope;
+	private final ClassAccessModifier accessModifier;
 	private final List<Attribute> attributes = new ArrayList<>();
 	private final List<Constructor> constructors = new ArrayList<>();
 	private final List<Method> methods = new ArrayList<>();
 
-	public Class(String name, Package cPackage, ClassScope scope) {
+	public Class(String name, Package cPackage, ClassAccessModifier accessModifier) {
 		this.name = name;
 		this.cPackage = cPackage;
-		this.scope = scope;
+		this.accessModifier = accessModifier;
 	}
 
 	public String getName() {
@@ -28,8 +28,8 @@ public class Class {
 		return this.cPackage;
 	}
 
-	public ClassScope getScope() {
-		return this.scope;
+	public ClassAccessModifier getAccessModifier() {
+		return this.accessModifier;
 	}
 
 	public boolean addAttribute(Attribute attribute) {

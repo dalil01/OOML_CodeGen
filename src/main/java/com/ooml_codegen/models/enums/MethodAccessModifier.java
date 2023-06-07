@@ -1,13 +1,14 @@
 package com.ooml_codegen.models.enums;
 
-public enum ClassScope {
+public enum MethodAccessModifier {
 
 	PUBLIC('+'),
-	PRIVATE('-');
+	PRIVATE('-'),
+	PROTECTED('#');
 
 	private final char value;
 
-	ClassScope(char value) {
+	MethodAccessModifier(char value) {
 		this.value = value;
 	}
 

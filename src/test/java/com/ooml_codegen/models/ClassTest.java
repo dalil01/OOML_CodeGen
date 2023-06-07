@@ -1,8 +1,9 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.ClassScope;
-import com.ooml_codegen.models.enums.ConstructorScope;
-import com.ooml_codegen.models.enums.MethodScope;
+import com.ooml_codegen.models.enums.AttributeAccessModifier;
+import com.ooml_codegen.models.enums.ClassAccessModifier;
+import com.ooml_codegen.models.enums.ConstructorAccessModifier;
+import com.ooml_codegen.models.enums.MethodAccessModifier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ public class ClassTest {
 
 	private final String expectedName = "Address";
 	private final Package expectedPackage = new Package("com.ooml_codegen.models");
-	private ClassScope expectedScope = ClassScope.PUBLIC;
+	private ClassAccessModifier expectedScope = ClassAccessModifier.PUBLIC;
 
 	private Class clazz;
 
@@ -24,7 +25,7 @@ public class ClassTest {
 	public void constructorTest() {
 		Assertions.assertEquals(this.expectedName, this.clazz.getName());
 		Assertions.assertEquals(this.expectedPackage, this.clazz.getPackage());
-		Assertions.assertEquals(this.expectedScope, this.clazz.getScope());
+		Assertions.assertEquals(this.expectedScope, this.clazz.getAccessModifier());
 	}
 
 	public void getNameTest() {
@@ -35,32 +36,34 @@ public class ClassTest {
 		Assertions.assertEquals(this.expectedPackage, clazz.getPackage());
 	}
 
-	public void getScopeTest() {
-		this.expectedScope = ClassScope.PRIVATE;
+	public void getAccessModifierTest() {
+		this.expectedScope = ClassAccessModifier.PRIVATE;
 		this.clazz = new Class(this.expectedName, this.expectedPackage, this.expectedScope);
 
-		Assertions.assertEquals(this.expectedScope, this.clazz.getScope());
+		Assertions.assertEquals(this.expectedScope, this.clazz.getAccessModifier());
 	}
 
 	public void addAttributeTest() {
 		String expectedName = "Address";
+		AttributeAccessModifier accessModifier = AttributeAccessModifier.PRIVATE;
 		Package expectedPackage = new Package("com.ooml_codegen.models");
-		ClassScope expectedScope = ClassScope.PUBLIC;
+		ClassAccessModifier expectedScope = ClassAccessModifier.PUBLIC;
 
 		Class clazz = new Class(expectedName, expectedPackage, expectedScope);
 
-		Assertions.assertTrue(clazz.addAttribute(new Attribute("id", new Type("string"))));
+		Assertions.assertTrue(clazz.addAttribute(new Attribute("id" + 1, accessModifier, new Type("string"))));
 	}
 
 	public void getAttributesTest() {
 		String expectedName = "Address";
+		AttributeAccessModifier accessModifier = AttributeAccessModifier.PRIVATE;
 		Package expectedPackage = new Package("com.ooml_codegen.models");
-		ClassScope expectedScope = ClassScope.PUBLIC;
+		ClassAccessModifier expectedScope = ClassAccessModifier.PUBLIC;
 
 		Class clazz = new Class(expectedName, expectedPackage, expectedScope);
 
 		for (int i = 0; i < 3; i++) {
-			clazz.addAttribute(new Attribute("id" + i, new Type("string")));
+			clazz.addAttribute(new Attribute("id" + i, accessModifier, new Type("string")));
 		}
 
 		Assertions.assertNotNull(clazz.getAttributes());
@@ -71,22 +74,22 @@ public class ClassTest {
 	public void addConstructorTest() {
 		String expectedName = "Address";
 		Package expectedPackage = new Package("com.ooml_codegen.models");
-		ClassScope expectedScope = ClassScope.PUBLIC;
+		ClassAccessModifier expectedScope = ClassAccessModifier.PUBLIC;
 
 		Class clazz = new Class(expectedName, expectedPackage, expectedScope);
 
-		Assertions.assertTrue(clazz.addConstructor(new Constructor("id", ConstructorScope.PRIVATE)));
+		Assertions.assertTrue(clazz.addConstructor(new Constructor("id", ConstructorAccessModifier.PRIVATE)));
 	}
 
 	public void getConstructorsTest() {
 		String expectedName = "User";
 		Package expectedPackage = new Package("com.ooml_codegen.models");
-		ClassScope expectedScope = ClassScope.PRIVATE;
+		ClassAccessModifier expectedScope = ClassAccessModifier.PRIVATE;
 
 		Class clazz = new Class(expectedName, expectedPackage, expectedScope);
 
 		for (int i = 0; i < 3; i++) {
-			clazz.addConstructor(new Constructor("id" + i, ConstructorScope.PROTECTED));
+			clazz.addConstructor(new Constructor("id" + i, ConstructorAccessModifier.PROTECTED));
 		}
 
 		Assertions.assertNotNull(clazz.getConstructors());
@@ -97,22 +100,22 @@ public class ClassTest {
 	public void addMethodTest() {
 		String expectedName = "Person";
 		Package expectedPackage = new Package("com.ooml_codegen.models");
-		ClassScope expectedScope = ClassScope.PUBLIC;
+		ClassAccessModifier expectedScope = ClassAccessModifier.PUBLIC;
 
 		Class clazz = new Class(expectedName, expectedPackage, expectedScope);
 
-		Assertions.assertTrue(clazz.addMethod(new Method("id", MethodScope.PRIVATE, new Type("void"))));
+		Assertions.assertTrue(clazz.addMethod(new Method("id", MethodAccessModifier.PRIVATE, new Type("void"))));
 	}
 
 	public void getMethodsTest() {
 		String expectedName = "User";
 		Package expectedPackage = new Package("com.ooml_codegen.models");
-		ClassScope expectedScope = ClassScope.PRIVATE;
+		ClassAccessModifier expectedScope = ClassAccessModifier.PRIVATE;
 
 		Class clazz = new Class(expectedName, expectedPackage, expectedScope);
 
 		for (int i = 0; i < 3; i++) {
-			clazz.addMethod(new Method("id", MethodScope.PRIVATE, new Type("void")));
+			clazz.addMethod(new Method("id", MethodAccessModifier.PRIVATE, new Type("void")));
 		}
 
 		Assertions.assertNotNull(clazz.getMethods());

@@ -1,6 +1,6 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.ConstructorScope;
+import com.ooml_codegen.models.enums.ConstructorAccessModifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,20 +8,20 @@ import java.util.List;
 public class Constructor {
 
 	private final String name;
-	private final ConstructorScope scope;
+	private final ConstructorAccessModifier accessModifier;
 	private final List<Parameter> parameters = new ArrayList<>();
 
-	public Constructor(String name, ConstructorScope scope) {
+	public Constructor(String name, ConstructorAccessModifier accessModifier) {
 		this.name = name;
-		this.scope = scope;
+		this.accessModifier = accessModifier;
 	}
 
 	public String getName() {
 		return this.name;
 	}
 
-	public ConstructorScope getScope() {
-		return this.scope;
+	public ConstructorAccessModifier getAccessModifier() {
+		return this.accessModifier;
 	}
 
 	public List<Parameter> getParameters() {

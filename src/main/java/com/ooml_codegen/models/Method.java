@@ -1,6 +1,6 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.MethodScope;
+import com.ooml_codegen.models.enums.MethodAccessModifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +8,13 @@ import java.util.List;
 public class Method {
 
 	private final String name;
-	private final MethodScope scope;
+	private final MethodAccessModifier accessModifier;
 	private final List<Parameter> parameters = new ArrayList<>();
 	private final Type returnType;
 
-	public Method(String name, MethodScope scope, Type returnType) {
+	public Method(String name, MethodAccessModifier accessModifier, Type returnType) {
 		this.name = name;
-		this.scope = scope;
+		this.accessModifier = accessModifier;
 		this.returnType = returnType;
 	}
 
@@ -22,8 +22,8 @@ public class Method {
 		return this.name;
 	}
 
-	public MethodScope getScope() {
-		return this.scope;
+	public MethodAccessModifier getAccessModifier() {
+		return this.accessModifier;
 	}
 
 	public Type getReturnType() {

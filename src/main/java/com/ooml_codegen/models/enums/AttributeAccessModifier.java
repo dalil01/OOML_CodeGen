@@ -1,6 +1,6 @@
 package com.ooml_codegen.models.enums;
 
-public enum ConstructorScope {
+public enum AttributeAccessModifier {
 
 	PUBLIC('+'),
 	PRIVATE('-'),
@@ -8,7 +8,7 @@ public enum ConstructorScope {
 
 	private final char value;
 
-	ConstructorScope(char value) {
+	AttributeAccessModifier(char value) {
 		this.value = value;
 	}
 

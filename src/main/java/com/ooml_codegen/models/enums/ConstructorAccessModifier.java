@@ -1,6 +1,6 @@
 package com.ooml_codegen.models.enums;
 
-public enum MethodScope {
+public enum ConstructorAccessModifier {
 
 	PUBLIC('+'),
 	PRIVATE('-'),
@@ -8,7 +8,7 @@ public enum MethodScope {
 
 	private final char value;
 
-	MethodScope(char value) {
+	ConstructorAccessModifier(char value) {
 		this.value = value;
 	}
 
