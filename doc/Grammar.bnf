@@ -1,0 +1,151 @@
+; this is a comment
+; any line starting with ';' is a comment
+; rules are defined by a word and an '=' such as
+; "rule=..." where ... is the content of that rule
+; single quotes and double quotes signify the same thing, a string of case sensitive characters
+; a space serves as concatenation
+; ...? means the previous is present 0 or 1 times
+; ...* means the previous is present 0 or more times
+; ...+ means the previous is present 1 or more times
+; ...-... matches if it matches the previous and not the next, aka exclusion
+; [...] follows regular expression rules, [a-z] are all the characters from 'a' to 'z'
+; [^a-z] means all the characters except the ones from 'a' to 'z'
+; "" and '' matches the empty string
+
+
+
+
+
+class_id    = "class"
+interface_id= "interface"
+package_id  = "package"
+
+reserved    = class_id
+            | interface_id
+            | package_id
+
+; "- reserved" here signifies that a NAME cannot match the reserved rule
+NAME        = ([a-zA-Z_][a-zA-Z0-9_]*) - reserved
+
+SPACE       = " \t"
+
+EOF         = "\0"
+
+; EOL means anything ending a line
+EOL         = "\n"
+            | "\n\r"
+
+; this means we don’t care if left and right are separated
+; PAD is just a shorthand for PADDING
+PADDING     = (SPACE | EOL)*
+PAD         = PADDING
+
+; this means we need left and right to be separated
+; SEP is just a shorthand for SEPARATOR
+SEPARATOR   = (SPACE | EOL) PADDING
+SEP         = SEPARATOR
+
+Start       = PAD list PAD EOF
+
+list        = entry SEP list
+            | entry
+
+entry       = class
+            | interface
+            | reference
+            | package
+            | import
+            | comment
+
+
+comment     = "//" [^\n\r\0]*
+; TODO need to do /* comment */
+
+
+; FILE being any valid url (couldn't be bothered to do that one, pain in the a to specify properly)
+import      = "@" FILE
+
+
+
+; class are always public? no scope needed?
+class       = class_id SEP modifier_list NAME class_properties
+
+
+class_properties
+            = PAD "{" PAD class_prop_list "}"
+            | PAD ":" PAD class_prop_list
+
+class_prop_list
+            = class_prop SEP class_prop_list
+            | class_prop
+
+class_prop  = attribute_scoped
+            | method_scoped
+            | access_block
+            | comment
+
+; + for public
+; - for private
+; # for protected
+scope       = "+"
+            | "-"
+            | "#"
+
+
+access_block = scope PAD ':' PAD class_prop_block_list
+
+class_prop_block_list
+            = class_prop_block SEP class_prop_block_list
+            | class_prop_block
+
+class_prop_block
+            = attribute
+            | method
+            | comment
+
+; scope could be optional if we wanted to use the 'default' behaviour of java
+attribute_scoped
+            = scope attribute
+            | attribute
+
+attribute
+            = PAD modifier_list NAME PAD ":" PAD accessors PAD type
+
+modifier_list
+            = modifier SEP modifier_list
+            | modifier SEP
+            | ""
+
+modifier    = NAME
+
+accessors   = getter PAD setter
+            | getter
+            | setter PAD getter
+            | setter
+            | ""
+
+getter      = "-"
+
+setter      = "+"
+
+method_scoped
+            = scope method
+            | method
+
+method      = modifier_list NAME PAD "(" arguments PAD ")" PAD ":" PAD type
+
+arguments   = PAD modifier_list NAME PAD ":" PAD type SEP arguments
+            | PAD modifier_list NAME PAD ":" PAD type
+
+type        = NAME
+
+; TODO
+; interface
+; reference
+; package
+
+
+
+
+
+
