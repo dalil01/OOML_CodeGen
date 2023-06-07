@@ -32,12 +32,24 @@ public class Class {
 		return this.scope;
 	}
 
+	public boolean addAttribute(Attribute attribute) {
+		return this.attributes.add(attribute);
+	}
+
 	public List<Attribute> getAttributes() {
 		return this.attributes;
 	}
 
+	public boolean addConstructor(Constructor constructor) {
+		return this.constructors.add(constructor);
+	}
+
 	public List<Constructor> getConstructors() {
 		return this.constructors;
+	}
+
+	public boolean addMethod(Method method) {
+		return this.methods.add(method);
 	}
 
 	public List<Method> getMethods() {
