@@ -1,8 +1,7 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.Attribute;
-import com.ooml_codegen.models.Type;
 import com.ooml_codegen.models.enums.AttributeAccessModifier;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

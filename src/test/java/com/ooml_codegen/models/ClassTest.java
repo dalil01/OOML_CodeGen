@@ -4,6 +4,7 @@ import com.ooml_codegen.models.enums.AttributeAccessModifier;
 import com.ooml_codegen.models.enums.ClassAccessModifier;
 import com.ooml_codegen.models.enums.ConstructorAccessModifier;
 import com.ooml_codegen.models.enums.MethodAccessModifier;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

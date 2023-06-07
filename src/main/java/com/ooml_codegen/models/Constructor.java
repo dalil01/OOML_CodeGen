@@ -24,6 +24,10 @@ public class Constructor {
 		return this.accessModifier;
 	}
 
+	public boolean addParameter(Parameter parameter) {
+		return this.parameters.add(parameter);
+	}
+
 	public List<Parameter> getParameters() {
 		return this.parameters;
 	}

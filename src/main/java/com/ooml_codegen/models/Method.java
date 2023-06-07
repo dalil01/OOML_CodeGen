@@ -9,8 +9,8 @@ public class Method {
 
 	private final String name;
 	private final MethodAccessModifier accessModifier;
-	private final List<Parameter> parameters = new ArrayList<>();
 	private final Type returnType;
+	private final List<Parameter> parameters = new ArrayList<>();
 
 	public Method(String name, MethodAccessModifier accessModifier, Type returnType) {
 		this.name = name;
@@ -28,6 +28,10 @@ public class Method {
 
 	public Type getReturnType() {
 		return this.returnType;
+	}
+
+	public boolean addParameter(Parameter parameter) {
+		return this.parameters.add(parameter);
 	}
 
 	public List<Parameter> getParameters() {
