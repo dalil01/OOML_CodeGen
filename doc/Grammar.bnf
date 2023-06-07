@@ -35,16 +35,18 @@ EOF         = "\0"
 EOL         = "\n"
             | "\n\r"
 
-; this means we don’t care if left and right are separated
+; we don’t care if left and right are separated
 ; PAD is just a shorthand for PADDING
 PADDING     = (SPACE | EOL)*
 PAD         = PADDING
 
-; this means we need left and right to be separated
+; we need left and right to be separated
 ; SEP is just a shorthand for SEPARATOR
 SEPARATOR   = (SPACE | EOL) PADDING
 SEP         = SEPARATOR
 
+
+; Starting rule
 Start       = PAD list PAD EOF
 
 list        = entry SEP list
@@ -57,9 +59,10 @@ entry       = class
             | import
             | comment
 
-
+; in truth, comments might be removed from the source file before lexing
 comment     = "//" [^\n\r\0]*
-; TODO need to do /* comment */
+; multiline comments
+            | "/*" ([^\0] - "*/")*
 
 
 ; FILE being any valid url (couldn't be bothered to do that one, pain in the a to specify properly)
@@ -79,20 +82,21 @@ class_prop_list
             = class_prop SEP class_prop_list
             | class_prop
 
-class_prop  = attribute_scoped
-            | method_scoped
+class_prop  = attribute_with_access
+            | method_with_access
             | access_block
             | comment
 
 ; + for public
 ; - for private
 ; # for protected
-scope       = "+"
+access_modifier
+            = "+"
             | "-"
             | "#"
 
 
-access_block = scope PAD ':' PAD class_prop_block_list
+access_block = access_modifier PAD ':' PAD class_prop_block_list
 
 class_prop_block_list
             = class_prop_block SEP class_prop_block_list
@@ -104,8 +108,8 @@ class_prop_block
             | comment
 
 ; scope could be optional if we wanted to use the 'default' behaviour of java
-attribute_scoped
-            = scope attribute
+attribute_with_access
+            = access_modifier attribute
             | attribute
 
 attribute
@@ -128,13 +132,14 @@ getter      = "-"
 
 setter      = "+"
 
-method_scoped
-            = scope method
+method_with_access
+            = access_modifier method
             | method
 
-method      = modifier_list NAME PAD "(" arguments PAD ")" PAD ":" PAD type
+method      = modifier_list NAME PAD "(" argument_list PAD ")" PAD ":" PAD type
 
-arguments   = PAD modifier_list NAME PAD ":" PAD type SEP arguments
+argument_list
+            = PAD modifier_list NAME PAD ":" PAD type SEP argument_list
             | PAD modifier_list NAME PAD ":" PAD type
 
 type        = NAME
@@ -143,9 +148,4 @@ type        = NAME
 ; interface
 ; reference
 ; package
-
-
-
-
-
-
+; class constructor
