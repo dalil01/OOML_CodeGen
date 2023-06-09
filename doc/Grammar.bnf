@@ -46,11 +46,13 @@ INTERFACE_ID= "interface"
 PACKAGE_ID  = "package"
 INHERITANCE_ID
             = "->"
+ENUM_ID     = "enum"
 
 RESERVED    = CLASS_ID
             | INTERFACE_ID
             | PACKAGE_ID
             | INHERITANCE_ID
+            | ENUM_ID
 
 // "- reserved" here signifies that a NAME cannot match the 'reserved' rule
 NAME        = ([a-zA-Z_][a-zA-Z0-9_.]*) - RESERVED
@@ -65,26 +67,13 @@ EOL         = "\n"
 
 // We do not care if left and right are separated
 // PAD is just a shorthand for PADDING
-PADDING     = (SPACE | EOL)*
+PADDING     = (SPACE | EOL)* comment (SPACE | EOL)*
 PAD         = PADDING
 
 // We need left and right to be separated
 // SEP is just a shorthand for SEPARATOR
 SEPARATOR   = (SPACE | EOL) PADDING
 SEP         = SEPARATOR
-
-
-// Starting rule
-Start       = PAD list PAD EOF
-
-list        = entry SEP list
-            | entry
-
-entry       = class
-            | interface
-            | package
-            | import
-            | comment
 
 /* Comments might be removed from the source file before the tokenizer,
    it will depend on the implementation we choose.
@@ -95,6 +84,17 @@ comment     = "//" [^\n\r\0]*
 // Multiline comments
             | "/*" ([^\0] - "*/")*
 
+// Starting rule
+Start       = PAD list PAD EOF
+
+list        = entry SEP list
+            | entry
+
+entry       = class
+            | enum
+            | interface
+            | package
+            | import
 
 // FILE being any valid url
 // (couldn't be bothered to do that one, pain in the a to specify properly)
@@ -107,11 +107,10 @@ import      = "@" FILE
    implemented yet. This might change anyway when we try to implement more
    languages.
 */
-class       = CLASS_ID SEP modifier_list NAME inheritance class_properties
+class       = restricted_access_modifier CLASS_ID SEP modifier_list NAME inheritance class_model
 
 
-class_properties
-            = PAD "{" PAD class_prop_list "}"
+class_model = PAD "{" PAD class_prop_list "}"
             | PAD ":" PAD class_prop_list
 
 class_prop_list
@@ -122,7 +121,10 @@ class_prop  = attribute_with_access
             | method_with_access
             | constructor_with_access
             | access_block
-            | comment
+
+restricted_access_modifier
+            = "+"
+            | ""
 
 /* + for public
    - for private
@@ -145,7 +147,6 @@ class_prop_block
             = attribute
             | method
             | constructor
-            | comment
 
 // The access modifier can be optional if we want to use the 'default'
 // behaviour of java.
@@ -190,9 +191,9 @@ constructor_with_access
 
 constructor = NAME PAD "(" argument_list PAD ")"
 
-interface   = INTERFACE_ID SEP modifier_list NAME inheritance interface_properties
+interface   = restricted_access_modifier INTERFACE_ID SEP modifier_list NAME inheritance interface_model
 
-interface_properties
+interface_model
             = PAD "{" PAD interface_prop_list "}"
             | PAD ":" PAD interface_prop_list
 
@@ -204,7 +205,6 @@ interface_prop
             = attribute_with_access
             | method_with_access
             | interface_access_block
-            | comment
 
 interface_access_block
             = access_modifier PAD ":" PAD interface_prop_block_list
@@ -216,7 +216,6 @@ interface_prop_block_list
 interface_prop_block
             = attribute
             | method
-            | comment
 
 // This might need some polishing later.
 package     = PACKAGE_ID SEP NAME
@@ -226,6 +225,20 @@ inheritance = PAD INHERITANCE_ID inheritance_list
 inheritance_list
             = PAD NAME
             | PAD NAME PAD ',' inheritance_list
+
+enum        = restricted_access_modifier ENUM_ID SEP NAME PAD enum_model
+
+enum_model  = SEP ":" PAD enum_value_list
+            | SEP "{" PAD enum_value_list PAD "}"
+
+enum_value_list
+            = PAD enum_key PAD "," enum_value_list
+            | PAD enum_key
+
+
+enum_key    = NAME
+            | NAME PAD "=" PAD NAME
+
 
 // TODO
 // reference -> inheritance done, other relationship in later PR
