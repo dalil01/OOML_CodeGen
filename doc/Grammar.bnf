@@ -43,10 +43,13 @@
 CLASS_ID    = "class"
 INTERFACE_ID= "interface"
 PACKAGE_ID  = "package"
+INHERITANCE_ID
+            = "->"
 
-RESERVED    = class_id
-            | interface_id
-            | package_id
+RESERVED    = CLASS_ID
+            | INTERFACE_ID
+            | PACKAGE_ID
+            | INHERITANCE_ID
 
 ; "- reserved" here signifies that a NAME cannot match the reserved rule
 NAME        = ([a-zA-Z_][a-zA-Z0-9_.]*) - RESERVED
@@ -78,7 +81,6 @@ list        = entry SEP list
 
 entry       = class
             | interface
-            | reference
             | package
             | import
             | comment
@@ -95,7 +97,7 @@ import      = "@" FILE
 
 
 ; class are always public? no scope needed?
-class       = CLASS_ID SEP modifier_list NAME class_properties
+class       = CLASS_ID SEP modifier_list NAME inheritance class_properties
 
 
 class_properties
@@ -176,7 +178,7 @@ constructor_with_access
 
 constructor = NAME PAD "(" argument_list PAD ")"
 
-interface   = INTERFACE_ID SEP modifier_list NAME interface_properties
+interface   = INTERFACE_ID SEP modifier_list NAME inheritance interface_properties
 
 interface_properties
             = PAD "{" PAD interface_prop_list "}"
@@ -206,5 +208,12 @@ interface_prop_block
 
 package     = PACKAGE_ID SEP NAME
 
+
+inheritance = PAD INHERITANCE_ID inheritance_list
+
+inheritance_list
+            = PAD NAME
+            | PAD NAME PAD ',' inheritance_list
+
 ; TODO
-; reference
+; reference -> inheritance done, other relationship in later PR
