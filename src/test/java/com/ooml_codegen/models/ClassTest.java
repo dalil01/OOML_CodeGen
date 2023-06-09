@@ -1,9 +1,9 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.AttributeAccessModifier;
-import com.ooml_codegen.models.enums.ClassAccessModifier;
-import com.ooml_codegen.models.enums.ConstructorAccessModifier;
-import com.ooml_codegen.models.enums.MethodAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.ConstructorAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,20 +13,20 @@ public class ClassTest {
 
 	private final String expectedName = "Address";
 	private final Package expectedPackage = new Package("com.ooml_codegen.models");
-	private ClassAccessModifier expectedScope = ClassAccessModifier.PUBLIC;
+	private ClassAccessModifier accessModifier = ClassAccessModifier.PUBLIC;
 
 	private Class clazz;
 
 	@BeforeEach
 	public void setup() {
-		this.clazz = new Class(this.expectedName, this.expectedPackage, this.expectedScope);
+		this.clazz = new Class(this.expectedName, this.expectedPackage, this.accessModifier);
 	}
 
 	@Test
 	public void constructorTest() {
 		Assertions.assertEquals(this.expectedName, this.clazz.getName());
 		Assertions.assertEquals(this.expectedPackage, this.clazz.getPackage());
-		Assertions.assertEquals(this.expectedScope, this.clazz.getAccessModifier());
+		Assertions.assertEquals(this.accessModifier, this.clazz.getAccessModifier());
 	}
 
 	public void getNameTest() {
@@ -38,10 +38,10 @@ public class ClassTest {
 	}
 
 	public void getAccessModifierTest() {
-		this.expectedScope = ClassAccessModifier.PRIVATE;
-		this.clazz = new Class(this.expectedName, this.expectedPackage, this.expectedScope);
+		this.accessModifier = ClassAccessModifier.PRIVATE;
+		this.clazz = new Class(this.expectedName, this.expectedPackage, this.accessModifier);
 
-		Assertions.assertEquals(this.expectedScope, this.clazz.getAccessModifier());
+		Assertions.assertEquals(this.accessModifier, this.clazz.getAccessModifier());
 	}
 
 	public void addAttributeTest() {

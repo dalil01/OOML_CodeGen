@@ -1,6 +1,6 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.AttributeAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
 
 public class Attribute {
 

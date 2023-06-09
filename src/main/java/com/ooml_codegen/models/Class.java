@@ -1,6 +1,6 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.ClassAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 
 import java.util.ArrayList;
 import java.util.List;

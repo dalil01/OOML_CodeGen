@@ -1,4 +1,4 @@
-package com.ooml_codegen.models.enums;
+package com.ooml_codegen.models.enums.modifiers.access;
 
 public enum ClassAccessModifier {
 

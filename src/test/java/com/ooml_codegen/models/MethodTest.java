@@ -1,6 +1,6 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.MethodAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
