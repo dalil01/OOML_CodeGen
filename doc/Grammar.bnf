@@ -95,7 +95,7 @@ import      = "@" FILE
 
 
 ; class are always public? no scope needed?
-class       = class_id SEP modifier_list NAME class_properties
+class       = CLASS_ID SEP modifier_list NAME class_properties
 
 
 class_properties
@@ -121,7 +121,8 @@ access_modifier
             | "#"
 
 
-access_block = access_modifier PAD ':' PAD class_prop_block_list
+class_access_block
+            = access_modifier PAD ":" PAD class_prop_block_list
 
 class_prop_block_list
             = class_prop_block SEP class_prop_block_list
@@ -176,7 +177,34 @@ constructor_with_access
 
 constructor = NAME PAD "(" argument_list PAD ")"
 
+interface   = INTERFACE_ID SEP modifier_list NAME interface_properties
+
+interface_properties
+            = PAD "{" PAD interface_prop_list "}"
+            | PAD ":" PAD interface_prop_list
+
+interface_prop_list
+            = interface_prop SEP interface_prop_list
+            | interface_prop
+
+interface_prop
+            = attribute_with_access
+            | method_with_access
+            | interface_access_block
+            | comment
+
+interface_access_block
+            = access_modifier PAD ":" PAD interface_prop_block_list
+
+interface_prop_block_list
+            = interface_prop_block SEP interface_prop_block_list
+            | interface_prop_block
+
+interface_prop_block
+            = attribute
+            | method
+            | comment
+
 ; TODO
-; interface
 ; reference
 ; package
