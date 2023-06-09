@@ -35,10 +35,10 @@
 ;   [...] following POSIX extended regular expression rules in the manual grep(1)
 
 
-; a rule in CAPS is one that will be abstracted by the tokenizer
-; they are mostly here as a referece to make sure to follow the language specifications
-; in particular, PADDING and SEPARATOR will be removed from the token listing
-; and only serve to differenciate tokens for the tokenizer
+; A rule in CAPS is one that will be abstracted by the tokenizer.
+; They are mostly here as a referece to make sure we follow the language specifications.
+; In particular, PADDING and SEPARATOR will be removed from the token listing
+; and only serve to differenciate tokens for the tokenizer.
 
 CLASS_ID    = "class"
 INTERFACE_ID= "interface"
@@ -51,7 +51,7 @@ RESERVED    = CLASS_ID
             | PACKAGE_ID
             | INHERITANCE_ID
 
-; "- reserved" here signifies that a NAME cannot match the reserved rule
+; "- reserved" here signifies that a NAME cannot match the 'reserved' rule
 NAME        = ([a-zA-Z_][a-zA-Z0-9_.]*) - RESERVED
 
 SPACE       = [ \t]
@@ -62,12 +62,12 @@ EOF         = "\0"
 EOL         = "\n"
             | "\n\r"
 
-; we don’t care if left and right are separated
+; We do not care if left and right are separated
 ; PAD is just a shorthand for PADDING
 PADDING     = (SPACE | EOL)*
 PAD         = PADDING
 
-; we need left and right to be separated
+; We need left and right to be separated
 ; SEP is just a shorthand for SEPARATOR
 SEPARATOR   = (SPACE | EOL) PADDING
 SEP         = SEPARATOR
@@ -85,18 +85,25 @@ entry       = class
             | import
             | comment
 
-; in truth, comments might be removed from the source file before lexing
+; Comments might be removed from the source file before the tokenizer,
+; it will depend on the implementation we choose.
+; This would allow them to be more flexible compare to the rather limited
+; placement we have here.
 comment     = "//" [^\n\r\0]*
-; multiline comments
+; Multiline comments
             | "/*" ([^\0] - "*/")*
 
 
-; FILE being any valid url (couldn't be bothered to do that one, pain in the a to specify properly)
+; FILE being any valid url
+; (couldn't be bothered to do that one, pain in the a to specify properly)
 import      = "@" FILE
 
 
 
-; class are always public? no scope needed?
+; Classes are always public? in java at least, so no access modifiers needed.
+; This only holds for toplevel classes, but sub-classes have not been
+; implemented yet. This might change anyway when we try to implement more
+; languages.
 class       = CLASS_ID SEP modifier_list NAME inheritance class_properties
 
 
@@ -136,7 +143,8 @@ class_prop_block
             | constructor
             | comment
 
-; scope could be optional if we wanted to use the 'default' behaviour of java
+; The access modifier can be optional if we want to use the 'default'
+; behaviour of java.
 attribute_with_access
             = access_modifier attribute
             | attribute
@@ -206,8 +214,8 @@ interface_prop_block
             | method
             | comment
 
+; This might need some polishing later.
 package     = PACKAGE_ID SEP NAME
-
 
 inheritance = PAD INHERITANCE_ID inheritance_list
 
