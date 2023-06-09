@@ -1,33 +1,57 @@
-; this is a comment
-; any line starting with ';' is a comment
-; rules are defined by a word and an '=' such as
-; "rule=..." where ... is the content of that rule
-; single quotes and double quotes signify the same thing, a string of case sensitive characters
-; a space serves as concatenation
-; ...? means the previous is present 0 or 1 times
-; ...* means the previous is present 0 or more times
-; ...+ means the previous is present 1 or more times
-; ...-... matches if it matches the previous and not the next, aka exclusion
-; [...] follows regular expression rules, [a-z] are all the characters from 'a' to 'z'
-; [^a-z] means all the characters except the ones from 'a' to 'z'
-; "" and '' matches the empty string
+;   Rule:
+;   rule=...
+;
+;   Non-Terminal:
+;   "..." or '...'
+;
+;   Terminal:
+;   ...
+;
+;   Concat:
+;   ... ...
+;
+;   Choice:
+;   ...|...
+;
+;   Optional:
+;   ...?
+;
+;   0 or more:
+;   ...*
+;
+:   1 or more:
+;   ...+
+;
+;   Grouping:
+;   (...)
+;
+;   Exclusion:
+;   ...-...
+;
+;   Comment:
+;   ;...
+;
+;   Character Set:
+;   [...] following POSIX extended regular expression rules in the manual grep(1)
 
 
+; a rule in CAPS is one that will be abstracted by the tokenizer
+; they are mostly here as a referece to make sure to follow the language specifications
+; in particular, PADDING and SEPARATOR will be removed from the token listing
+; and only serve to differenciate tokens for the tokenizer
 
+CLASS_ID    = "class"
+INTERFACE_ID= "interface"
+PACKAGE_ID  = "package"
 
-
-class_id    = "class"
-interface_id= "interface"
-package_id  = "package"
-
-reserved    = class_id
+RESERVED    = class_id
             | interface_id
             | package_id
 
 ; "- reserved" here signifies that a NAME cannot match the reserved rule
-NAME        = ([a-zA-Z_][a-zA-Z0-9_]*) - reserved
+NAME        = ([a-zA-Z_][a-zA-Z0-9_]*) - RESERVED
 
-SPACE       = " \t"
+SPACE       = [ \t]
 
 EOF         = "\0"
 
@@ -84,6 +108,7 @@ class_prop_list
 
 class_prop  = attribute_with_access
             | method_with_access
+            | constructor_with_access
             | access_block
             | comment
 
@@ -105,6 +130,7 @@ class_prop_block_list
 class_prop_block
             = attribute
             | method
+            | constructor
             | comment
 
 ; scope could be optional if we wanted to use the 'default' behaviour of java
@@ -144,8 +170,13 @@ argument_list
 
 type        = NAME
 
+constructor_with_access
+            = access_modifier constructor
+            | constructor
+
+constructor = NAME PAD "(" argument_list PAD ")"
+
 ; TODO
 ; interface
 ; reference
 ; package
-; class constructor
