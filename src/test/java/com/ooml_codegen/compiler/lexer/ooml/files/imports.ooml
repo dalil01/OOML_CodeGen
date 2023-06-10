@@ -1,3 +1,10 @@
-@models.ooml
-@controllers.ooml
-@services.ooml
+@main.ooml
+		@../models/models.ooml
+@../../controller/controllers.ooml/
+@All @Services.ooml
+ 	@config.ooml
+@/
+@dir./*
+@babla.txt
+@@@@@@@babla
+@
