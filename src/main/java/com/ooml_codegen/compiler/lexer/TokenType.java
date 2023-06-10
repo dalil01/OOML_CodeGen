@@ -13,6 +13,4 @@ public enum TokenType {
     COLON,
     EQUAL,
     EOF
-
-
 }
