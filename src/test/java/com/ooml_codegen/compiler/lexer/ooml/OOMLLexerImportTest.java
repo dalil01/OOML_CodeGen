@@ -16,8 +16,11 @@ public class OOMLLexerImportTest extends OOMLLexerTest {
 	public void importsTest() throws FileNotFoundException {
 		this.lexer.tokenize().forEach(token -> {
 			int currentLine = this.index.getAndIncrement();
+			System.out.println(token.toString());
 
-			Assertions.assertEquals(TokenType.IMPORT, token.type());
+			if (token.type() != TokenType.EOF) {
+				Assertions.assertEquals(TokenType.IMPORT, token.type());
+			}
 
 			if (currentLine == 1) {
 				Assertions.assertEquals("main.ooml", token.value());
