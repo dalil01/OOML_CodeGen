@@ -12,6 +12,9 @@ import java.util.stream.Stream;
 
 public class OOMLLexer extends Lexer {
 
+	private TokenType type = null;
+	private String value = null;
+
 	private String restOfLastLine = "";
 
 	public OOMLLexer(String filePath) {
@@ -32,8 +35,8 @@ public class OOMLLexer extends Lexer {
 	}
 
 	private Token nextToken() {
-		TokenType type = null;
-		String value = null;
+		this.type = null;
+		this.value = null;
 
 		while (!this.restOfLastLine.equals("") || this.scanner.hasNextLine()) {
 			System.out.println(this.restOfLastLine);
@@ -50,23 +53,14 @@ public class OOMLLexer extends Lexer {
 				key.append(currentChar);
 
 				if (key.toString().startsWith(OOMLKey.MULTI_LINE_COMMENT_START.getValue())) {
-					if (!StringUtils.contains(line, OOMLKey.MULTI_LINE_COMMENT_END.getValue())) {
-						this.restOfLastLine = line + "\n";
-						break;
-					}
-
-					type = TokenType.MULTI_LINE_COMMENT;
-					value = StringUtils.substringBetween(line, OOMLKey.MULTI_LINE_COMMENT_START.getValue(), OOMLKey.MULTI_LINE_COMMENT_END.getValue());
-
-					this.restOfLastLine = StringUtils.substringAfter(line, value + OOMLKey.MULTI_LINE_COMMENT_START.getValue());
-				} else if (key.toString().startsWith(OOMLKey.SINGLE_LINE_COMMENT.getValue())) {
-					type = TokenType.SINGLE_LINE_COMMENT;
-					value = StringUtils.substringAfter(line, key.toString());
-					return new Token(type, value);
+					if (this.onMultiLineComment(line)) break;
+				}
+				else if (key.toString().startsWith(OOMLKey.SINGLE_LINE_COMMENT.getValue())) {
+					this.onSingleLineComment(line, key.toString());
 				}
 
-				if (type != null && value != null) {
-					return new Token(type, value);
+				if (this.type != null && this.value != null) {
+					return new Token(this.type, this.value);
 				}
 			}
 		}
@@ -77,6 +71,26 @@ public class OOMLLexer extends Lexer {
 		}
 
 		return new Token(TokenType.EOF, "");
+	}
+
+	private boolean onMultiLineComment(String line) {
+		boolean justBreakLoop = false;
+
+		if (!StringUtils.contains(line, OOMLKey.MULTI_LINE_COMMENT_END.getValue())) {
+			this.restOfLastLine = line + "\n";
+			return true;
+		}
+
+		this.type = TokenType.MULTI_LINE_COMMENT;
+		this.value = StringUtils.substringBetween(line, OOMLKey.MULTI_LINE_COMMENT_START.getValue(), OOMLKey.MULTI_LINE_COMMENT_END.getValue());
+		this.restOfLastLine = StringUtils.substringAfter(line, this.value + OOMLKey.MULTI_LINE_COMMENT_START.getValue());
+
+		return justBreakLoop;
+	}
+
+	private void onSingleLineComment(String line, String key) {
+		this.type = TokenType.SINGLE_LINE_COMMENT;
+		this.value = StringUtils.substringAfter(line, key);
 	}
 
 }

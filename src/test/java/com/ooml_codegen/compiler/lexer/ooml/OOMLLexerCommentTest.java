@@ -17,7 +17,6 @@ public class OOMLLexerCommentTest extends OOMLLexerTest {
     public void singleLineCommentTest() throws FileNotFoundException {
         this.lexer.tokenize().forEach(token -> {
             int currentLine = this.index.getAndIncrement();
-            System.out.println(token.toString());
 
             if (currentLine == 1) {
                 Assertions.assertEquals(TokenType.SINGLE_LINE_COMMENT, token.type());
