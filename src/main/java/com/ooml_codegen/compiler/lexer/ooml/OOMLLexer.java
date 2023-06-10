@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -27,7 +28,10 @@ public class OOMLLexer extends Lexer {
 			File file = new File(this.filePath);
 			this.scanner = new Scanner(file);
 
-			return Stream.generate(this::nextToken).takeWhile(Token -> Token.type() != TokenType.EOF);
+			Stream<Token> tokenStream = Stream.generate(this::nextToken).takeWhile(Objects::nonNull);
+			tokenStream = Stream.concat(tokenStream, Stream.of(new Token(TokenType.EOF, "")));
+
+			return tokenStream;
 		} catch (FileNotFoundException e) {
 			System.out.println("Lexer.tokenize: Error while opening file " + filePath + " ; " + e.getMessage());
 			throw e;
@@ -74,7 +78,7 @@ public class OOMLLexer extends Lexer {
 			System.out.println("Scanner closed!");
 		}
 
-		return new Token(TokenType.EOF, "");
+		return null;
 	}
 
 	private boolean onMultiLineComment(String line) {
