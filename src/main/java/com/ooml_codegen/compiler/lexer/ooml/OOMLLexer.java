@@ -52,11 +52,15 @@ public class OOMLLexer extends Lexer {
 
 				key.append(currentChar);
 
-				if (key.toString().startsWith(OOMLKey.MULTI_LINE_COMMENT_START.getValue())) {
+				String k = key.toString();
+				if (k.startsWith(OOMLKey.MULTI_LINE_COMMENT_START.getValue())) {
 					if (this.onMultiLineComment(line)) break;
 				}
-				else if (key.toString().startsWith(OOMLKey.SINGLE_LINE_COMMENT.getValue())) {
-					this.onSingleLineComment(line, key.toString());
+				else if (k.startsWith(OOMLKey.SINGLE_LINE_COMMENT.getValue())) {
+					this.onSingleLineComment(line, k);
+				}
+				else if (k.startsWith(OOMLKey.IMPORT.getValue())) {
+					this.onImport(line, k);
 				}
 
 				if (this.type != null && this.value != null) {
@@ -91,6 +95,11 @@ public class OOMLLexer extends Lexer {
 	private void onSingleLineComment(String line, String key) {
 		this.type = TokenType.SINGLE_LINE_COMMENT;
 		this.value = StringUtils.substringAfter(line, key);
+	}
+
+	private void onImport(String line, String key) {
+		this.type = TokenType.IMPORT;
+		this.value = StringUtils.substringAfter(line, key).trim();
 	}
 
 }

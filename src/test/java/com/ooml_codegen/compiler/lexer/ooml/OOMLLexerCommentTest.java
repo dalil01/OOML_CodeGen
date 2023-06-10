@@ -22,13 +22,11 @@ public class OOMLLexerCommentTest extends OOMLLexerTest {
                 Assertions.assertEquals(TokenType.SINGLE_LINE_COMMENT, token.type());
                 Assertions.assertEquals(" Hello World!", token.value());
             }
-
-            if (currentLine == 2) {
+            else if (currentLine == 2) {
                 Assertions.assertEquals(TokenType.SINGLE_LINE_COMMENT, token.type());
                 Assertions.assertEquals(" Lorem ipsum /*", token.value());
             }
-
-            if (currentLine == 3) {
+            else if (currentLine == 3) {
                 Assertions.assertEquals(token.type(), TokenType.SINGLE_LINE_COMMENT);
                 Assertions.assertEquals("    Test // Test", token.value());
             }
@@ -39,7 +37,6 @@ public class OOMLLexerCommentTest extends OOMLLexerTest {
     public void multiLineCommentTest() throws FileNotFoundException {
         this.lexer.tokenize().forEach(token -> {
             int currentLine = this.index.getAndIncrement();
-            System.out.println(token.toString());
 
             if (currentLine == 4) {
                 Assertions.assertEquals(TokenType.MULTI_LINE_COMMENT, token.type());
@@ -55,13 +52,11 @@ public class OOMLLexerCommentTest extends OOMLLexerTest {
                         "\t/* Hi ! /\n" +
                         "\t", token.value());
             }
-
-            if (currentLine == 6) {
+            else if (currentLine == 6) {
                 Assertions.assertEquals(token.type(), TokenType.MULTI_LINE_COMMENT);
                 Assertions.assertEquals(" OOML!!!    + - / * > # { }  :  ", token.value());
             }
-
-            if (currentLine == 7) {
+            else if (currentLine == 7) {
                 Assertions.assertEquals(token.type(), TokenType.MULTI_LINE_COMMENT);
                 Assertions.assertEquals(" Lorem\n" +
                         "Ipsum\n" +
