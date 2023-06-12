@@ -1,6 +1,7 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
 import com.ooml_codegen.compiler.lexer.*;
+import org.apache.commons.lang.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ public class OOMLLexerCommentTest extends OOMLLexerTest {
         this.lexer.tokenize().forEach(token -> {
             int currentLine = this.index.getAndIncrement();
 
-            //System.out.println(token.toString());
+            System.out.println(token.toString());
 
             if (List.of(1, 2, 3).contains(currentLine)) {
                 Assertions.assertEquals(TokenType.SINGLE_LINE_COMMENT, token.type());
@@ -61,12 +62,15 @@ public class OOMLLexerCommentTest extends OOMLLexerTest {
                 Assertions.assertEquals(" OOML!!!    + - / * > # { }  :  ", token.value());
             }
             else if (currentLine == 7) {
+                //System.out.println(StringUtils.replace(token.value(), "\n", "$"));
+
                 Assertions.assertEquals(token.type(), TokenType.MULTI_LINE_COMMENT);
                 Assertions.assertEquals(" Lorem\n" +
                         "Ipsum\n" +
                         "// 1\n" +
                         "// 2\n" +
                         "// 3\n" +
+                        "\n" +
                         "\n" +
                         "\n" +
                         "\n", token.value());
