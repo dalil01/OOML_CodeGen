@@ -62,7 +62,7 @@ SPACE       = [ \t]
 EOF         = "\0"
 
 // EOL means anything ending a line
-EOL         = "\n"
+EOL         = [\n\r\u2028\u2029\u0085]
             | "\n\r"
 
 // We do not care if left and right are separated
@@ -80,7 +80,7 @@ SEP         = SEPARATOR
    This would allow them to be more flexible compare to the rather limited
    placement we have here.
 */
-comment     = "//" [^\n\r\0]*
+comment     = "//" [^\n\r\u2028\u2029\u0085\0]*
 // Multiline comments
             | "/*" ([^\0] - "*/")*
 
