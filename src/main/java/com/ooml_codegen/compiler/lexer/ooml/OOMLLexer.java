@@ -20,10 +20,10 @@ public class OOMLLexer extends Lexer {
 
 	private String restOfLastLine = "";
 
-	private final Pattern patternSingleLineComment = Pattern.compile("//(.*)");
-	private final Pattern patternSingleLineCommentWithSpaceBefore = Pattern.compile("\\s+//(.*)");
+	private final Pattern patternSingleLineComment = Pattern.compile("//[^\n\r]*");
+	// comment     = "//" [^\n\r\0]*
 	private final Pattern patternMultiLineComment = Pattern.compile("/\\*");
-	private final Pattern patternMultiLineCommentWithSpaceBefore = Pattern.compile("\\s+/\\*");
+
 	private final Pattern patternImport = Pattern.compile("^@.*");
 
 	public OOMLLexer(String filePath) {
@@ -121,7 +121,7 @@ public class OOMLLexer extends Lexer {
 		StringBuilder comment = new StringBuilder();
 		comment.append(line);
 
-		boolean commentEnded = line.trim().contains(OOMLKey.MULTI_LINE_COMMENT_END.getValue());
+		boolean commentEnded = line.contains(OOMLKey.MULTI_LINE_COMMENT_END.getValue());
 		while (!commentEnded && this.scanner.hasNextLine()) {
 			line = this.scanner.nextLine();
 			comment.append("\n").append(line);
@@ -129,13 +129,18 @@ public class OOMLLexer extends Lexer {
 			commentEnded = line.contains(OOMLKey.MULTI_LINE_COMMENT_END.getValue());
 		}
 
+		this.type = TokenType.MULTI_LINE_COMMENT;
 		if (commentEnded) {
-			this.type = TokenType.MULTI_LINE_COMMENT;
 			this.value = StringUtils.substringBetween(comment.toString(), OOMLKey.MULTI_LINE_COMMENT_START.getValue(), OOMLKey.MULTI_LINE_COMMENT_END.getValue());
 			this.restOfLastLine = StringUtils.substringAfter(comment.toString(), this.value + OOMLKey.MULTI_LINE_COMMENT_END.getValue());
 		} else {
-			// TODO : Manage when multi-line comment not completed
-			this.restOfLastLine = comment.toString();
+			if (line.isEmpty()) {
+				comment.append('\n');
+			}
+
+			//System.out.println(StringUtils.replace(comment.toString(), "\n", "$"));
+			this.value = StringUtils.substringAfter(comment.toString(), OOMLKey.MULTI_LINE_COMMENT_START.getValue());
+			this.restOfLastLine = "";
 		}
 	}
 
@@ -148,7 +153,7 @@ public class OOMLLexer extends Lexer {
 
 		if (importFound) {
 			this.type = TokenType.IMPORT;
-
+/*
 			Matcher matcherSingleLineComment = this.patternSingleLineCommentWithSpaceBefore.matcher(line);
 			Matcher matcherMultiLineComment = this.patternMultiLineCommentWithSpaceBefore.matcher(line);
 
@@ -176,7 +181,7 @@ public class OOMLLexer extends Lexer {
 				}
 			}
 
-			this.restOfLastLine = StringUtils.substringAfter(line, this.value) + "\n";
+			this.restOfLastLine = StringUtils.substringAfter(line, this.value) + "\n";*/
 		}
 
 		return importFound;
