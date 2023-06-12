@@ -1,0 +1,11 @@
+@main.ooml
+		@../models/models.ooml
+@../../controller/controllers.ooml/ // Comment
+@All @Services/
+ 	@config.ooml
+@/
+@dir. /*
+@babla.txt
+@@@@@@@babla
+@ */
+@@@@@@@babla2

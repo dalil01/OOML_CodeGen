@@ -6,7 +6,7 @@ public enum OOMLKey {
     MULTI_LINE_COMMENT_START("/*"),
     MULTI_LINE_COMMENT_END("*/"),
     IMPORT("@"),
-    EXT(".ooml"),
+    PACKAGE("package"),
     ;
 
     private final String value;
