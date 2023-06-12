@@ -5,8 +5,8 @@ import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -18,13 +18,42 @@ public class OOMLLexer extends Lexer {
 	private TokenType type = null;
 	private String value = null;
 
-	private String restOfLastLine = "";
+	private int currentChar = 0;
+	private boolean charInUse = false;
 
-	private final Pattern patternSingleLineComment = Pattern.compile("//[^\n\r]*");
-	// comment     = "//" [^\n\r\0]*
-	private final Pattern patternMultiLineComment = Pattern.compile("/\\*");
+	private int peek() {
+		if (!this.charInUse) {
 
-	private final Pattern patternImport = Pattern.compile("^@.*");
+			try {
+				this.currentChar = this.reader.read();
+				//System.out.println((char) this.currentChar);
+
+			} catch (IOException e) {
+				System.err.println(e.getLocalizedMessage());
+				this.currentChar = -1;
+			}
+			this.charInUse = true;
+		}
+		return this.currentChar;
+	}
+
+	private int read() {
+		if (this.charInUse) {
+			this.charInUse = false;
+			return this.currentChar;
+		}
+		try {
+			this.currentChar = this.reader.read();
+			//System.out.println((char) this.currentChar);
+
+		} catch (IOException e) {
+			System.out.println(e.getLocalizedMessage());
+			return -1;
+		}
+		this.charInUse = true;
+		return this.currentChar;
+	}
+
 
 	public OOMLLexer(String filePath) {
 		super(filePath);
@@ -34,7 +63,7 @@ public class OOMLLexer extends Lexer {
 		try {
 			// TODO : Check file extension, must be .ooml
 			File file = new File(this.filePath);
-			this.scanner = new Scanner(file);
+			this.reader = new BufferedReader(new FileReader(file));
 
 			Stream<Token> tokenStream = Stream.generate(this::nextToken).takeWhile(Objects::nonNull);
 			tokenStream = Stream.concat(tokenStream, Stream.of(new Token(TokenType.EOF, "")));
@@ -46,145 +75,150 @@ public class OOMLLexer extends Lexer {
 		}
 	}
 
+
+	private void consumePadding() {
+		while (peek() != -1 && OOMLKey.PAD.getValue().indexOf((char) peek()) != -1) {
+			read();
+		}
+	}
+
+	private Token generateCommentToken() {
+		if (peek() == '*')
+			return generateMultiLineCommentToken();
+		return generateSingleLineCommentToken();
+	}
+
+	private Token generateSingleLineCommentToken() {
+		read();
+		StringBuilder s = new StringBuilder();
+		while (peek() != -1 && OOMLKey.NEWLINE.getValue().indexOf((char) peek()) == -1){
+			s.append((char) read());
+		}
+		return new Token(TokenType.SINGLE_LINE_COMMENT, s.toString());
+	}
+
+	private Token generateMultiLineCommentToken() {
+		read();
+		StringBuilder s = new StringBuilder();
+		while (true) {
+			while (peek() != -1 && peek() != '*') {
+				s.append((char) read());
+			}
+			// if we reached EOF (no '*')
+			if (read() == -1){
+				break;
+			}
+
+			// someone added a '*' just before EOF
+			if (peek() == -1){
+				s.append('*');
+				break;
+			}
+
+			if (peek() == '/'){
+				read();
+				break;
+			}
+
+			s.append('*');
+
+		}
+		return new Token(TokenType.MULTI_LINE_COMMENT, s.toString());
+	}
+
+	private Token generateImportToken() {
+		return null;
+	}
+
+
+	private Token generateWordToken() {
+		return generateWordToken("");
+	}
+
+	// Need to implement proper Exception stuff
+	private Token generateQuotedWord(){
+		int quote = read();
+		StringBuilder s = new StringBuilder();
+		while (peek() != -1 && peek() != quote){
+			if (peek() == '\\'){
+				read();
+				if (peek() != quote && peek() != '\\'){
+					System.err.println("Character '" + (char) peek() + "' did not need to be escaped.");
+				}
+			}
+			s.append((char) read());
+		}
+		if (peek() == quote){
+			read();
+		} else {
+			System.err.println("Quote closed by end of file.");
+		}
+		return new Token(TokenType.WORD, s.toString());
+	}
+	private Token generateWordToken(String prefix){
+
+		StringBuilder s = new StringBuilder(prefix + (char) read());
+		while (peek() != -1 && OOMLKey.WORD_END.getValue().indexOf((char) peek()) == -1){
+			s.append((char) read());
+		}
+		return new Token(TokenType.WORD, s.toString());
+	}
+
+	// processingChar will still be at the last character, needs to be incremented
+	private Token generateToken() {
+		if (peek() == -1)
+			return null;
+		switch (peek()) {
+			case '/' -> {
+				read();
+				if (peek() == -1) {
+					return new Token(TokenType.WORD, "/");
+				}
+				if (peek() != '*' && peek() != '/'){
+					return generateWordToken("/");
+				}
+				return generateCommentToken();
+			}
+			case '@' -> {
+				return generateImportToken();
+			}
+			case ':' -> {
+				read();
+				return new Token(TokenType.COLON, null);
+			}
+			case '=' -> {
+				read();
+				return new Token(TokenType.EQUAL, null);
+			}
+			case '+', '#' -> {
+				return new Token(TokenType.SIGN, String.valueOf(read()));
+			}
+			case '-' -> {
+				read();
+				if (peek() == '>'){
+					//TODO Maybe add inherited stuff to this token
+					return new Token(TokenType.INHERITANCE, null);
+				}
+				return new Token(TokenType.SIGN, "-");
+			}
+			case '"', '\'', '`' -> {
+				return generateQuotedWord();
+			}
+			default -> {
+				return generateWordToken();
+			}
+		}
+	}
+
+
 	private Token nextToken() {
 		this.type = null;
 		this.value = null;
 
-		while (this.scanner.hasNextLine()) {
-			String line = this.scanner.nextLine();
+		// Consuming PADDING
+		consumePadding();
 
-			line = this.restOfLastLine + line;
-			this.restOfLastLine = "";
-
-			if (this.onImport(line)
-					|| this.onComment(line))
-			{
-				break;
-			}
-		}
-
-		if (this.type != null && this.value != null) {
-			return new Token(this.type, this.value);
-		}
-
-		if (this.scanner.hasNextLine()) {
-			this.nextToken();
-		}
-
-		if (!this.scanner.hasNextLine()) {
-			this.scanner.close();
-			System.out.println("Scanner closed!");
-		}
-
-		return null;
-	}
-
-	private boolean onComment(String line) {
-		Matcher matcherSingleLineComment = this.patternSingleLineComment.matcher(line);
-		Matcher matcherMultiLineComment = this.patternMultiLineComment.matcher(line);
-
-		boolean singleLineCommentFound = matcherSingleLineComment.find();
-		boolean multiLineCommentFound = matcherMultiLineComment.find();
-
-		if (singleLineCommentFound && multiLineCommentFound) {
-			int singleLineIndex = matcherSingleLineComment.start();
-			int multiLineIndex = matcherMultiLineComment.start();
-
-			if (singleLineIndex < multiLineIndex) {
-				this.onSingleLineComment(matcherSingleLineComment, line);
-			} else {
-				this.onMultiLineComment(line);
-			}
-		} else if (singleLineCommentFound) {
-			this.onSingleLineComment(matcherSingleLineComment, line);
-		} else if (multiLineCommentFound) {
-			this.onMultiLineComment(line);
-		}
-
-		return singleLineCommentFound || multiLineCommentFound;
-	}
-
-	private void onSingleLineComment(Matcher matcher, String line) {
-		this.type = TokenType.SINGLE_LINE_COMMENT;
-
-		if (line.contains("\n")) {
-			this.value = StringUtils.substringBetween(line, OOMLKey.SINGLE_LINE_COMMENT.getValue(), "\n");
-			this.restOfLastLine = line.substring(matcher.end()) + "\n";
-		} else {
-			this.value = StringUtils.substringAfter(line, OOMLKey.SINGLE_LINE_COMMENT.getValue());
-			this.restOfLastLine = line.substring(matcher.end());
-		}
-
-	}
-
-	private void onMultiLineComment(String line) {
-		StringBuilder comment = new StringBuilder();
-		comment.append(line);
-
-		boolean commentEnded = line.contains(OOMLKey.MULTI_LINE_COMMENT_END.getValue());
-		while (!commentEnded && this.scanner.hasNextLine()) {
-			line = this.scanner.nextLine();
-			comment.append("\n").append(line);
-
-			commentEnded = line.contains(OOMLKey.MULTI_LINE_COMMENT_END.getValue());
-		}
-
-		this.type = TokenType.MULTI_LINE_COMMENT;
-		if (commentEnded) {
-			this.value = StringUtils.substringBetween(comment.toString(), OOMLKey.MULTI_LINE_COMMENT_START.getValue(), OOMLKey.MULTI_LINE_COMMENT_END.getValue());
-			this.restOfLastLine = StringUtils.substringAfter(comment.toString(), this.value + OOMLKey.MULTI_LINE_COMMENT_END.getValue());
-		} else {
-			if (line.isEmpty()) {
-				comment.append('\n');
-			}
-
-			//System.out.println(StringUtils.replace(comment.toString(), "\n", "$"));
-			this.value = StringUtils.substringAfter(comment.toString(), OOMLKey.MULTI_LINE_COMMENT_START.getValue());
-			this.restOfLastLine = "";
-		}
-	}
-
-	private boolean onImport(String line) {
-		line = line.trim();
-		Matcher matcher = this.patternImport.matcher(line);
-		System.out.println(this.restOfLastLine);
-
-		boolean importFound = matcher.find();
-
-		if (importFound) {
-			this.type = TokenType.IMPORT;
-/*
-			Matcher matcherSingleLineComment = this.patternSingleLineCommentWithSpaceBefore.matcher(line);
-			Matcher matcherMultiLineComment = this.patternMultiLineCommentWithSpaceBefore.matcher(line);
-
-			boolean singleLineCommentFound = matcherSingleLineComment.find();
-			boolean multiLineCommentFound = matcherMultiLineComment.find();
-
-			if (singleLineCommentFound && multiLineCommentFound) {
-				int singleLineIndex = matcherSingleLineComment.start();
-				int multiLineIndex = matcherMultiLineComment.start();
-
-				if (singleLineIndex < multiLineIndex) {
-					this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.SINGLE_LINE_COMMENT.getValue());
-				} else {
-					this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.MULTI_LINE_COMMENT_START.getValue());
-				}
-			} else if (singleLineCommentFound) {
-				this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.SINGLE_LINE_COMMENT.getValue());
-			} else if (multiLineCommentFound) {
-				this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.MULTI_LINE_COMMENT_START.getValue());
-			} else {
-				if (line.contains("\n")) {
-					this.value = StringUtils.substringBefore(line, "\n");
-				} else {
-					this.value = StringUtils.substringAfter(line, OOMLKey.IMPORT.getValue());
-				}
-			}
-
-			this.restOfLastLine = StringUtils.substringAfter(line, this.value) + "\n";*/
-		}
-
-		return importFound;
+		return generateToken();
 	}
 
 }

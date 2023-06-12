@@ -13,6 +13,8 @@ public enum TokenType {
     ACCESS_MODIFIER,
     COLON,
     EQUAL,
+    SIGN,
+    WORD,
     EOF
 
 }
