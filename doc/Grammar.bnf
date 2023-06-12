@@ -96,6 +96,12 @@ entry       = class
             | package
             | import
 
+
+
+FILE        = "\"" ([^\"] | "\\\"")* "\""
+            | "'" ([^'] | "\\'")* "'"
+            | [^ ]*
+
 // FILE being any valid url
 // (couldn't be bothered to do that one, pain in the a to specify properly)
 import      = "@" FILE
