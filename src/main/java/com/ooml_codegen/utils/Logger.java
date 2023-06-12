@@ -16,13 +16,8 @@ enum errorType {
     ERROR
 }
 
+
 public class Logger {
-
-    private static final String RESET = "\u001B[0m";
-    private static final String GREEN = "\u001B[32m";
-    private static final String YELLOW = "\u001B[33m";
-    private static final String RED = "\u001B[31m";
-
 
     public static void trace(Object message) {
         printMessage(TRACE, message.toString());
@@ -55,13 +50,13 @@ public class Logger {
                 System.out.println(new Date().toString() + " DEBUG " + message);
                 break;
             case INFO:
-                System.out.println(GREEN + new Date().toString() + " INFO " + message + RESET);
+                System.out.println(ColorCode.GREEN + new Date().toString() + " INFO " + message + ColorCode.RESET);
                 break;
             case WARN:
-                System.out.println(YELLOW + new Date().toString() + " WARN " + message + RESET);
+                System.out.println(ColorCode.YELLOW + new Date().toString() + " WARN " + message + ColorCode.RESET);
                 break;
             case ERROR:
-                System.out.println(RED + new Date().toString() + " ERROR " + message + RESET);
+                System.out.println(ColorCode.RED + new Date().toString() + " ERROR " + message + ColorCode.RESET);
                 break;
         }
     }
