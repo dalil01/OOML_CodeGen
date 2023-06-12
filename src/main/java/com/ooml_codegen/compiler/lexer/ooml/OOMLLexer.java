@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class OOMLLexer extends Lexer {
@@ -17,6 +19,12 @@ public class OOMLLexer extends Lexer {
 	private String value = null;
 
 	private String restOfLastLine = "";
+
+	private final Pattern patternSingleLineComment = Pattern.compile("//(.*)");
+	private final Pattern patternSingleLineCommentWithSpaceBefore = Pattern.compile("\\s+//(.*)");
+	private final Pattern patternMultiLineComment = Pattern.compile("/\\*");
+	private final Pattern patternMultiLineCommentWithSpaceBefore = Pattern.compile("\\s+/\\*");
+	private final Pattern patternImport = Pattern.compile("^@.*");
 
 	public OOMLLexer(String filePath) {
 		super(filePath);
@@ -42,38 +50,28 @@ public class OOMLLexer extends Lexer {
 		this.type = null;
 		this.value = null;
 
-		while (!this.restOfLastLine.equals("") || this.scanner.hasNextLine()) {
-			System.out.println(this.restOfLastLine);
-			String line = this.restOfLastLine + (this.scanner.hasNextLine() ? scanner.nextLine() : "");
+		while (this.scanner.hasNextLine()) {
+			String line = this.scanner.nextLine();
 
-			StringBuilder key = new StringBuilder();
-			for (int i = 0; i < line.length(); i++) {
-				char currentChar = line.charAt(i);
+			line = this.restOfLastLine + line;
+			this.restOfLastLine = "";
 
-				if (key.toString().equals("") && Character.isWhitespace(currentChar)) {
-					continue;
-				}
-
-				key.append(currentChar);
-
-				String k = key.toString();
-				if (k.startsWith(OOMLKey.MULTI_LINE_COMMENT_START.getValue())) {
-					if (this.onMultiLineComment(line)) break;
-				}
-				else if (k.startsWith(OOMLKey.SINGLE_LINE_COMMENT.getValue())) {
-					this.onSingleLineComment(line, k);
-				}
-				else if (k.startsWith(OOMLKey.IMPORT.getValue())) {
-					this.onImport(line, k);
-				}
-
-				if (this.type != null && this.value != null) {
-					return new Token(this.type, this.value);
-				}
+			if (this.onImport(line)
+					|| this.onComment(line))
+			{
+				break;
 			}
 		}
 
-		if (this.scanner != null) {
+		if (this.type != null && this.value != null) {
+			return new Token(this.type, this.value);
+		}
+
+		if (this.scanner.hasNextLine()) {
+			this.nextToken();
+		}
+
+		if (!this.scanner.hasNextLine()) {
 			this.scanner.close();
 			System.out.println("Scanner closed!");
 		}
@@ -81,29 +79,107 @@ public class OOMLLexer extends Lexer {
 		return null;
 	}
 
-	private boolean onMultiLineComment(String line) {
-		boolean justBreakLoop = false;
+	private boolean onComment(String line) {
+		Matcher matcherSingleLineComment = this.patternSingleLineComment.matcher(line);
+		Matcher matcherMultiLineComment = this.patternMultiLineComment.matcher(line);
 
-		if (!StringUtils.contains(line, OOMLKey.MULTI_LINE_COMMENT_END.getValue())) {
-			this.restOfLastLine = line + "\n";
-			return true;
+		boolean singleLineCommentFounded = matcherSingleLineComment.find();
+		boolean multiLineCommentFounded = matcherMultiLineComment.find();
+
+		if (singleLineCommentFounded && multiLineCommentFounded) {
+			int singleLineIndex = matcherSingleLineComment.start();
+			int multiLineIndex = matcherMultiLineComment.start();
+
+			if (singleLineIndex < multiLineIndex) {
+				this.onSingleLineComment(matcherSingleLineComment, line);
+			} else {
+				this.onMultiLineComment(line);
+			}
+		} else if (singleLineCommentFounded) {
+			this.onSingleLineComment(matcherSingleLineComment, line);
+		} else if (multiLineCommentFounded) {
+			this.onMultiLineComment(line);
 		}
 
-		this.type = TokenType.MULTI_LINE_COMMENT;
-		this.value = StringUtils.substringBetween(line, OOMLKey.MULTI_LINE_COMMENT_START.getValue(), OOMLKey.MULTI_LINE_COMMENT_END.getValue());
-		this.restOfLastLine = StringUtils.substringAfter(line, this.value + OOMLKey.MULTI_LINE_COMMENT_START.getValue());
-
-		return justBreakLoop;
+		return singleLineCommentFounded || multiLineCommentFounded;
 	}
 
-	private void onSingleLineComment(String line, String key) {
+	private void onSingleLineComment(Matcher matcher, String line) {
 		this.type = TokenType.SINGLE_LINE_COMMENT;
-		this.value = StringUtils.substringAfter(line, key);
+
+		if (line.contains("\n")) {
+			this.value = StringUtils.substringBetween(line, OOMLKey.SINGLE_LINE_COMMENT.getValue(), "\n");
+			this.restOfLastLine = line.substring(matcher.end()) + "\n";
+		} else {
+			this.value = StringUtils.substringAfter(line, OOMLKey.SINGLE_LINE_COMMENT.getValue());
+			this.restOfLastLine = line.substring(matcher.end());
+		}
+
 	}
 
-	private void onImport(String line, String key) {
-		this.type = TokenType.IMPORT;
-		this.value = StringUtils.substringAfter(line, key).trim();
+	private void onMultiLineComment(String line) {
+		StringBuilder comment = new StringBuilder();
+		comment.append(line);
+
+		boolean commentEnded = line.trim().contains(OOMLKey.MULTI_LINE_COMMENT_END.getValue());
+		while (!commentEnded && this.scanner.hasNextLine()) {
+			line = this.scanner.nextLine();
+			comment.append("\n").append(line);
+
+			commentEnded = line.contains(OOMLKey.MULTI_LINE_COMMENT_END.getValue());
+		}
+
+		if (commentEnded) {
+			this.type = TokenType.MULTI_LINE_COMMENT;
+			this.value = StringUtils.substringBetween(comment.toString(), OOMLKey.MULTI_LINE_COMMENT_START.getValue(), OOMLKey.MULTI_LINE_COMMENT_END.getValue());
+			this.restOfLastLine = StringUtils.substringAfter(comment.toString(), this.value + OOMLKey.MULTI_LINE_COMMENT_END.getValue());
+		} else {
+			// TODO : Manage when multi-line comment not completed
+			this.restOfLastLine = comment.toString();
+		}
+	}
+
+	private boolean onImport(String line) {
+		line = line.trim();
+		Matcher matcher = this.patternImport.matcher(line);
+		System.out.println(this.restOfLastLine);
+
+		boolean importFounded = matcher.find();
+
+		if (importFounded) {
+			this.type = TokenType.IMPORT;
+
+			Matcher matcherSingleLineComment = this.patternSingleLineCommentWithSpaceBefore.matcher(line);
+			Matcher matcherMultiLineComment = this.patternMultiLineCommentWithSpaceBefore.matcher(line);
+
+			boolean singleLineCommentFounded = matcherSingleLineComment.find();
+			boolean multiLineCommentFounded = matcherMultiLineComment.find();
+
+			if (singleLineCommentFounded && multiLineCommentFounded) {
+				int singleLineIndex = matcherSingleLineComment.start();
+				int multiLineIndex = matcherMultiLineComment.start();
+
+				if (singleLineIndex < multiLineIndex) {
+					this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.SINGLE_LINE_COMMENT.getValue());
+				} else {
+					this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.MULTI_LINE_COMMENT_START.getValue());
+				}
+			} else if (singleLineCommentFounded) {
+				this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.SINGLE_LINE_COMMENT.getValue());
+			} else if (multiLineCommentFounded) {
+				this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.MULTI_LINE_COMMENT_START.getValue());
+			} else {
+				if (line.contains("\n")) {
+					this.value = StringUtils.substringBefore(line, "\n");
+				} else {
+					this.value = StringUtils.substringAfter(line, OOMLKey.IMPORT.getValue());
+				}
+			}
+
+			this.restOfLastLine = StringUtils.substringAfter(line, this.value) + "\n";
+		}
+
+		return importFounded;
 	}
 
 }
