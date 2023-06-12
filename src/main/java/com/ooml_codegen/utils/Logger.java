@@ -1,8 +1,8 @@
-package com.ooml_codegen.utility.logger;
+package com.ooml_codegen.utils;
 
 import java.util.Date;
 
-public class CodegenLogger {
+public class Logger {
 
     private static final String RESET = "\u001B[0m";
     private static final String GREEN = "\u001B[32m";
@@ -10,15 +10,15 @@ public class CodegenLogger {
     private static final String RED = "\u001B[31m";
 
 
-    public void trace(String message) {
+    public void trace(Object message) {
         System.out.println(new Date().toString() + " TRACE " + message);
     }
 
-    public void debug(String message) {
+    public void debug(Object message) {
         System.out.println(new Date().toString() + " DEBUG " + message);
     }
 
-    public void info(String message) {
+    public void info(Object message) {
         System.out.println(GREEN + new Date().toString() + " INFO " + message + RESET);
     }
 
