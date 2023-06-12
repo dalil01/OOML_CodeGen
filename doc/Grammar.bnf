@@ -54,8 +54,21 @@ RESERVED    = CLASS_ID
             | INHERITANCE_ID
             | ENUM_ID
 
-// "- reserved" here signifies that a NAME cannot match the 'reserved' rule
-NAME        = ([a-zA-Z_][a-zA-Z0-9_.]*) - RESERVED
+SINGLE_QUOTED_WORD
+            = "'" ([^\']|\\\')* "'"
+
+DOUBLE_QUOTED_WORD
+            = "\"" ([^\"]|\\\")* "\""
+
+BACK_QUOTED_WORD
+            = "`" ([^`]|\\`)* "`"
+
+QUOTED_WORD = BACK_QUOTED_WORD
+            | DOUBLE_QUOTED_WORD
+            | SINGLE_QUOTED_WORD
+
+// "- reserved" here signifies that a WORD cannot match the 'reserved' rule
+WORD        = [^\n\r\u2028\u2029\u0085 \t\"\'`]* - RESERVED
 
 SPACE       = [ \t]
 
@@ -104,7 +117,10 @@ FILE        = "\"" ([^\"] | "\\\"")* "\""
 
 // FILE being any valid url
 // (couldn't be bothered to do that one, pain in the a to specify properly)
-import      = "@" FILE
+import      = "@" WORD
+            | "@" DOUBLE_QUOTED_WORD
+            | "@" SINGLE_QUOTED_WORD
+            | "@" BACK_QUOTED_WORD
 
 
 
@@ -113,7 +129,7 @@ import      = "@" FILE
    implemented yet. This might change anyway when we try to implement more
    languages.
 */
-class       = restricted_access_modifier CLASS_ID SEP modifier_list NAME inheritance class_model
+class       = restricted_access_modifier CLASS_ID SEP modifier_list WORD inheritance class_model
 
 
 class_model = PAD "{" PAD class_prop_list "}"
@@ -160,14 +176,14 @@ attribute_with_access
             = access_modifier attribute
             | attribute
 
-attribute   = PAD modifier_list NAME PAD ":" PAD accessors PAD type
+attribute   = PAD modifier_list WORD PAD ":" PAD accessors PAD type
 
 modifier_list
             = modifier SEP modifier_list
             | modifier SEP
             | ""
 
-modifier    = NAME
+modifier    = WORD
 
 accessors   = getter PAD setter
             | getter
@@ -183,21 +199,21 @@ method_with_access
             = access_modifier method
             | method
 
-method      = modifier_list NAME PAD "(" argument_list PAD ")" PAD ":" PAD type
+method      = modifier_list WORD PAD "(" argument_list PAD ")" PAD ":" PAD type
 
 argument_list
-            = PAD modifier_list NAME PAD ":" PAD type SEP argument_list
-            | PAD modifier_list NAME PAD ":" PAD type
+            = PAD modifier_list WORD PAD ":" PAD type SEP argument_list
+            | PAD modifier_list WORD PAD ":" PAD type
 
-type        = NAME
+type        = WORD
 
 constructor_with_access
             = access_modifier constructor
             | constructor
 
-constructor = NAME PAD "(" argument_list PAD ")"
+constructor = WORD PAD "(" argument_list PAD ")"
 
-interface   = restricted_access_modifier INTERFACE_ID SEP modifier_list NAME inheritance interface_model
+interface   = restricted_access_modifier INTERFACE_ID SEP modifier_list WORD inheritance interface_model
 
 interface_model
             = PAD "{" PAD interface_prop_list "}"
@@ -224,15 +240,15 @@ interface_prop_block
             | method
 
 // This might need some polishing later.
-package     = PACKAGE_ID SEP NAME
+package     = PACKAGE_ID SEP WORD
 
 inheritance = PAD INHERITANCE_ID inheritance_list
 
 inheritance_list
-            = PAD NAME
-            | PAD NAME PAD ',' inheritance_list
+            = PAD WORD
+            | PAD WORD PAD ',' inheritance_list
 
-enum        = restricted_access_modifier ENUM_ID SEP NAME PAD enum_model
+enum        = restricted_access_modifier ENUM_ID SEP WORD PAD enum_model
 
 enum_model  = SEP ":" PAD enum_value_list
             | SEP "{" PAD enum_value_list PAD "}"
@@ -242,8 +258,8 @@ enum_value_list
             | PAD enum_key
 
 
-enum_key    = NAME
-            | NAME PAD "=" PAD NAME
+enum_key    = WORD
+            | WORD PAD "=" PAD WORD
 
 
 // TODO
