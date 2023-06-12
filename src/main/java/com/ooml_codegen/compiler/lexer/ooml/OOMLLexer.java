@@ -83,10 +83,10 @@ public class OOMLLexer extends Lexer {
 		Matcher matcherSingleLineComment = this.patternSingleLineComment.matcher(line);
 		Matcher matcherMultiLineComment = this.patternMultiLineComment.matcher(line);
 
-		boolean singleLineCommentFounded = matcherSingleLineComment.find();
-		boolean multiLineCommentFounded = matcherMultiLineComment.find();
+		boolean singleLineCommentFound = matcherSingleLineComment.find();
+		boolean multiLineCommentFound = matcherMultiLineComment.find();
 
-		if (singleLineCommentFounded && multiLineCommentFounded) {
+		if (singleLineCommentFound && multiLineCommentFound) {
 			int singleLineIndex = matcherSingleLineComment.start();
 			int multiLineIndex = matcherMultiLineComment.start();
 
@@ -95,13 +95,13 @@ public class OOMLLexer extends Lexer {
 			} else {
 				this.onMultiLineComment(line);
 			}
-		} else if (singleLineCommentFounded) {
+		} else if (singleLineCommentFound) {
 			this.onSingleLineComment(matcherSingleLineComment, line);
-		} else if (multiLineCommentFounded) {
+		} else if (multiLineCommentFound) {
 			this.onMultiLineComment(line);
 		}
 
-		return singleLineCommentFounded || multiLineCommentFounded;
+		return singleLineCommentFound || multiLineCommentFound;
 	}
 
 	private void onSingleLineComment(Matcher matcher, String line) {
@@ -144,18 +144,18 @@ public class OOMLLexer extends Lexer {
 		Matcher matcher = this.patternImport.matcher(line);
 		System.out.println(this.restOfLastLine);
 
-		boolean importFounded = matcher.find();
+		boolean importFound = matcher.find();
 
-		if (importFounded) {
+		if (importFound) {
 			this.type = TokenType.IMPORT;
 
 			Matcher matcherSingleLineComment = this.patternSingleLineCommentWithSpaceBefore.matcher(line);
 			Matcher matcherMultiLineComment = this.patternMultiLineCommentWithSpaceBefore.matcher(line);
 
-			boolean singleLineCommentFounded = matcherSingleLineComment.find();
-			boolean multiLineCommentFounded = matcherMultiLineComment.find();
+			boolean singleLineCommentFound = matcherSingleLineComment.find();
+			boolean multiLineCommentFound = matcherMultiLineComment.find();
 
-			if (singleLineCommentFounded && multiLineCommentFounded) {
+			if (singleLineCommentFound && multiLineCommentFound) {
 				int singleLineIndex = matcherSingleLineComment.start();
 				int multiLineIndex = matcherMultiLineComment.start();
 
@@ -164,9 +164,9 @@ public class OOMLLexer extends Lexer {
 				} else {
 					this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.MULTI_LINE_COMMENT_START.getValue());
 				}
-			} else if (singleLineCommentFounded) {
+			} else if (singleLineCommentFound) {
 				this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.SINGLE_LINE_COMMENT.getValue());
-			} else if (multiLineCommentFounded) {
+			} else if (multiLineCommentFound) {
 				this.value = StringUtils.substringBetween(line, OOMLKey.IMPORT.getValue(), OOMLKey.MULTI_LINE_COMMENT_START.getValue());
 			} else {
 				if (line.contains("\n")) {
@@ -179,7 +179,7 @@ public class OOMLLexer extends Lexer {
 			this.restOfLastLine = StringUtils.substringAfter(line, this.value) + "\n";
 		}
 
-		return importFounded;
+		return importFound;
 	}
 
 }
