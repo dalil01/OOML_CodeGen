@@ -1,26 +1,22 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
 import com.ooml_codegen.compiler.lexer.*;
-import com.ooml_codegen.compiler.lexer.ooml.OOMLLexer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class OOMLLexerTest {
+public class OOMLLexerCommentTest extends OOMLLexerTest {
 
-    private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml_codegen/compiler/lexer/ooml/files/";
+    public OOMLLexerCommentTest() {
+        super("comment.ooml");
+    }
 
     @Test
     public void singleLineCommentTest() throws FileNotFoundException {
-        String filePath = pathPrefix + "single-line-comment.ooml";
-
-        Lexer lexer = new OOMLLexer(filePath);
-
-        AtomicInteger index = new AtomicInteger(1);
-        lexer.tokenize().forEach(token -> {
-            int currentLine = index.getAndIncrement();
+        this.lexer.tokenize().forEach(token -> {
+            int currentLine = this.index.getAndIncrement();
             System.out.println(token.toString());
 
             if (currentLine == 1) {
@@ -30,32 +26,54 @@ public class OOMLLexerTest {
 
             if (currentLine == 2) {
                 Assertions.assertEquals(TokenType.SINGLE_LINE_COMMENT, token.type());
-                Assertions.assertEquals("  Lorem ipsum", token.value());
+                Assertions.assertEquals(" Lorem ipsum /*", token.value());
             }
 
-            if (currentLine == 2) {
+            if (currentLine == 3) {
                 Assertions.assertEquals(token.type(), TokenType.SINGLE_LINE_COMMENT);
-                Assertions.assertEquals("    Test // Test   ", token.value());
+                Assertions.assertEquals("    Test // Test", token.value());
             }
         });
     }
 
     @Test
     public void multiLineCommentTest() throws FileNotFoundException {
+        this.lexer.tokenize().forEach(token -> {
+            int currentLine = this.index.getAndIncrement();
+            System.out.println(token.toString());
 
-    }
+            if (currentLine == 4) {
+                Assertions.assertEquals(TokenType.MULTI_LINE_COMMENT, token.type());
+                Assertions.assertEquals("\n" +
+                                "\tHello Mundo!\n" +
+                                "\n" +
+                                "\t", token.value());
+            }
 
-    @Test
-    public void importsTest() throws FileNotFoundException {
-        String filePath = pathPrefix + "imports.ooml";
+            if (currentLine == 5) {
+                Assertions.assertEquals(TokenType.MULTI_LINE_COMMENT, token.type());
+                Assertions.assertEquals("\n" +
+                        "\t/* Hi ! /\n" +
+                        "\t", token.value());
+            }
 
-        Lexer lexer = new OOMLLexer(filePath);
+            if (currentLine == 6) {
+                Assertions.assertEquals(token.type(), TokenType.MULTI_LINE_COMMENT);
+                Assertions.assertEquals(" OOML!!!    + - / * > # { }  :  ", token.value());
+            }
 
-        AtomicInteger index = new AtomicInteger(1);
-        lexer.tokenize().forEach(token -> {
-            System.out.println(index.getAndIncrement() + " " + token.toString());
+            if (currentLine == 7) {
+                Assertions.assertEquals(token.type(), TokenType.MULTI_LINE_COMMENT);
+                Assertions.assertEquals(" Lorem\n" +
+                        "Ipsum\n" +
+                        "// 1\n" +
+                        "// 2\n" +
+                        "// 3\n" +
+                        "\n" +
+                        "\n" +
+                        "\n", token.value());
+            }
         });
     }
-
 
 }
