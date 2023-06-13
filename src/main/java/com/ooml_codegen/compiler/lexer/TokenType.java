@@ -1,6 +1,7 @@
 package com.ooml_codegen.compiler.lexer;
 
 public enum TokenType {
+
     SINGLE_LINE_COMMENT,
     MULTI_LINE_COMMENT,
     IMPORT,
@@ -13,4 +14,5 @@ public enum TokenType {
     COLON,
     EQUAL,
     EOF
+
 }
