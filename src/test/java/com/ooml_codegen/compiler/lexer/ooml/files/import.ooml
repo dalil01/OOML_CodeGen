@@ -9,3 +9,7 @@
 @@@@@@@babla
 @ */
 @@@@@@@babla2
+@colon:
+@space // padding
+@comment//not_a_comment
+@comment/*not_a_comment*/
