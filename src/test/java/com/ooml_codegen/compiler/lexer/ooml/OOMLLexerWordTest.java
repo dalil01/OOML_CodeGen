@@ -21,10 +21,10 @@ public class OOMLLexerWordTest extends OOMLLexerTest{
             System.out.println(token.toString());
 
 
-            if (List.of(1, 2, 3, 5, 6, 8, 10, 12, 13, 14, 15, 16, 17).contains(currentLine)) {
+            if (List.of(1, 2, 3, 5, 6, 8, 10, 12, 14, 15, 16, 17, 18).contains(currentLine)) {
                 Assertions.assertEquals(TokenType.WORD, token.type());
             }
-            if (currentLine == 18){
+            if (currentLine == 19){
                 Assertions.assertEquals(TokenType.EOF, token.type());
             }
             else if (currentLine == 1){
@@ -54,19 +54,19 @@ public class OOMLLexerWordTest extends OOMLLexerTest{
             else if (currentLine == 12){
                 Assertions.assertEquals("comma", token.value());
             }
-            else if (currentLine == 13){
+            else if (currentLine == 14){
                 Assertions.assertEquals("curlybracket", token.value());
             }
-            else if (currentLine == 14){
+            else if (currentLine == 15){
                 Assertions.assertEquals("{", token.value());
             }
-            else if (currentLine == 15){
+            else if (currentLine == 16){
                 Assertions.assertEquals("}", token.value());
             }
-            else if (currentLine == 16){
+            else if (currentLine == 17){
                 Assertions.assertEquals("this_is$a|big~wordé&%withµsome§hit", token.value());
             }
-            else if (currentLine == 17){
+            else if (currentLine == 18){
                 Assertions.assertEquals("test", token.value());
             }
         });
