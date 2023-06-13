@@ -1,13 +1,10 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
 import com.ooml_codegen.compiler.lexer.*;
-import org.apache.commons.lang.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class OOMLLexerCommentTest extends OOMLLexerTest {
 
