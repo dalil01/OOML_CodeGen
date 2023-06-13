@@ -46,11 +46,11 @@ public enum OOMLKey {
 
     WORD_END(PAD.value + COLON.value +
             QUOTE.value + EQUAL.value +
-            IMPORT.value + ACCESS_MODIFIER.value + "/{("),
+            IMPORT.value + ACCESS_MODIFIER.value + "/{()}[]"),
 
     FILE_END(PAD.value + COLON.value +
             QUOTE.value + EQUAL.value +
-            IMPORT.value + ACCESS_MODIFIER.value + "{("),
+            IMPORT.value + ACCESS_MODIFIER.value + "{()}[]"),
     ;
 
     private final String value;
