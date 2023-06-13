@@ -7,11 +7,6 @@ public enum OOMLKey {
     DOUBLE_QUOTE("\""),
     BACK_QUOTE("`"),
     QUOTE(SINGLE_QUOTE.value + DOUBLE_QUOTE.value + BACK_QUOTE.value),
-    SINGLE_LINE_COMMENT_S("//"),
-    SINGLE_LINE_COMMENT_CONTENT_R("[^" + NEWLINE.value +"]*"),
-    MULTI_LINE_COMMENT_START_S("/*"),
-    MULTI_LINE_COMMENT_CONTENT_R("([^*]|*[^/])*"), // Not needed?
-    MULTI_LINE_COMMENT_END_S("*/"),
     EQUAL("="),
     ACCESS_MODIFIER("+-#"),
     INHERITANCE("->"),
@@ -21,27 +16,6 @@ public enum OOMLKey {
 
     PACKAGE_S("package"),
 
-    SINGLE_QUOTED_WORD_R(SINGLE_QUOTE.value +
-            "([^" + SINGLE_QUOTE.value + "]|\\\\" +
-            SINGLE_QUOTE.value + ")*" +
-            SINGLE_QUOTE.value
-    ),
-    DOUBLE_QUOTED_WORD_R(DOUBLE_QUOTE.value +
-            "([^" + DOUBLE_QUOTE.value + "]|\\\\" +
-            DOUBLE_QUOTE.value + ")*" +
-            DOUBLE_QUOTE.value
-    ),
-
-    BACK_QUOTED_WORD_R(BACK_QUOTE.value +
-            "([^" + BACK_QUOTE.value + "]|\\\\" +
-            BACK_QUOTE.value + ")*" +
-            BACK_QUOTE.value
-    ),
-
-    QUOTED_WORD_R(BACK_QUOTED_WORD_R.value + "|" + SINGLE_QUOTED_WORD_R.value + "|" + DOUBLE_QUOTED_WORD_R.value ),
-    WORD_R("[^" + NEWLINE.value + SPACE.value + QUOTE.value + "]*"),
-
-    PAD_R("[" + SPACE.value + NEWLINE.value + COMMA.value + "]*"),
     PAD(SPACE.value + NEWLINE.value + COMMA.value),
 
     WORD_END(PAD.value + COLON.value +
