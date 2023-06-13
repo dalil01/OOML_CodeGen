@@ -1,0 +1,8 @@
+{
+  "label": "Syntax",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Defining the rules and structure of a programming language or grammar, such as in a BNF (Backus-Naur Form) file."
+  }
+}
