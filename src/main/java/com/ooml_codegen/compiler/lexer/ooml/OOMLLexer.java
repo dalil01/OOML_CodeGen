@@ -3,20 +3,12 @@ package com.ooml_codegen.compiler.lexer.ooml;
 import com.ooml_codegen.compiler.lexer.Lexer;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class OOMLLexer extends Lexer {
-
-	private TokenType type = null;
-	private String value = null;
 
 	private int currentChar = 0;
 	private boolean charInUse = false;
@@ -30,6 +22,7 @@ public class OOMLLexer extends Lexer {
 
 			} catch (IOException e) {
 				System.err.println(e.getLocalizedMessage());
+				System.err.println("Assuming EOF after error, continuing...");
 				this.currentChar = -1;
 			}
 			this.charInUse = true;
@@ -47,13 +40,13 @@ public class OOMLLexer extends Lexer {
 			//System.out.println((char) this.currentChar);
 
 		} catch (IOException e) {
-			System.out.println(e.getLocalizedMessage());
+			System.err.println(e.getLocalizedMessage());
+			System.err.println("Assuming EOF after error, continuing...");
 			return -1;
 		}
 		this.charInUse = true;
 		return this.currentChar;
 	}
-
 
 	public OOMLLexer(String filePath) {
 		super(filePath);
@@ -66,7 +59,7 @@ public class OOMLLexer extends Lexer {
 			this.reader = new BufferedReader(new FileReader(file));
 
 			Stream<Token> tokenStream = Stream.generate(this::nextToken).takeWhile(Objects::nonNull);
-			tokenStream = Stream.concat(tokenStream, Stream.of(new Token(TokenType.EOF, "")));
+			tokenStream = Stream.concat(tokenStream, Stream.of(new Token(TokenType.EOF, null)));
 
 			return tokenStream;
 		} catch (FileNotFoundException e) {
@@ -75,13 +68,14 @@ public class OOMLLexer extends Lexer {
 		}
 	}
 
-
 	private void consumePadding() {
 		while (peek() != -1 && OOMLKey.PAD.getValue().indexOf((char) peek()) != -1) {
 			read();
 		}
 	}
 
+	// we already know that the previous character is '/'
+	// and that the current one is either '*' or '/'
 	private Token generateCommentToken() {
 		if (peek() == '*')
 			return generateMultiLineCommentToken();
@@ -126,10 +120,31 @@ public class OOMLLexer extends Lexer {
 		return new Token(TokenType.MULTI_LINE_COMMENT, s.toString());
 	}
 
+	// We are using a different word terminator here as file paths often contain '/'
 	private Token generateImportToken() {
-		return null;
+		read();
+		consumePadding();
+		if (peek() == -1){
+			System.err.println("WARN: Import symbol found with nothing to import before EOF!");
+			return new Token(TokenType.IMPORT, null);
+		}
+		String file;
+		if (peek() == '"' | peek() == '\'' | peek() == '`'){
+			file = generateQuotedWord().value();
+		} else {
+			StringBuilder s = new StringBuilder();
+			while (peek() != -1 && OOMLKey.FILE_END.getValue().indexOf((char) peek()) == -1){
+				s.append((char) read());
+			}
+			file = s.toString();
+		}
+		if (file == null || file.isEmpty()){
+			System.err.println("WARN: Import symbol found with nothing to import! Use quotes if a character isn't recognized as part of a file.");
+			// using null objects instead of empty strings for easier checking... although isEmpty is O(1) tbh
+			file = null;
+		}
+		return new Token(TokenType.IMPORT, file);
 	}
-
 
 	private Token generateWordToken() {
 		return generateWordToken("");
@@ -155,6 +170,7 @@ public class OOMLLexer extends Lexer {
 		}
 		return new Token(TokenType.WORD, s.toString());
 	}
+
 	private Token generateWordToken(String prefix){
 
 		StringBuilder s = new StringBuilder(prefix + (char) read());
@@ -164,12 +180,12 @@ public class OOMLLexer extends Lexer {
 		return new Token(TokenType.WORD, s.toString());
 	}
 
-	// processingChar will still be at the last character, needs to be incremented
 	private Token generateToken() {
 		if (peek() == -1)
 			return null;
 		switch (peek()) {
 			case '/' -> {
+				//Checking for the next character, might not be a comment
 				read();
 				if (peek() == -1) {
 					return new Token(TokenType.WORD, "/");
@@ -194,6 +210,7 @@ public class OOMLLexer extends Lexer {
 				return new Token(TokenType.SIGN, String.valueOf(read()));
 			}
 			case '-' -> {
+				//check for next character to differentiate sign and inheritance
 				read();
 				if (peek() == '>'){
 					//TODO Maybe add inherited stuff to this token
@@ -210,10 +227,7 @@ public class OOMLLexer extends Lexer {
 		}
 	}
 
-
 	private Token nextToken() {
-		this.type = null;
-		this.value = null;
 
 		// Consuming PADDING
 		consumePadding();
