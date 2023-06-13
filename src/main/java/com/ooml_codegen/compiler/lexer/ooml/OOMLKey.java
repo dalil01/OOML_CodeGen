@@ -1,6 +1,7 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
 public enum OOMLKey {
+
     NEWLINE("\n\r\u2028\u2029\u0085"),
     SPACE(" \t"),
     SINGLE_QUOTE("'"),
@@ -35,6 +36,10 @@ public enum OOMLKey {
 
     public String getValue() {
         return this.value;
+    }
+
+    public char getCharValue() {
+        return this.value.charAt(0);
     }
 
 }

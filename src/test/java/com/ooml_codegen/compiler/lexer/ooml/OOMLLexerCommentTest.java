@@ -16,7 +16,7 @@ public class OOMLLexerCommentTest extends OOMLLexerTest {
     }
 
     @Test
-    public void singleLineCommentTest() throws FileNotFoundException {
+    public void singleLineCommentTest() {
         this.lexer.tokenize().forEach(token -> {
             int currentLine = this.index.getAndIncrement();
 
@@ -39,7 +39,7 @@ public class OOMLLexerCommentTest extends OOMLLexerTest {
     }
 
     @Test
-    public void multiLineCommentTest() throws FileNotFoundException {
+    public void multiLineCommentTest() {
         this.lexer.tokenize().forEach(token -> {
             int currentLine = this.index.getAndIncrement();
 
