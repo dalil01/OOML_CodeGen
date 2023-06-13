@@ -13,6 +13,7 @@ public class OOMLLexer extends Lexer {
 	private int currentChar = 0;
 	private boolean charInUse = false;
 
+	// returns the character under the cursor but doesn't move
 	private int peek() {
 		if (!this.charInUse) {
 
