@@ -17,15 +17,15 @@ public enum OOMLKey {
 
     PACKAGE_S("package"),
 
-    PAD(SPACE.value + NEWLINE.value + COMMA.value),
+    PAD(SPACE.value + NEWLINE.value),
 
     WORD_END(PAD.value + COLON.value +
             QUOTE.value + EQUAL.value +
-            IMPORT.value + ACCESS_MODIFIER.value + "/{()}[]"),
+            IMPORT.value + ACCESS_MODIFIER.value + COMMA.value + "/{()}[]"),
 
     FILE_END(PAD.value + COLON.value +
             QUOTE.value + EQUAL.value +
-            IMPORT.value + ACCESS_MODIFIER.value + "{()}[]"),
+            IMPORT.value + ACCESS_MODIFIER.value + COMMA.value + "{()}[]"),
     ;
 
     private final String value;

@@ -15,6 +15,7 @@ public enum TokenType {
     EQUAL,
     SIGN,
     WORD,
+    COMMA,
     EOF
 
 }

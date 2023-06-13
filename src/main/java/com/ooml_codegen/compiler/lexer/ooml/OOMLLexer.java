@@ -51,6 +51,10 @@ public class OOMLLexer extends Lexer {
 
                 return generateCommentToken();
             }
+            case ',' -> {
+                cStream.next();
+                return new Token(TokenType.COMMA, null);
+            }
             case '@' -> {
                 return generateImportToken();
             }
@@ -87,75 +91,9 @@ public class OOMLLexer extends Lexer {
         }
     }
 
-
     /**
-     * Returns the current character,
-     * Does not move the cursor,
-     * returns -1 on error or EOF
-     *//*
-    private int peek() {
-
-        if (!this.__charInUse) {
-
-            try {
-                this.__currentChar = this.reader.read();
-                //System.out.println((char) this.__currentChar);
-
-            } catch (IOException e) {
-                System.err.println(e.getLocalizedMessage());
-                System.err.println("Assuming EOF after error, continuing...");
-                this.__currentChar = -1;
-                try {
-                    reader.close();
-                } catch (IOException ioe) {
-                    System.err.println(ioe.getLocalizedMessage());
-                    System.err.println("Failed while trying to close the reader, continuing...");
-                }
-            }
-            this.__charInUse = true;
-        }
-        return this.__currentChar;
-    }
-
-    private char peek(int i){
-        return 0;
-    }
-
-    /**
-     * Returns the current character,
-     * Moves the cursor by one forward (after the current character),
-     * returns -1 on error or EOF
-     *//*
-    private int read() {
-        if (this.__charInUse) {
-            this.__charInUse = false;
-            return this.__currentChar;
-        }
-        try {
-            this.__currentChar = this.reader.read();
-            //System.out.println((char) this.currentChar);
-        } catch (IOException e) {
-            System.err.println(e.getLocalizedMessage());
-            System.err.println("Assuming EOF after error, continuing...");
-
-            this.__currentChar = -1;
-        }
-        if (this.__currentChar == -1) {
-            try {
-                reader.close();
-
-            } catch (IOException ioe) {
-                System.err.println(ioe.getLocalizedMessage());
-                System.err.println("Failed while trying to close the reader, continuing...");
-            }
-        }
-
-        this.__charInUse = true;
-
-        return this.__currentChar;
-
-    }*/
-
+     * Discards all characters in the OOMLKEY.PAD character set (considered PADDING)
+     */
     private void consumePadding() {
         while (!cStream.isEOF() && OOMLKey.PAD.getValue().indexOf(cStream.getChar()) != -1) {
             cStream.next();
@@ -163,11 +101,12 @@ public class OOMLLexer extends Lexer {
     }
 
     /**
-     * We already know that the previous character is '/'
-     * and that the current one is either '*' or '/'
+     * Generates a token from any comment in a character stream
      * @return Token
      */
     private Token generateCommentToken() {
+        // We already know that the previous character is '/'
+        // and that the current one is either '*' or '/'
         return (cStream.getChar() == '*') ? generateMultiLineCommentToken() : generateSingleLineCommentToken();
     }
 
