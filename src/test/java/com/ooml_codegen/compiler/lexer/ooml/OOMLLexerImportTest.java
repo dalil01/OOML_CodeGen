@@ -52,7 +52,7 @@ public class OOMLLexerImportTest extends OOMLLexerTest {
 				Assertions.assertEquals("dir.", token.value());
 			}
 			else if (currentLine >= 11 && currentLine <= 16) {
-				Assertions.assertEquals("", token.value());
+				Assertions.assertNull(token.value());
 			}
 			else if (currentLine == 17) {
 				Assertions.assertEquals("babla2", token.value());
