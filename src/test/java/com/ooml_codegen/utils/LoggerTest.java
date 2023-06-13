@@ -7,19 +7,21 @@ import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.ooml_codegen.utils.enums.ColorCode;
 
 public class LoggerTest {
+
+    private final String error = "Error";
 
     @Test
     public void traceTest() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        Exception exception = new Exception();
-        Logger.trace(exception);
+        Logger.trace(error);
 
         String output = outputStream.toString().trim();
-        String expectedOutput = new Date() + " TRACE " + exception;
+        String expectedOutput = new Date() + " TRACE " + error;
 
         Assertions.assertEquals(expectedOutput, output);
         System.setOut(System.out);
@@ -30,11 +32,10 @@ public class LoggerTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        Exception exception = new Exception();
-        Logger.debug(exception);
+        Logger.debug(error);
 
         String output = outputStream.toString().trim();
-        String expectedOutput = new Date() + " DEBUG " + exception;
+        String expectedOutput = new Date() + " DEBUG " + error;
 
         Assertions.assertEquals(expectedOutput, output);
         System.setOut(System.out);
@@ -45,11 +46,10 @@ public class LoggerTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        Exception exception = new Exception();
-        Logger.info(exception);
+        Logger.info(error);
 
         String output = "\u001B" + outputStream.toString().trim();
-        String expectedOutput = ColorCode.GREEN + new Date().toString() + " INFO " + exception + ColorCode.RESET;
+        String expectedOutput = ColorCode.GREEN + new Date().toString() + " INFO " + error + ColorCode.RESET;
 
         Assertions.assertEquals(expectedOutput, output);
         System.setOut(System.out);
@@ -60,11 +60,10 @@ public class LoggerTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        Exception exception = new Exception();
-        Logger.warn(exception);
+        Logger.warn(error);
 
         String output = "\u001B" + outputStream.toString().trim();
-        String expectedOutput = ColorCode.YELLOW + new Date().toString() + " WARN " + exception + ColorCode.RESET;
+        String expectedOutput = ColorCode.YELLOW + new Date().toString() + " WARN " + error + ColorCode.RESET;
 
         Assertions.assertEquals(expectedOutput, output);
         System.setOut(System.out);
@@ -75,11 +74,10 @@ public class LoggerTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        Exception exception = new Exception();
-        Logger.error(exception);
+        Logger.error(error);
 
         String output = "\u001B" + outputStream.toString().trim();
-        String expectedOutput = ColorCode.RED + new Date().toString() + " ERROR " + exception + ColorCode.RESET;
+        String expectedOutput = ColorCode.RED + new Date().toString() + " ERROR " + error + ColorCode.RESET;
 
         Assertions.assertEquals(expectedOutput, output);
         System.setOut(System.out);
