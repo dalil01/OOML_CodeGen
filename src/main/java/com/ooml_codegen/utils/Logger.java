@@ -34,19 +34,19 @@ public class Logger {
 
         switch (errorType) {
             case TRACE:
-                errorMessage.append(" TRACE ");
+                errorMessage.append(" ").append(ErrorType.TRACE).append(" ").append(message);
                 break;
             case DEBUG:
-                errorMessage.append(" DEBUG ");
+                errorMessage.append(" ").append(ErrorType.DEBUG).append(" ").append(message);
                 break;
             case INFO:
-                errorMessage.insert(0, ColorCode.GREEN).append(" INFO ").append(message).append(ColorCode.RESET);
+                errorMessage.insert(0, ColorCode.GREEN).append(" ").append(ErrorType.INFO).append(" ").append(message).append(ColorCode.RESET);
                 break;
             case WARN:
-                errorMessage.insert(0, ColorCode.YELLOW).append(" WARN ").append(message).append(ColorCode.RESET);
+                errorMessage.insert(0, ColorCode.YELLOW).append(" ").append(ErrorType.WARN).append(" ").append(message).append(ColorCode.RESET);
                 break;
             case ERROR:
-                errorMessage.insert(0, ColorCode.RED).append(" ERROR ").append(message).append(ColorCode.RESET);
+                errorMessage.insert(0, ColorCode.RED).append(" ").append(ErrorType.ERROR).append(" ").append(message).append(ColorCode.RESET);
                 break;
         }
         System.out.println(errorMessage);

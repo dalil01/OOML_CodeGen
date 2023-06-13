@@ -1,6 +1,7 @@
 package com.ooml_codegen.utils.enums;
 
 public enum ColorCode {
+
     RESET("\033[0m"),
     GREEN("\u001B[32m"),
     YELLOW("\u001B[33m"),
@@ -16,4 +17,5 @@ public enum ColorCode {
     public String toString() {
         return code;
     }
+
 }
