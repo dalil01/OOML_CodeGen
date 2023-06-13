@@ -3,6 +3,7 @@ package com.ooml_codegen.compiler.lexer.ooml;
 import com.ooml_codegen.compiler.lexer.Lexer;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
+import com.ooml_codegen.compiler.lexer.CharStream;
 
 import java.io.*;
 import java.util.Objects;
@@ -10,76 +11,71 @@ import java.util.stream.Stream;
 
 public class OOMLLexer extends Lexer {
 
-    private int __currentChar = 0;
-    private boolean __charInUse = false;
+    private final CharStream cStream;
 
-    // returns the character under the cursor but doesn't move
-
-
-    public OOMLLexer(String filePath) {
+    public OOMLLexer(String filePath) throws FileNotFoundException {
         super(filePath);
+        // TODO : Check file extension, must be .ooml
+        this.cStream = new CharStream(new File(filePath));
     }
 
-    public Stream<Token> tokenize() throws FileNotFoundException {
-        try {
-            // TODO : Check file extension, must be .ooml
-            File file = new File(this.filePath);
-            this.reader = new BufferedReader(new FileReader(file));
+    public Stream<Token> tokenize() {
+        Stream<Token> tokenStream = Stream.generate(this::nextToken).takeWhile(Objects::nonNull);
+        tokenStream = Stream.concat(tokenStream, Stream.of(new Token(TokenType.EOF, null)));
 
-            Stream<Token> tokenStream = Stream.generate(this::nextToken).takeWhile(Objects::nonNull);
-            tokenStream = Stream.concat(tokenStream, Stream.of(new Token(TokenType.EOF, null)));
-
-            return tokenStream;
-        } catch (FileNotFoundException e) {
-            System.out.println("Lexer.tokenize: Error while opening file " + filePath + " ; " + e.getMessage());
-            throw e;
-        }
+        return tokenStream;
     }
 
     private Token nextToken() {
-
-        // Consuming PADDING
         consumePadding();
-
         return generateToken();
     }
 
     private Token generateToken() {
-        if (peek() == -1)
+        if (cStream.isEOF()) {
             return null;
-        switch (peek()) {
+        }
+
+        switch (cStream.getChar()) {
             case '/' -> {
                 //Checking for the next character, might not be a comment
-                read();
-                if (peek() == -1) {
+                cStream.next();
+
+                if (cStream.isEOF()) {
                     return new Token(TokenType.WORD, "/");
                 }
-                if (peek() != '*' && peek() != '/') {
+
+                if (cStream.getChar() != '*' && cStream.getChar() != '/') {
                     return generateWordToken("/");
                 }
+
                 return generateCommentToken();
             }
             case '@' -> {
                 return generateImportToken();
             }
             case ':' -> {
-                read();
+                cStream.next();
                 return new Token(TokenType.COLON, null);
             }
             case '=' -> {
-                read();
+                cStream.next();
                 return new Token(TokenType.EQUAL, null);
             }
             case '+', '#' -> {
-                return new Token(TokenType.SIGN, String.valueOf(read()));
+                Token tok = new Token(TokenType.SIGN, String.valueOf(cStream.getChar()));
+                cStream.next();
+                return tok;
             }
             case '-' -> {
                 //check for next character to differentiate sign and inheritance
-                read();
-                if (peek() == '>') {
+                cStream.next();
+
+                if (cStream.getChar() == '>') {
                     //TODO Maybe add inherited stuff to this token
                     return new Token(TokenType.INHERITANCE, null);
                 }
+
                 return new Token(TokenType.SIGN, "-");
             }
             case '"', '\'', '`' -> {
@@ -96,7 +92,7 @@ public class OOMLLexer extends Lexer {
      * Returns the current character,
      * Does not move the cursor,
      * returns -1 on error or EOF
-     */
+     *//*
     private int peek() {
 
         if (!this.__charInUse) {
@@ -121,11 +117,15 @@ public class OOMLLexer extends Lexer {
         return this.__currentChar;
     }
 
+    private char peek(int i){
+        return 0;
+    }
+
     /**
      * Returns the current character,
      * Moves the cursor by one forward (after the current character),
      * returns -1 on error or EOF
-     */
+     *//*
     private int read() {
         if (this.__charInUse) {
             this.__charInUse = false;
@@ -154,112 +154,134 @@ public class OOMLLexer extends Lexer {
 
         return this.__currentChar;
 
-    }
+    }*/
 
     private void consumePadding() {
-        while (peek() != -1 && OOMLKey.PAD.getValue().indexOf((char) peek()) != -1) {
-            read();
+        while (!cStream.isEOF() && OOMLKey.PAD.getValue().indexOf(cStream.getChar()) != -1) {
+            cStream.next();
         }
     }
 
-    // we already know that the previous character is '/'
-    // and that the current one is either '*' or '/'
+    /**
+     * We already know that the previous character is '/'
+     * and that the current one is either '*' or '/'
+     * @return Token
+     */
     private Token generateCommentToken() {
-        if (peek() == '*')
-            return generateMultiLineCommentToken();
-        return generateSingleLineCommentToken();
+        return (cStream.getChar() == '*') ? generateMultiLineCommentToken() : generateSingleLineCommentToken();
     }
 
     private Token generateSingleLineCommentToken() {
-        read();
+        cStream.next();
+
         StringBuilder s = new StringBuilder();
-        while (peek() != -1 && OOMLKey.NEWLINE.getValue().indexOf((char) peek()) == -1) {
-            s.append((char) read());
+        while (!cStream.isEOF() && OOMLKey.NEWLINE.getValue().indexOf(cStream.getChar()) == -1) {
+            s.append(cStream.getChar());
+            cStream.next();
         }
+
         return new Token(TokenType.SINGLE_LINE_COMMENT, s.toString());
     }
-    /*
-    TODO
-    isEOF();
-    next();
-    current();
-    */
 
-    /* zae* azea*/
     private Token generateMultiLineCommentToken() {
-        read();
+        cStream.next();
+
         StringBuilder s = new StringBuilder();
         while (true) {
-            while (peek() != -1 && peek() != '*') {
-                s.append((char) read());
+            while (!cStream.isEOF() && cStream.getChar() != '*') {
+                s.append(cStream.getChar());
+                cStream.next();
             }
+
             // if we reached EOF (no '*')
-            if (peek() == -1) {
+            if (cStream.isEOF()) {
                 break;
             }
-            read();
+
+            cStream.next();
 
             // someone added a '*' just before EOF
-            if (peek() == -1) {
+            if (cStream.isEOF()) {
                 s.append('*');
                 break;
             }
 
-            if (peek() == '/') {
-                read();
+            if (cStream.getChar() == '/') {
+                cStream.next();
                 break;
             }
 
             s.append('*');
 
         }
+
         return new Token(TokenType.MULTI_LINE_COMMENT, s.toString());
     }
 
-    // We are using a different word terminator here as file paths often contain '/'
+    /**
+     * We are using a different word terminator here as file paths often contain '/'
+     * @return Token
+     */
     private Token generateImportToken() {
-        read();
+        cStream.next();
         consumePadding();
-        if (peek() == -1) {
+
+        if (cStream.isEOF()) {
             System.err.println("WARN: Import symbol found with nothing to import before EOF!");
             return new Token(TokenType.IMPORT, null);
         }
+
         String file;
-        if (peek() == '"' | peek() == '\'' | peek() == '`') {
+        if (cStream.getChar() == '"' | cStream.getChar() == '\'' | cStream.getChar() == '`') {
             file = generateQuotedWord().value();
         } else {
             StringBuilder s = new StringBuilder();
-            while (peek() != -1 && OOMLKey.FILE_END.getValue().indexOf((char) peek()) == -1) {
-                s.append((char) read());
+            while (!cStream.isEOF() && OOMLKey.FILE_END.getValue().indexOf(cStream.getChar()) == -1) {
+                s.append(cStream.getChar());
+                cStream.next();
             }
+
             file = s.toString();
         }
+
         if (file == null || file.isEmpty()) {
             System.err.println("WARN: Import symbol found with nothing to import! Use quotes if a character isn't recognized as part of a file.");
             // using null objects instead of empty strings for easier checking... although isEmpty is O(1) tbh
             file = null;
         }
+
         return new Token(TokenType.IMPORT, file);
     }
 
-    // Need to implement proper Exception stuff
+    // TODO Need to implement proper Exception stuff
     private Token generateQuotedWord() {
-        int quote = read();
+        int quote = cStream.getChar();
+        cStream.next();
+
         StringBuilder s = new StringBuilder();
-        while (peek() != -1 && peek() != quote) {
-            if (peek() == '\\') {
-                read();
-                if (peek() != quote && peek() != '\\') {
-                    System.err.println("Character '" + (char) peek() + "' did not need to be escaped.");
+        while (!cStream.isEOF() && cStream.getChar() != quote) {
+            if (cStream.getChar() == '\\') {
+                cStream.next();
+
+                if (cStream.isEOF()){
+                    System.err.println("Reached EOF after escaping character!");
+                    break;
+                }
+
+                if (cStream.getChar() != quote && cStream.getChar() != '\\') {
+                    System.err.println("Character '" + cStream.getChar() + "' did not need to be escaped.");
                 }
             }
-            s.append((char) read());
+            s.append(cStream.getChar());
+            cStream.next();
         }
-        if (peek() == quote) {
-            read();
-        } else {
+
+        if (cStream.isEOF()){
             System.err.println("Quote closed by end of file.");
+        } else {
+            cStream.next();
         }
+
         return new Token(TokenType.WORD, s.toString());
     }
 
@@ -268,14 +290,15 @@ public class OOMLLexer extends Lexer {
     }
 
     private Token generateWordToken(String prefix) {
+        StringBuilder s = new StringBuilder(prefix + cStream.getChar());
+        cStream.next();
 
-        StringBuilder s = new StringBuilder(prefix);
-        while (peek() != -1 && OOMLKey.WORD_END.getValue().indexOf((char) peek()) == -1) {
-            s.append((char) read());
+        while (!cStream.isEOF() && OOMLKey.WORD_END.getValue().indexOf(cStream.getChar()) == -1) {
+            s.append(cStream.getChar());
+            cStream.next();
         }
+
         return new Token(TokenType.WORD, s.toString());
     }
-
-
 
 }

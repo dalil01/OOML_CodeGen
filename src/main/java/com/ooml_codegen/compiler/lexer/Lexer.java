@@ -2,15 +2,14 @@ package com.ooml_codegen.compiler.lexer;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.stream.Stream;
 
 
 public abstract class Lexer {
 
 	protected final String filePath;
-	protected BufferedReader reader;
 
+	protected BufferedReader reader;
 	protected Lexer(String filePath) {
 		this.filePath = filePath;
 		this.reader = null;
