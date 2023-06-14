@@ -36,53 +36,60 @@ public class OOMLLexer extends Lexer {
             return null;
         }
 
-        switch (cStream.getChar()) {
-            case '/' -> {
+        // I don't know if the enum helped... actually seems less readable?
+        OOMLSymbols symbol = OOMLSymbols.getForChar(cStream.getChar());
+        if (symbol == null){
+            return generateWordToken();
+        }
+
+        switch (symbol) {
+            case SLASH -> {
                 //Checking for the next character, might not be a comment
                 cStream.next();
 
                 if (cStream.isEOF()) {
-                    return new Token(TokenType.WORD, "/");
+                    return new Token(TokenType.WORD, OOMLSymbols.SLASH.stringValue());
                 }
 
-                if (cStream.getChar() != '*' && cStream.getChar() != '/') {
-                    return generateWordToken("/");
+                if (cStream.getChar() != OOMLSymbols.STAR.getValue() && cStream.getChar() != OOMLSymbols.SLASH.getValue()) {
+                    return generateWordToken(OOMLSymbols.SLASH.stringValue());
                 }
 
                 return generateCommentToken();
             }
-            case ',' -> {
+            case COMMA -> {
                 cStream.next();
                 return new Token(TokenType.COMMA, null);
             }
-            case '@' -> {
+            case IMPORT -> {
                 return generateImportToken();
             }
-            case ':' -> {
+            case COLON -> {
                 cStream.next();
                 return new Token(TokenType.COLON, null);
             }
-            case '=' -> {
+            case EQUAL -> {
                 cStream.next();
                 return new Token(TokenType.EQUAL, null);
             }
-            case '+', '#' -> {
+            case PLUS, HASH -> {
                 Token tok = new Token(TokenType.SIGN, String.valueOf(cStream.getChar()));
                 cStream.next();
                 return tok;
             }
-            case '-' -> {
+            case MINUS -> {
                 //check for next character to differentiate sign and inheritance
                 cStream.next();
 
-                if (cStream.getChar() == '>') {
+                if (cStream.getChar() == OOMLSymbols.GREATER_THAN.getValue()) {
+                    // matched "->"
                     //TODO Maybe add inherited stuff to this token
                     return new Token(TokenType.INHERITANCE, null);
                 }
 
-                return new Token(TokenType.SIGN, "-");
+                return new Token(TokenType.SIGN, OOMLSymbols.MINUS.stringValue());
             }
-            case '"', '\'', '`' -> {
+            case DOUBLE_QUOTE, SINGLE_QUOTE, BACK_QUOTE -> {
                 return generateQuotedWord();
             }
             default -> {
@@ -92,7 +99,7 @@ public class OOMLLexer extends Lexer {
     }
 
     /**
-     * Discards all characters in the OOMLKEY.PAD character set (considered PADDING)
+     * Discards all characters in the OOMLKey.PAD character set (considered PADDING)
      */
     private void consumePadding() {
         while (!cStream.isEOF() && OOMLKey.PAD.getValue().indexOf(cStream.getChar()) != -1) {
@@ -107,7 +114,7 @@ public class OOMLLexer extends Lexer {
     private Token generateCommentToken() {
         // We already know that the previous character is '/'
         // and that the current one is either '*' or '/'
-        return (cStream.getChar() == '*') ? generateMultiLineCommentToken() : generateSingleLineCommentToken();
+        return (cStream.getChar() == OOMLSymbols.STAR.getValue()) ? generateMultiLineCommentToken() : generateSingleLineCommentToken();
     }
 
     private Token generateSingleLineCommentToken() {
@@ -127,7 +134,7 @@ public class OOMLLexer extends Lexer {
 
         StringBuilder s = new StringBuilder();
         while (true) {
-            while (!cStream.isEOF() && cStream.getChar() != '*') {
+            while (!cStream.isEOF() && cStream.getChar() != OOMLSymbols.STAR.getValue()) {
                 s.append(cStream.getChar());
                 cStream.next();
             }
@@ -141,11 +148,11 @@ public class OOMLLexer extends Lexer {
 
             // someone added a '*' just before EOF
             if (cStream.isEOF()) {
-                s.append('*');
+                s.append(OOMLSymbols.STAR.getValue());
                 break;
             }
 
-            if (cStream.getChar() == '/') {
+            if (cStream.getChar() == OOMLSymbols.SLASH.getValue()) {
                 cStream.next();
                 break;
             }
@@ -171,7 +178,9 @@ public class OOMLLexer extends Lexer {
         }
 
         String file;
-        if (cStream.getChar() == '"' | cStream.getChar() == '\'' | cStream.getChar() == '`') {
+        if (cStream.getChar() == OOMLSymbols.DOUBLE_QUOTE.getValue() |
+                cStream.getChar() == OOMLSymbols.SINGLE_QUOTE.getValue() |
+                cStream.getChar() == OOMLSymbols.BACK_QUOTE.getValue()) {
             file = generateQuotedWord().value();
         } else {
             StringBuilder s = new StringBuilder();
@@ -199,7 +208,7 @@ public class OOMLLexer extends Lexer {
 
         StringBuilder s = new StringBuilder();
         while (!cStream.isEOF() && cStream.getChar() != quote) {
-            if (cStream.getChar() == '\\') {
+            if (cStream.getChar() == OOMLSymbols.BACKSLASH.getValue()) {
                 cStream.next();
 
                 if (cStream.isEOF()){
@@ -207,7 +216,7 @@ public class OOMLLexer extends Lexer {
                     break;
                 }
 
-                if (cStream.getChar() != quote && cStream.getChar() != '\\') {
+                if (cStream.getChar() != quote && cStream.getChar() != OOMLSymbols.BACKSLASH.getValue()) {
                     System.err.println("Character '" + cStream.getChar() + "' did not need to be escaped.");
                 }
             }
