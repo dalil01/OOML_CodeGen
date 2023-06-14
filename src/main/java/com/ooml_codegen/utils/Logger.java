@@ -33,22 +33,14 @@ public class Logger {
         errorMessage.append(LocalDateTime.now());
 
         switch (errorType) {
-            case TRACE:
-                errorMessage.append(" ").append(ErrorType.TRACE).append(" ").append(message);
-                break;
-            case DEBUG:
-                errorMessage.append(" ").append(ErrorType.DEBUG).append(" ").append(message);
-                break;
-            case INFO:
-                errorMessage.insert(0, ColorCode.GREEN).append(" ").append(ErrorType.INFO).append(" ").append(message).append(ColorCode.RESET);
-                break;
-            case WARN:
-                errorMessage.insert(0, ColorCode.YELLOW).append(" ").append(ErrorType.WARN).append(" ").append(message).append(ColorCode.RESET);
-                break;
-            case ERROR:
-                errorMessage.insert(0, ColorCode.RED).append(" ").append(ErrorType.ERROR).append(" ").append(message).append(ColorCode.RESET);
-                break;
+            case TRACE -> errorMessage.append(" ").append(ErrorType.TRACE).append(" ").append(message);
+            case DEBUG -> errorMessage.append(" ").append(ErrorType.DEBUG).append(" ").append(message);
+            case INFO -> errorMessage.insert(0, ColorCode.GREEN).append(" ").append(ErrorType.INFO).append(" ").append(message).append(ColorCode.RESET);
+            case WARN -> errorMessage.insert(0, ColorCode.YELLOW).append(" ").append(ErrorType.WARN).append(" ").append(message).append(ColorCode.RESET);
+            case ERROR -> errorMessage.insert(0, ColorCode.RED).append(" ").append(ErrorType.ERROR).append(" ").append(message).append(ColorCode.RESET);
         }
+
         System.out.println(errorMessage);
     }
+
 }

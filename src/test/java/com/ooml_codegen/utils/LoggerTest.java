@@ -34,6 +34,30 @@ public class LoggerTest {
     }
 
     @Test
+    public void debugTest() {
+        LocalDateTime before = LocalDateTime.now();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream out = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        Logger.debug(error);
+
+        String output = outputStream.toString().trim();
+        System.setOut(out);
+
+        int length = checkTime(before, output);
+        output = output.substring(length);
+
+        String expectedOutput = " DEBUG " + error;
+
+        Assertions.assertEquals(expectedOutput, output);
+
+    }
+
+
+
+    @Test
     public void traceTest() {
         LocalDateTime before = LocalDateTime.now();
 
@@ -54,28 +78,6 @@ public class LoggerTest {
         String expectedOutput = " TRACE " + error;
 
         Assertions.assertEquals(expectedOutput, output);
-    }
-
-    @Test
-    public void debugTest() {
-        LocalDateTime before = LocalDateTime.now();
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream out = System.out;
-        System.setOut(new PrintStream(outputStream));
-
-        Logger.debug(error);
-
-        String output = outputStream.toString().trim();
-        System.setOut(out);
-
-        int length = checkTime(before, output);
-        output = output.substring(length);
-
-        String expectedOutput = " DEBUG " + error;
-
-        Assertions.assertEquals(expectedOutput, output);
-
     }
 
     @Test
