@@ -1,6 +1,6 @@
 package com.ooml_codegen.utils;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.ooml_codegen.utils.enums.ColorCode;
 import com.ooml_codegen.utils.enums.ErrorType;
@@ -30,7 +30,7 @@ public class Logger {
     private static void printMessage(ErrorType errorType, String message)  {
         StringBuilder errorMessage = new StringBuilder();
 
-        errorMessage.append(new Date());
+        errorMessage.append(LocalDateTime.now());
 
         switch (errorType) {
             case TRACE:
@@ -52,4 +52,3 @@ public class Logger {
         System.out.println(errorMessage);
     }
 }
-
