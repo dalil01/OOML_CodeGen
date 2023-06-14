@@ -37,7 +37,7 @@ public class OOMLLexer extends Lexer {
      */
     private void consumePadding() {
         while (!this.cStream.isEOF() && OOMLKey.PAD.getValue().indexOf(this.cStream.getChar()) != -1) {
-            this. cStream.next();
+            this.cStream.next();
         }
     }
 
@@ -239,7 +239,7 @@ public class OOMLLexer extends Lexer {
             if (this.cStream.getChar() == OOMLSymbols.BACKSLASH.getValue()) {
                 this.cStream.next();
 
-                if (this.cStream.isEOF()){
+                if (this.cStream.isEOF()) {
                     System.err.println("Reached EOF after escaping character!");
                     break;
                 }
@@ -253,7 +253,7 @@ public class OOMLLexer extends Lexer {
             this.cStream.next();
         }
 
-        if (this.cStream.isEOF()){
+        if (this.cStream.isEOF()) {
             System.err.println("Quote closed by end of file.");
         } else {
             this.cStream.next();
