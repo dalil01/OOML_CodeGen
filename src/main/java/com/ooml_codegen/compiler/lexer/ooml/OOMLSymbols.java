@@ -1,7 +1,8 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
-public enum OOMLSymbols {
+import java.util.Optional;
 
+public enum OOMLSymbols {
 
     SLASH('/'),
     STAR('*'),
@@ -29,8 +30,7 @@ public enum OOMLSymbols {
     OPENING_BRACKET('['),
     CLOSING_BRACKET('}'),
     OPENING_CURLY_BRACKET('{'),
-    CLOSING_CURLY_BRACKET('}'),
-
+    CLOSING_CURLY_BRACKET('}')
     ;
 
     private final char value;
@@ -43,17 +43,19 @@ public enum OOMLSymbols {
         return this.value;
     }
 
-    public String stringValue(){
+    @Override
+    public String toString(){
         return String.valueOf(this.value);
     }
 
-    public static OOMLSymbols getForChar(char c){
+    public static Optional<OOMLSymbols> getForChar(char c){
         for (OOMLSymbols symbol : OOMLSymbols.values()){
             if (c == symbol.value){
-                return symbol;
+                return Optional.of(symbol);
             }
         }
 
-        return null;
+        return Optional.empty();
     }
+
 }
