@@ -30,19 +30,16 @@ public class CharStream {
             return false;
         }
 
-        int readChar = 0;
+        int readChar = -1;
         try {
             readChar = reader.read();
         } catch (IOException e) {
-            readChar = -1;
+            e.printStackTrace();
         }
 
-        if (readChar == -1){
+        if (readChar == -1) {
             this.reachedEOF = true;
-
-            try {
-                this.reader.close();
-            } catch (IOException ignored) {}
+            this.closeReaderQuietly();
 
             return false;
         }
@@ -75,6 +72,13 @@ public class CharStream {
             try {
                 this.reader.close();
             } catch (IOException ignored) {}
+        }
+    }
+
+    private void closeReaderQuietly() {
+        try {
+            reader.close();
+        } catch (IOException ignored) {
         }
     }
 

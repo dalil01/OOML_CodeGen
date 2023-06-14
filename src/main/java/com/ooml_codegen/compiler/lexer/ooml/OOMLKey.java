@@ -2,50 +2,50 @@ package com.ooml_codegen.compiler.lexer.ooml;
 
 public enum OOMLKey {
 
-    NEWLINE(OOMLSymbols.NEWLINE.stringValue() +
-            OOMLSymbols.NEXT_LINE.stringValue() +
-            OOMLSymbols.RETURN_CARRIAGE.stringValue() +
-            OOMLSymbols.LINE_SEPARATOR.stringValue() +
-            OOMLSymbols.PARAGRAPH_SEPARATOR.stringValue()),
-    SPACE(OOMLSymbols.SPACE.stringValue() +
-            OOMLSymbols.TABULATION.stringValue()),
-    QUOTE(OOMLSymbols.SINGLE_QUOTE.stringValue() +
-            OOMLSymbols.DOUBLE_QUOTE.stringValue() +
-            OOMLSymbols.BACK_QUOTE.stringValue()),
-    ACCESS_MODIFIER(OOMLSymbols.PLUS.stringValue() +
-            OOMLSymbols.MINUS.stringValue() +
-            OOMLSymbols.HASH.stringValue()),
+    NEWLINE(OOMLSymbols.NEWLINE +
+            OOMLSymbols.NEXT_LINE.toString() +
+            OOMLSymbols.RETURN_CARRIAGE +
+            OOMLSymbols.LINE_SEPARATOR +
+            OOMLSymbols.PARAGRAPH_SEPARATOR),
+    SPACE(OOMLSymbols.SPACE +
+            OOMLSymbols.TABULATION.toString()),
+    QUOTE(OOMLSymbols.SINGLE_QUOTE +
+            OOMLSymbols.DOUBLE_QUOTE.toString() +
+            OOMLSymbols.BACK_QUOTE),
+    ACCESS_MODIFIER(OOMLSymbols.PLUS +
+            OOMLSymbols.MINUS.toString() +
+            OOMLSymbols.HASH),
 
-    PARENTHESIS(OOMLSymbols.OPENING_PARENTHESIS.stringValue() +
-            OOMLSymbols.CLOSING_PARENTHESIS.stringValue()),
-    CURLY_BRACKET(OOMLSymbols.OPENING_CURLY_BRACKET.stringValue() +
-            OOMLSymbols.CLOSING_CURLY_BRACKET.stringValue()),
-    BRACKET(OOMLSymbols.OPENING_BRACKET.stringValue() +
-            OOMLSymbols.CLOSING_BRACKET.stringValue()),
+    PARENTHESIS(OOMLSymbols.OPENING_PARENTHESIS +
+            OOMLSymbols.CLOSING_PARENTHESIS.toString()),
+    CURLY_BRACKET(OOMLSymbols.OPENING_CURLY_BRACKET +
+            OOMLSymbols.CLOSING_CURLY_BRACKET.toString()),
+    BRACKET(OOMLSymbols.OPENING_BRACKET +
+            OOMLSymbols.CLOSING_BRACKET.toString()),
 
     PACKAGE_S("package"),
 
     PAD(SPACE.value + NEWLINE.value),
 
     WORD_END(PAD.value +
-            OOMLSymbols.COLON.stringValue() +
+            OOMLSymbols.COLON +
             QUOTE.value +
-            OOMLSymbols.EQUAL.stringValue() +
-            OOMLSymbols.IMPORT.stringValue() +
+            OOMLSymbols.EQUAL +
+            OOMLSymbols.IMPORT +
             ACCESS_MODIFIER.value +
-            OOMLSymbols.COMMA.stringValue() +
-            OOMLSymbols.SLASH.stringValue() +
+            OOMLSymbols.COMMA +
+            OOMLSymbols.SLASH +
             CURLY_BRACKET.value +
             PARENTHESIS.value +
             BRACKET.value),
 
     FILE_END(PAD.value +
-            OOMLSymbols.COLON.stringValue() +
+            OOMLSymbols.COLON +
             QUOTE.value +
-            OOMLSymbols.EQUAL.stringValue() +
-            OOMLSymbols.IMPORT.stringValue() +
+            OOMLSymbols.EQUAL +
+            OOMLSymbols.IMPORT +
             ACCESS_MODIFIER.value +
-            OOMLSymbols.COMMA.stringValue() +
+            OOMLSymbols.COMMA +
             CURLY_BRACKET.value +
             PARENTHESIS.value +
             BRACKET.value),
@@ -60,6 +60,5 @@ public enum OOMLKey {
     public String getValue() {
         return this.value;
     }
-
 
 }
