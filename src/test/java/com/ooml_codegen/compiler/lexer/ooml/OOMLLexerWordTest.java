@@ -21,7 +21,7 @@ public class OOMLLexerWordTest extends OOMLLexerTest{
             System.out.println(token.toString());
 
 
-            if (List.of(1, 2, 3, 5, 6, 8, 10, 12, 14, 15, 16, 17, 18).contains(currentLine)) {
+            if (List.of(1, 2, 3, 5, 6, 8, 10, 12, 14, 17, 18).contains(currentLine)) {
                 Assertions.assertEquals(TokenType.WORD, token.type());
             }
             if (currentLine == 19){
@@ -56,12 +56,6 @@ public class OOMLLexerWordTest extends OOMLLexerTest{
             }
             else if (currentLine == 14){
                 Assertions.assertEquals("curlybracket", token.value());
-            }
-            else if (currentLine == 15){
-                Assertions.assertEquals("{", token.value());
-            }
-            else if (currentLine == 16){
-                Assertions.assertEquals("}", token.value());
             }
             else if (currentLine == 17){
                 Assertions.assertEquals("this_is$a|big~wordé&%withµsome§hit", token.value());

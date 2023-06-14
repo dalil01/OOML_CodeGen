@@ -92,6 +92,30 @@ public class OOMLLexer extends Lexer {
             case DOUBLE_QUOTE, SINGLE_QUOTE, BACK_QUOTE -> {
                 return generateQuotedWord();
             }
+            case OPENING_BRACKET -> {
+                cStream.next();
+                return new Token(TokenType.OPENING_BRACKET, null);
+            }
+            case CLOSING_BRACKET -> {
+                cStream.next();
+                return new Token(TokenType.CLOSING_BRACKET, null);
+            }
+            case OPENING_PARENTHESIS -> {
+                cStream.next();
+                return new Token(TokenType.OPENING_PARENTHESIS, null);
+            }
+            case CLOSING_PARENTHESIS -> {
+                cStream.next();
+                return new Token(TokenType.CLOSING_PARENTHESIS, null);
+            }
+            case OPENING_CURLY_BRACKET -> {
+                cStream.next();
+                return new Token(TokenType.OPENING_CURLY_BRACKET, null);
+            }
+            case CLOSING_CURLY_BRACKET -> {
+                cStream.next();
+                return new Token(TokenType.CLOSING_CURLY_BRACKET, null);
+            }
             default -> {
                 return generateWordToken();
             }
