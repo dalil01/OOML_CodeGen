@@ -2,28 +2,26 @@ package com.ooml_codegen.compiler.lexer.ooml;
 
 public enum OOMLKey {
 
-    NEWLINE(OOMLSymbols.NEWLINE +
-            OOMLSymbols.NEXT_LINE.toString() +
+    NEWLINE(OOMLSymbols.NEWLINE.toString() +
+            OOMLSymbols.NEXT_LINE +
             OOMLSymbols.RETURN_CARRIAGE +
             OOMLSymbols.LINE_SEPARATOR +
             OOMLSymbols.PARAGRAPH_SEPARATOR),
-    SPACE(OOMLSymbols.SPACE +
-            OOMLSymbols.TABULATION.toString()),
-    QUOTE(OOMLSymbols.SINGLE_QUOTE +
-            OOMLSymbols.DOUBLE_QUOTE.toString() +
+    SPACE(OOMLSymbols.SPACE.toString() +
+            OOMLSymbols.TABULATION),
+    QUOTE(OOMLSymbols.SINGLE_QUOTE.toString() +
+            OOMLSymbols.DOUBLE_QUOTE +
             OOMLSymbols.BACK_QUOTE),
     ACCESS_MODIFIER(OOMLSymbols.PLUS +
             OOMLSymbols.MINUS.toString() +
             OOMLSymbols.HASH),
 
-    PARENTHESIS(OOMLSymbols.OPENING_PARENTHESIS +
-            OOMLSymbols.CLOSING_PARENTHESIS.toString()),
-    CURLY_BRACKET(OOMLSymbols.OPENING_CURLY_BRACKET +
-            OOMLSymbols.CLOSING_CURLY_BRACKET.toString()),
-    BRACKET(OOMLSymbols.OPENING_BRACKET +
-            OOMLSymbols.CLOSING_BRACKET.toString()),
-
-    PACKAGE_S("package"),
+    PARENTHESIS(OOMLSymbols.OPENING_PARENTHESIS.toString() +
+            OOMLSymbols.CLOSING_PARENTHESIS),
+    CURLY_BRACKET(OOMLSymbols.OPENING_CURLY_BRACKET.toString() +
+            OOMLSymbols.CLOSING_CURLY_BRACKET),
+    BRACKET(OOMLSymbols.OPENING_BRACKET.toString() +
+            OOMLSymbols.CLOSING_BRACKET),
 
     PAD(SPACE.value + NEWLINE.value),
 

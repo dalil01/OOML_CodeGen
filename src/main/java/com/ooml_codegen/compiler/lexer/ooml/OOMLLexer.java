@@ -37,7 +37,7 @@ public class OOMLLexer extends Lexer {
      */
     private void consumePadding() {
         while (!this.cStream.isEOF() && OOMLKey.PAD.getValue().indexOf(this.cStream.getChar()) != -1) {
-            this. cStream.next();
+            this.cStream.next();
         }
     }
 
@@ -48,7 +48,7 @@ public class OOMLLexer extends Lexer {
 
         // I don't know if the enum helped... actually seems less readable?
         Optional<OOMLSymbols> symbol = OOMLSymbols.getForChar(this.cStream.getChar());
-        if (symbol.isEmpty()){
+        if (symbol.isEmpty()) {
             return this.generateWordToken();
         }
 
@@ -235,7 +235,7 @@ public class OOMLLexer extends Lexer {
             if (this.cStream.getChar() == OOMLSymbols.BACKSLASH.getValue()) {
                 this.cStream.next();
 
-                if (this.cStream.isEOF()){
+                if (this.cStream.isEOF()) {
                     System.err.println("Reached EOF after escaping character!");
                     break;
                 }
@@ -249,7 +249,7 @@ public class OOMLLexer extends Lexer {
             this.cStream.next();
         }
 
-        if (this.cStream.isEOF()){
+        if (this.cStream.isEOF()) {
             System.err.println("Quote closed by end of file.");
         } else {
             this.cStream.next();
