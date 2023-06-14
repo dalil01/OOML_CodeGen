@@ -22,8 +22,9 @@ public class LoggerTest {
             LocalDateTime tested = LocalDateTime.parse(toBeParsed);
             LocalDateTime after = LocalDateTime.now();
 
-            Assertions.assertTrue(before.isBefore(tested));
-            Assertions.assertTrue(tested.isBefore(after));
+            // on the off chance that our tests runs really really fast...
+            Assertions.assertTrue(before.isBefore(tested) || before.isEqual(tested));
+            Assertions.assertTrue(tested.isBefore(after) || tested.isEqual(after));
             return separator;
         }
         catch (DateTimeParseException e){
