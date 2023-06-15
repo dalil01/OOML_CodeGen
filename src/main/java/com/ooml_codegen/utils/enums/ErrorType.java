@@ -1,6 +1,7 @@
 package com.ooml_codegen.utils.enums;
 
 public enum ErrorType {
+
     TRACE("TRACE"),
     DEBUG("DEBUG"),
     INFO("INFO"),
@@ -15,6 +16,7 @@ public enum ErrorType {
 
     @Override
     public String toString() {
-        return type;
+        return this.type;
     }
+
 }
