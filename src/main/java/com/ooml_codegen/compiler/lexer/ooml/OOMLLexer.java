@@ -48,7 +48,7 @@ public class OOMLLexer extends Lexer {
 
         // I don't know if the enum helped... actually seems less readable?
         Optional<OOMLSymbols> symbol = OOMLSymbols.getForChar(this.cStream.getChar());
-        if (symbol.isEmpty()){
+        if (symbol.isEmpty()) {
             return this.generateWordToken();
         }
 
@@ -78,14 +78,18 @@ public class OOMLLexer extends Lexer {
                 this.cStream.next();
                 return new Token(TokenType.COLON);
             }
+            case SEMI_COLON -> {
+                this.cStream.next();
+                return new Token(TokenType.SEMI_COLON);
+            }
             case EQUAL -> {
                 this.cStream.next();
                 return new Token(TokenType.EQUAL);
             }
             case PLUS, HASH -> {
-                Token tok = new Token(TokenType.SIGN, String.valueOf(cStream.getChar()));
+                Token t = new Token(TokenType.SIGN, String.valueOf(cStream.getChar()));
                 this.cStream.next();
-                return tok;
+                return t;
             }
             case MINUS -> {
                 //check for next character to differentiate sign and inheritance
@@ -93,7 +97,7 @@ public class OOMLLexer extends Lexer {
 
                 if (this.cStream.getChar() == OOMLSymbols.GREATER_THAN.getValue()) {
                     // matched "->"
-                    //TODO Maybe add inherited stuff to this token
+                    this.cStream.next();
                     return new Token(TokenType.INHERITANCE);
                 }
 

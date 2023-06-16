@@ -22,13 +22,12 @@ public enum OOMLKey {
             OOMLSymbols.CLOSING_CURLY_BRACKET.toString()),
     BRACKET(OOMLSymbols.OPENING_BRACKET +
             OOMLSymbols.CLOSING_BRACKET.toString()),
-
-    PACKAGE_S("package"),
-
+    
     PAD(SPACE.value + NEWLINE.value),
 
     WORD_END(PAD.value +
             OOMLSymbols.COLON +
+            OOMLSymbols.SEMI_COLON +
             QUOTE.value +
             OOMLSymbols.EQUAL +
             OOMLSymbols.IMPORT +

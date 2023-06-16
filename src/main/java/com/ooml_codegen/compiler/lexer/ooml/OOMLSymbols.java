@@ -23,12 +23,13 @@ public enum OOMLSymbols {
     HASH('#'),
     COMMA(','),
     COLON(':'),
+    SEMI_COLON(';'),
     IMPORT('@'),
     GREATER_THAN('>'),
     OPENING_PARENTHESIS('('),
     CLOSING_PARENTHESIS(')'),
     OPENING_BRACKET('['),
-    CLOSING_BRACKET('}'),
+    CLOSING_BRACKET(']'),
     OPENING_CURLY_BRACKET('{'),
     CLOSING_CURLY_BRACKET('}')
     ;

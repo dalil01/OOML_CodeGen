@@ -10,78 +10,78 @@ import java.util.List;
 public class LexerQuotedWordTest extends LexerTest {
 
     protected LexerQuotedWordTest() {
-        super("quotedword.ooml");
+        super("quoted-word.ooml");
     }
 
     @Test
     public void wordTest() {
         this.lexer.tokenize().forEach(token -> {
-            int currentLine = this.index.getAndIncrement();
+            int currentToken = this.index.getAndIncrement();
 
             System.out.println(token.toString());
 
-            if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19).contains(currentLine)) {
+            if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19).contains(currentToken)) {
                 Assertions.assertEquals(TokenType.WORD, token.getType());
             }
 
-            if (currentLine == 20) {
+            if (currentToken == 20) {
                 Assertions.assertEquals(TokenType.EOF, token.getType());
             }
-            else if (currentLine == 1) {
+            else if (currentToken == 1) {
                 Assertions.assertEquals("he\"llo!", token.getStringValue());
             }
-            else if (currentLine == 2) {
+            else if (currentToken == 2) {
                 Assertions.assertEquals("I \"'am", token.getStringValue());
             }
-            else if (currentLine == 3) {
+            else if (currentToken == 3) {
                 Assertions.assertEquals("a", token.getStringValue());
             }
-            else if (currentLine == 4) {
+            else if (currentToken == 4) {
                 Assertions.assertEquals("few words// I am", token.getStringValue());
             }
-            else if (currentLine == 5) {
+            else if (currentToken == 5) {
                 Assertions.assertEquals("a", token.getStringValue());
             }
-            else if (currentLine == 6) {
+            else if (currentToken == 6) {
                 Assertions.assertEquals("comment", token.getStringValue());
             }
-            else if (currentLine == 7) {
+            else if (currentToken == 7) {
                 Assertions.assertEquals("c\"olo\\n:", token.getStringValue());
             }
-            else if (currentLine == 8) {
+            else if (currentToken == 8) {
                 Assertions.assertEquals("import@tr", token.getStringValue());
             }
-            else if (currentLine == 9) {
+            else if (currentToken == 9) {
                 Assertions.assertEquals("ash", token.getStringValue());
             }
-            else if (currentLine == 10) {
+            else if (currentToken == 10) {
                 Assertions.assertEquals("comm", token.getStringValue());
             }
-            else if (currentLine == 11) {
+            else if (currentToken == 11) {
                 Assertions.assertEquals("a,  z\n ", normalizedString(token.getStringValue()));
             }
-            else if (currentLine == 12) {
+            else if (currentToken == 12) {
                 Assertions.assertEquals("curlyb", token.getStringValue());
             }
-            else if (currentLine == 13) {
+            else if (currentToken == 13) {
                 Assertions.assertEquals("rack", token.getStringValue());
             }
-            else if (currentLine == 14) {
+            else if (currentToken == 14) {
                 Assertions.assertEquals("", token.getStringValue());
             }
-            else if (currentLine == 15) {
+            else if (currentToken == 15) {
                 Assertions.assertEquals("et{}", token.getStringValue());
             }
-            else if (currentLine == 16) {
+            else if (currentToken == 16) {
                 Assertions.assertEquals("this_is", token.getStringValue());
             }
-            else if (currentLine == 17) {
+            else if (currentToken == 17) {
                 Assertions.assertEquals("$a|bi", token.getStringValue());
             }
-            else if (currentLine == 18) {
+            else if (currentToken == 18) {
                 Assertions.assertEquals("g~wordé&%withµsome§hit", token.getStringValue());
             }
-            else if (currentLine == 19) {
+            else if (currentToken == 19) {
                 Assertions.assertEquals("test", token.getStringValue());
             }
         });

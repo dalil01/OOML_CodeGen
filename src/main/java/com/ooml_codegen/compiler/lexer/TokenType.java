@@ -7,6 +7,7 @@ public enum TokenType {
     IMPORT,
     INHERITANCE,
     COLON,
+    SEMI_COLON,
     EQUAL,
     SIGN,
     WORD,

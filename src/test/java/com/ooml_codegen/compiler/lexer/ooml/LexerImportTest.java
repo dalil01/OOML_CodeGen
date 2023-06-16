@@ -16,55 +16,55 @@ public class LexerImportTest extends LexerTest {
 	@Test
 	public void importsTest() {
 		this.lexer.tokenize().forEach(token -> {
-			int currentLine = this.index.getAndIncrement();
+			int currentToken = this.index.getAndIncrement();
 
 			System.out.println(token.toString());
 
 
-			if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 23).contains(currentLine)) {
+			if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 23).contains(currentToken)) {
 				Assertions.assertEquals(TokenType.IMPORT, token.getType());
 			}
 
-			if (currentLine == 1) {
+			if (currentToken == 1) {
 				Assertions.assertEquals("main.ooml", token.getStringValue());
 			}
-			else if (currentLine == 2) {
+			else if (currentToken == 2) {
 				Assertions.assertEquals("../models/models.ooml", token.getStringValue());
 			}
-			else if (currentLine == 3) {
+			else if (currentToken == 3) {
 				Assertions.assertEquals("../../controller/controllers.ooml/", token.getStringValue());
 			}
-			else if (currentLine == 5) {
+			else if (currentToken == 5) {
 				Assertions.assertEquals("All", token.getStringValue());
 			}
-			else if (currentLine == 6) {
+			else if (currentToken == 6) {
 				Assertions.assertEquals("Services/", token.getStringValue());
 			}
-			else if (currentLine == 7) {
+			else if (currentToken == 7) {
 				Assertions.assertEquals("config.ooml", token.getStringValue());
 			}
-			else if (currentLine == 8) {
+			else if (currentToken == 8) {
 				Assertions.assertEquals("/", token.getStringValue());
 			}
-			else if (currentLine == 9) {
+			else if (currentToken == 9) {
 				Assertions.assertEquals("dir.", token.getStringValue());
 			}
-			else if (currentLine >= 11 && currentLine <= 16) {
+			else if (currentToken >= 11 && currentToken <= 16) {
 				Assertions.assertEquals("", token.getStringValue());
 			}
-			else if (currentLine == 17) {
+			else if (currentToken == 17) {
 				Assertions.assertEquals("babla2", token.getStringValue());
 			}
-			else if (currentLine == 18) {
+			else if (currentToken == 18) {
 				Assertions.assertEquals("colon", token.getStringValue());
 			}
-			else if (currentLine == 20) {
+			else if (currentToken == 20) {
 				Assertions.assertEquals("space", token.getStringValue());
 			}
-			else if (currentLine == 22) {
+			else if (currentToken == 22) {
 				Assertions.assertEquals("comment//not_a_comment", token.getStringValue());
 			}
-			else if (currentLine == 23) {
+			else if (currentToken == 23) {
 				Assertions.assertEquals("comment/*not_a_comment*/", token.getStringValue());
 			}
 		});

@@ -16,21 +16,21 @@ public class LexerCommentTest extends LexerTest {
 	@Test
 	public void singleLineCommentTest() {
 		this.lexer.tokenize().forEach(token -> {
-			int currentLine = this.index.getAndIncrement();
+			int currentToken = this.index.getAndIncrement();
 
 			System.out.println(token.toString());
 
-			if (List.of(1, 2, 3).contains(currentLine)) {
+			if (List.of(1, 2, 3).contains(currentToken)) {
 				Assertions.assertEquals(TokenType.SINGLE_LINE_COMMENT, token.getType());
 			}
 
-			if (currentLine == 1) {
+			if (currentToken == 1) {
 				Assertions.assertEquals(" Hello World!", token.getStringValue());
 			}
-			else if (currentLine == 2) {
+			else if (currentToken == 2) {
 				Assertions.assertEquals(" Lorem ipsum /* */", token.getStringValue());
 			}
-			else if (currentLine == 3) {
+			else if (currentToken == 3) {
 				Assertions.assertEquals("/    Test // Test", token.getStringValue());
 			}
 		});
