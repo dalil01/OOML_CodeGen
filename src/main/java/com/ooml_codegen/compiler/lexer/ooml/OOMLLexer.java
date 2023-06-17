@@ -235,7 +235,6 @@ public class OOMLLexer extends Lexer {
 
         if (file.isEmpty()) {
             System.err.println("WARN: Import symbol found with nothing to import! Use quotes if a character isn't recognized as part of a file.");
-            // using null objects instead of empty strings for easier checking... although isEmpty is O(1) tbh
             return new Token(TokenType.IMPORT);
         }
 
