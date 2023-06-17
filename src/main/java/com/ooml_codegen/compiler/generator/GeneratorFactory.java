@@ -1,6 +1,6 @@
-package com.ooml_codegen.generator;
+package com.ooml_codegen.compiler.generator;
 
-import com.ooml_codegen.generator.languages.java.JavaGenerator;
+import com.ooml_codegen.compiler.generator.languages.java.JavaGenerator;
 
 public class GeneratorFactory {
 

@@ -1,7 +1,7 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.generator.enums.GenerationContext;
-import com.ooml_codegen.generator.interfaces.IGeneration;
+import com.ooml_codegen.compiler.generator.enums.GenerationContext;
+import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 
 import java.util.ArrayList;

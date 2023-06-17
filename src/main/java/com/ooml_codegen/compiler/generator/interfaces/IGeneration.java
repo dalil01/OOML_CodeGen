@@ -1,6 +1,6 @@
-package com.ooml_codegen.generator.interfaces;
+package com.ooml_codegen.compiler.generator.interfaces;
 
-import com.ooml_codegen.generator.enums.GenerationContext;
+import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 
 import java.util.Map;
 

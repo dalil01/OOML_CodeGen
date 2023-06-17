@@ -1,4 +1,4 @@
-package com.ooml_codegen.generator.enums;
+package com.ooml_codegen.compiler.generator.enums;
 
 public enum GenerationContext {
 
