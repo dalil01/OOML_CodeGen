@@ -1,11 +1,14 @@
 package com.ooml_codegen.models;
 
+import com.ooml_codegen.generator.enums.GenerationContext;
+import com.ooml_codegen.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class Class {
+public class Class implements IGeneration {
 
 	private final String name;
 	private final Package cPackage;
@@ -57,4 +60,8 @@ public class Class {
 		return this.methods;
 	}
 
+	@Override
+	public Map<GenerationContext, Object> toGenerationContext() {
+		return Map.of();
+	}
 }
