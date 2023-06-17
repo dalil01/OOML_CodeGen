@@ -9,17 +9,20 @@ import java.util.Map;
 
 public class JavaGenerator extends Generator {
 
+	// TODO : Need meta data (java version, ...)
 	@Override
 	public void generate(IGeneration obj) {
 		Map<GenerationContext, Object> context = obj.getGenerationContext();
 
-		// TODO : Check & Add missing contexts
+		// TODO : Check & Add missing contexts & make reverse engineering to get existed file content & merge data
+		// TODO : Think about the java version
 
 		if (this.autoSetTemplate(obj)) {
 			for (Map.Entry<GenerationContext, Object> c : context.entrySet()) {
 				this.addContextToTemplate(c.getKey().getValue(), c.getValue());
 			}
 
+			// TODO : find file path from package
 			this.generateFile(obj.getFileName() + ".java");
 		}
 	}
