@@ -61,7 +61,17 @@ public class Class implements IGeneration {
 	}
 
 	@Override
-	public Map<GenerationContext, Object> toGenerationContext() {
-		return Map.of();
+	public Map<GenerationContext, Object> getGenerationContext() {
+		return Map.of(
+				GenerationContext.PACKAGE, this.cPackage,
+				GenerationContext.CLASS_ACCESS_MODIFIER, this.accessModifier.getValue(),
+				GenerationContext.CLASS_NAME, this.name
+		);
 	}
+
+	@Override
+	public String getFileName() {
+		return this.name;
+	}
+
 }
