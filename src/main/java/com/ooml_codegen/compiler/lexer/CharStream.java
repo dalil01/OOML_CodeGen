@@ -20,6 +20,13 @@ public class CharStream {
     }
 
     /**
+     * @return current character. Undefined when EOF has been reached.
+     */
+    public char getCurrentChar(){
+        return this.currentChar;
+    }
+
+    /**
      * Loads next character in internal storage,
      * Updates internal EOF status,
      * If EOF or error, close reader.
@@ -57,13 +64,6 @@ public class CharStream {
     }
 
     /**
-     * @return current character. Undefined when EOF has been reached.
-     */
-    public char getChar(){
-        return this.currentChar;
-    }
-
-    /**
      * Manual reader close
      */
     public void close() {
@@ -71,7 +71,8 @@ public class CharStream {
             this.reachedEOF = true;
             try {
                 this.reader.close();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
     }
 

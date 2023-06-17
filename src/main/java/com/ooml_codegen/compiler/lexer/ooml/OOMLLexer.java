@@ -36,7 +36,7 @@ public class OOMLLexer extends Lexer {
      * Discards all characters in the OOMLKey.PAD character set (considered PADDING)
      */
     private void consumePadding() {
-        while (!this.cStream.isEOF() && OOMLKey.PAD.getValue().indexOf(this.cStream.getChar()) != -1) {
+        while (!this.cStream.isEOF() && OOMLKey.PAD.getValue().indexOf(this.cStream.getCurrentChar()) != -1) {
             this.cStream.next();
         }
     }
@@ -47,7 +47,7 @@ public class OOMLLexer extends Lexer {
         }
 
         // I don't know if the enum helped... actually seems less readable?
-        Optional<OOMLSymbols> symbol = OOMLSymbols.getForChar(this.cStream.getChar());
+        Optional<OOMLSymbols> symbol = OOMLSymbols.getForChar(this.cStream.getCurrentChar());
         if (symbol.isEmpty()) {
             return this.generateWordToken();
         }
@@ -61,7 +61,7 @@ public class OOMLLexer extends Lexer {
                     return new Token(TokenType.WORD, OOMLSymbols.SLASH.toString());
                 }
 
-                if (this.cStream.getChar() != OOMLSymbols.STAR.getValue() && this.cStream.getChar() != OOMLSymbols.SLASH.getValue()) {
+                if (this.cStream.getCurrentChar() != OOMLSymbols.STAR.getValue() && this.cStream.getCurrentChar() != OOMLSymbols.SLASH.getValue()) {
                     return this.generateWordToken(OOMLSymbols.SLASH.toString());
                 }
 
@@ -87,7 +87,7 @@ public class OOMLLexer extends Lexer {
                 return new Token(TokenType.EQUAL);
             }
             case PLUS, HASH -> {
-                Token t = new Token(TokenType.SIGN, String.valueOf(cStream.getChar()));
+                Token t = new Token(TokenType.SIGN, String.valueOf(cStream.getCurrentChar()));
                 this.cStream.next();
                 return t;
             }
@@ -95,7 +95,7 @@ public class OOMLLexer extends Lexer {
                 //check for next character to differentiate sign and inheritance
                 this.cStream.next();
 
-                if (this.cStream.getChar() == OOMLSymbols.GREATER_THAN.getValue()) {
+                if (this.cStream.getCurrentChar() == OOMLSymbols.GREATER_THAN.getValue()) {
                     // matched "->"
                     this.cStream.next();
                     return new Token(TokenType.INHERITANCE);
@@ -143,15 +143,15 @@ public class OOMLLexer extends Lexer {
     private Token generateCommentToken() {
         // We already know that the previous character is '/'
         // and that the current one is either '*' or '/'
-        return (this.cStream.getChar() == OOMLSymbols.STAR.getValue()) ? this.generateMultiLineCommentToken() : this.generateSingleLineCommentToken();
+        return (this.cStream.getCurrentChar() == OOMLSymbols.STAR.getValue()) ? this.generateMultiLineCommentToken() : this.generateSingleLineCommentToken();
     }
 
     private Token generateSingleLineCommentToken() {
         this.cStream.next();
 
         StringBuilder s = new StringBuilder();
-        while (!this.cStream.isEOF() && !containsChar(OOMLKey.NEWLINE.getValue(), this.cStream.getChar())) {
-            s.append(this.cStream.getChar());
+        while (!this.cStream.isEOF() && !containsChar(OOMLKey.NEWLINE.getValue(), this.cStream.getCurrentChar())) {
+            s.append(this.cStream.getCurrentChar());
             this.cStream.next();
         }
 
@@ -163,8 +163,8 @@ public class OOMLLexer extends Lexer {
 
         StringBuilder s = new StringBuilder();
         while (true) {
-            while (!this.cStream.isEOF() && this.cStream.getChar() != OOMLSymbols.STAR.getValue()) {
-                s.append(this.cStream.getChar());
+            while (!this.cStream.isEOF() && this.cStream.getCurrentChar() != OOMLSymbols.STAR.getValue()) {
+                s.append(this.cStream.getCurrentChar());
                 this.cStream.next();
             }
 
@@ -181,7 +181,7 @@ public class OOMLLexer extends Lexer {
                 break;
             }
 
-            if (this.cStream.getChar() == OOMLSymbols.SLASH.getValue()) {
+            if (this.cStream.getCurrentChar() == OOMLSymbols.SLASH.getValue()) {
                 this.cStream.next();
                 break;
             }
@@ -206,14 +206,14 @@ public class OOMLLexer extends Lexer {
         }
 
         Optional<String> file;
-        if (this.cStream.getChar() == OOMLSymbols.DOUBLE_QUOTE.getValue() |
-                this.cStream.getChar() == OOMLSymbols.SINGLE_QUOTE.getValue() |
-                this.cStream.getChar() == OOMLSymbols.BACK_QUOTE.getValue()) {
+        if (this.cStream.getCurrentChar() == OOMLSymbols.DOUBLE_QUOTE.getValue() |
+                this.cStream.getCurrentChar() == OOMLSymbols.SINGLE_QUOTE.getValue() |
+                this.cStream.getCurrentChar() == OOMLSymbols.BACK_QUOTE.getValue()) {
             file = this.generateQuotedWord().getValue();
         } else {
             StringBuilder s = new StringBuilder();
-            while (!this.cStream.isEOF() && !containsChar(OOMLKey.FILE_END.getValue(), this.cStream.getChar())) {
-                s.append(this.cStream.getChar());
+            while (!this.cStream.isEOF() && !containsChar(OOMLKey.FILE_END.getValue(), this.cStream.getCurrentChar())) {
+                s.append(this.cStream.getCurrentChar());
                 this.cStream.next();
             }
 
@@ -231,12 +231,12 @@ public class OOMLLexer extends Lexer {
 
     // TODO Need to implement proper Exception stuff
     private Token generateQuotedWord() {
-        int quote = this.cStream.getChar();
+        int quote = this.cStream.getCurrentChar();
         this.cStream.next();
 
         StringBuilder s = new StringBuilder();
-        while (!this.cStream.isEOF() && this.cStream.getChar() != quote) {
-            if (this.cStream.getChar() == OOMLSymbols.BACKSLASH.getValue()) {
+        while (!this.cStream.isEOF() && this.cStream.getCurrentChar() != quote) {
+            if (this.cStream.getCurrentChar() == OOMLSymbols.BACKSLASH.getValue()) {
                 this.cStream.next();
 
                 if (this.cStream.isEOF()) {
@@ -244,12 +244,12 @@ public class OOMLLexer extends Lexer {
                     break;
                 }
 
-                if (this.cStream.getChar() != quote && this.cStream.getChar() != OOMLSymbols.BACKSLASH.getValue()) {
-                    System.err.println("Character '" + this.cStream.getChar() + "' did not need to be escaped.");
+                if (this.cStream.getCurrentChar() != quote && this.cStream.getCurrentChar() != OOMLSymbols.BACKSLASH.getValue()) {
+                    System.err.println("Character '" + this.cStream.getCurrentChar() + "' did not need to be escaped.");
                 }
             }
 
-            s.append(this.cStream.getChar());
+            s.append(this.cStream.getCurrentChar());
             this.cStream.next();
         }
 
@@ -267,11 +267,11 @@ public class OOMLLexer extends Lexer {
     }
 
     private Token generateWordToken(String prefix) {
-        StringBuilder s = new StringBuilder(prefix + this.cStream.getChar());
+        StringBuilder s = new StringBuilder(prefix + this.cStream.getCurrentChar());
         this.cStream.next();
 
-        while (!this.cStream.isEOF() && !containsChar(OOMLKey.WORD_END.getValue(), this.cStream.getChar())) {
-            s.append(this.cStream.getChar());
+        while (!this.cStream.isEOF() && !containsChar(OOMLKey.WORD_END.getValue(), this.cStream.getCurrentChar())) {
+            s.append(this.cStream.getCurrentChar());
             this.cStream.next();
         }
 
