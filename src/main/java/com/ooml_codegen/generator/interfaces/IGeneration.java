@@ -6,6 +6,8 @@ import java.util.Map;
 
 public interface IGeneration {
 
-	public Map<GenerationContext, Object> toGenerationContext();
+	Map<GenerationContext, Object> getGenerationContext();
+
+	String getFileName();
 
 }
