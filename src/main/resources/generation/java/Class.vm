@@ -1,0 +1,9 @@
+package $package;
+
+#foreach($import in $imports)
+import $import;
+#end
+
+$classAccessModifier $className {
+
+}
