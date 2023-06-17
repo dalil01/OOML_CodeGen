@@ -1,0 +1,6 @@
+class Dog -> Animal
+// class Dog -> Animal
+interface Behavior
+
+	class Dog -> Animal, Behavior
+	class Dog -> Animal Behavior;

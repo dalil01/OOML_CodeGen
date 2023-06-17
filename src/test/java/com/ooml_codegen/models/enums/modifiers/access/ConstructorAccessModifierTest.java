@@ -6,6 +6,19 @@ import org.junit.jupiter.api.Test;
 public class ConstructorAccessModifierTest {
 
 	@Test
+	public void valuesTest() {
+		ConstructorAccessModifier[] expectedValues = {
+				ConstructorAccessModifier.PUBLIC,
+				ConstructorAccessModifier.PRIVATE,
+				ConstructorAccessModifier.PROTECTED
+		};
+
+		ConstructorAccessModifier[] actualValues = ConstructorAccessModifier.values();
+
+		Assertions.assertArrayEquals(expectedValues, actualValues);
+	}
+
+	@Test
 	void getValuePublicReturnsPlusTest() {
 		Assertions.assertEquals('+', ConstructorAccessModifier.PUBLIC.getValue());
 	}
