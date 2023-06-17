@@ -1,8 +1,8 @@
-package com.ooml_codegen.generator.languages.java;
+package com.ooml_codegen.compiler.generator.languages.java;
 
-import com.ooml_codegen.generator.Generator;
-import com.ooml_codegen.generator.enums.GenerationContext;
-import com.ooml_codegen.generator.interfaces.IGeneration;
+import com.ooml_codegen.compiler.generator.Generator;
+import com.ooml_codegen.compiler.generator.enums.GenerationContext;
+import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.Class;
 
 import java.util.Map;

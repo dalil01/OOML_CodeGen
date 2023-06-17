@@ -1,6 +1,6 @@
-package com.ooml_codegen.generator;
+package com.ooml_codegen.compiler.generator;
 
-import com.ooml_codegen.generator.interfaces.IGeneration;
+import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
