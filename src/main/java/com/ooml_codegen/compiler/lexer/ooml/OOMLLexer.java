@@ -87,18 +87,31 @@ public class OOMLLexer extends Lexer {
                 return new Token(TokenType.EQUAL);
             }
             case PLUS, HASH -> {
-                Token t = new Token(TokenType.SIGN, String.valueOf(cStream.getCurrentChar()));
+                String character = String.valueOf(cStream.getCurrentChar());
+
                 this.cStream.next();
-                return t;
+                // check for next character to find access modifier block
+                if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
+                    // matched "+:" or "#:"
+                    this.cStream.next();
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, character);
+                }
+
+                return new Token(TokenType.SIGN, character);
             }
             case MINUS -> {
-                //check for next character to differentiate sign and inheritance
                 this.cStream.next();
 
+                // check for next character to differentiate sign and inheritance
                 if (this.cStream.getCurrentChar() == OOMLSymbols.GREATER_THAN.getValue()) {
                     // matched "->"
                     this.cStream.next();
                     return new Token(TokenType.INHERITANCE);
+                // check for next character to find access modifier block
+                } else if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
+                    // matched "-:"
+                    this.cStream.next();
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, OOMLSymbols.MINUS.toString());
                 }
 
                 return new Token(TokenType.SIGN, OOMLSymbols.MINUS.toString());
