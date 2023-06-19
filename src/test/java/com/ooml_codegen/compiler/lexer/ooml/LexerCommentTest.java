@@ -15,7 +15,8 @@ public class LexerCommentTest extends LexerTest {
 
 	@Test
 	public void singleLineCommentTest() {
-		this.lexer.tokenize().forEach(token -> {
+		Token token = this.lexer.nextToken();
+		while (token.getType() != TokenType.EOF){
 			int currentToken = this.index.getAndIncrement();
 
 			System.out.println(token.toString());
@@ -33,12 +34,14 @@ public class LexerCommentTest extends LexerTest {
 			else if (currentToken == 3) {
 				Assertions.assertEquals("/    Test // Test", token.getStringValue());
 			}
-		});
+			token = this.lexer.nextToken();
+		}
 	}
 
 	@Test
 	public void multiLineCommentTest() {
-		this.lexer.tokenize().forEach(token -> {
+		Token token = this.lexer.nextToken();
+		while (token.getType() != TokenType.EOF){
 			int currentLine = this.index.getAndIncrement();
 
 			if (currentLine == 4) {
@@ -71,7 +74,8 @@ public class LexerCommentTest extends LexerTest {
 						"\n" +
 						"\n", normalizedString(token.getStringValue()));
 			}
-		});
+			token = this.lexer.nextToken();
+		}
 	}
 
 }

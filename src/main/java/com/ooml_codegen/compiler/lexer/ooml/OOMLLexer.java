@@ -17,16 +17,21 @@ public class OOMLLexer extends Lexer {
         super(filePath);
     }
 
+    /*
     public Stream<Token> tokenize() {
         Stream<Token> tokenStream = Stream.generate(this::nextToken).takeWhile(Objects::nonNull);
         tokenStream = Stream.concat(tokenStream, Stream.of(new Token(TokenType.EOF)));
 
         return tokenStream;
     }
-
-    private Token nextToken() {
+*/
+    public Token nextToken() {
         this.consumePadding();
-        return generateToken();
+        Token tok = generateToken();
+        if (tok == null){
+            return new Token(TokenType.EOF);
+        }
+        return tok;
     }
 
     /**

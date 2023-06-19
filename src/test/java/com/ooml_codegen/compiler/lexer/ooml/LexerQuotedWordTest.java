@@ -1,5 +1,6 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
+import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.lexer.LexerTest;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +16,8 @@ public class LexerQuotedWordTest extends LexerTest {
 
     @Test
     public void wordTest() {
-        this.lexer.tokenize().forEach(token -> {
+        Token token = this.lexer.nextToken();
+        while (token.getType() != TokenType.EOF){
             int currentToken = this.index.getAndIncrement();
 
             System.out.println(token.toString());
@@ -84,7 +86,8 @@ public class LexerQuotedWordTest extends LexerTest {
             else if (currentToken == 19) {
                 Assertions.assertEquals("test", token.getStringValue());
             }
-        });
+            token = this.lexer.nextToken();
+        }
     }
 
 }
