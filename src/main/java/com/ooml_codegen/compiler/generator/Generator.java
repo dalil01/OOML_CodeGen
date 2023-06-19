@@ -17,8 +17,6 @@ public abstract class Generator {
 
 	protected Generator() {
 		this.engine = new VelocityEngine();
-//		this.engine.setProperty("resource.loader.classpath.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-//		this.engine.setProperty("resource.loaders", "classpath");
 		this.engine.setProperty("resource.loader", "classpath");
 		this.engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 		this.engine.init();
