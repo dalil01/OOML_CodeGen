@@ -1,19 +1,20 @@
 package com.ooml_codegen.models.enums.modifiers.access;
 
-import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class ClassAccessModifierTest {
 
 	@Test
-	public void getValuePublicReturnsPlusTest() {
-		Assertions.assertEquals('+', ClassAccessModifier.PUBLIC.getValue());
+	public void getValueForOOMLTest() {
+		Assertions.assertEquals('+', ClassAccessModifier.PUBLIC.getValueForOOML());
+		Assertions.assertEquals('-', ClassAccessModifier.PRIVATE.getValueForOOML());
 	}
 
 	@Test
-	public void getValuePrivateReturnsMinusTest() {
-		Assertions.assertEquals('-', ClassAccessModifier.PRIVATE.getValue());
+	public void getValueForJavaTest() {
+		Assertions.assertEquals("public", ClassAccessModifier.PUBLIC.getValueForJava());
+		Assertions.assertEquals("private", ClassAccessModifier.PRIVATE.getValueForJava());
 	}
 
 }

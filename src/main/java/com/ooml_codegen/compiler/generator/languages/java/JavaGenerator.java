@@ -1,6 +1,7 @@
 package com.ooml_codegen.compiler.generator.languages.java;
 
 import com.ooml_codegen.compiler.generator.Generator;
+import com.ooml_codegen.compiler.generator.GeneratorType;
 import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.Class;
@@ -12,7 +13,7 @@ public class JavaGenerator extends Generator {
 	// TODO : Need meta data (java version, ...)
 	@Override
 	public void generate(IGeneration obj) {
-		Map<GenerationContext, Object> context = obj.getGenerationContext();
+		Map<GenerationContext, Object> context = obj.getGenerationContext(GeneratorType.JAVA);
 
 		// TODO : Check & Add missing contexts & make reverse engineering to get existed file content & merge data
 		// TODO : Think about the java version
