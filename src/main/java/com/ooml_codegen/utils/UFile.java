@@ -44,7 +44,8 @@ public class UFile {
 	}
 
 	public static boolean isOOMLFile(String filePath) {
-		return filePath.endsWith(".ooml");
+		File file = new File(filePath);
+		return file.exists() && filePath.endsWith(".ooml");
 	}
 
 }

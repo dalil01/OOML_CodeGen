@@ -15,7 +15,7 @@ public class UFileTest {
 		List<String> emptyDir = UFile.findOOMLFilesPath(pathPrefix + "empty");
 		Assertions.assertTrue(emptyDir.isEmpty());
 
-		List<String> invalidOOMLFile = UFile.findOOMLFilesPath(pathPrefix + "empty/empty");
+		List<String> invalidOOMLFile = UFile.findOOMLFilesPath(pathPrefix + "empty/empty.txt");
 		Assertions.assertTrue(invalidOOMLFile.isEmpty());
 
 		String mainOOMLPath = pathPrefix + "main.ooml";
@@ -33,7 +33,15 @@ public class UFileTest {
 		Assertions.assertTrue(OOMLFilesInDir.contains(srcPath + "services.ooml"));
 	}
 
-	public static String normalizedPath(String s) {
+	@Test
+	public void isOOMLFileTest() {
+		Assertions.assertTrue(UFile.isOOMLFile(pathPrefix + "main.ooml"));
+		Assertions.assertFalse(UFile.isOOMLFile(pathPrefix + "empty/empty.txt"));
+		Assertions.assertFalse(UFile.isOOMLFile(pathPrefix + "main.ooomml"));
+		Assertions.assertFalse(UFile.isOOMLFile("babla.ooml"));
+	}
+
+	private static String normalizedPath(String s) {
 		return s.replaceAll("\\\\", "/");
 	}
 
