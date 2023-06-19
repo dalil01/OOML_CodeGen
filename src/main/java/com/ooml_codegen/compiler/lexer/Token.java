@@ -6,6 +6,7 @@ public class Token {
 
 	private final TokenType type;
 
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 	private final Optional<String> value;
 
 	public Token(TokenType type) {
