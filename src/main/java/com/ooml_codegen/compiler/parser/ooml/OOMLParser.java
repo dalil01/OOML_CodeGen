@@ -1,6 +1,7 @@
 package com.ooml_codegen.compiler.parser.ooml;
 
 import com.ooml_codegen.compiler.lexer.Lexer;
+import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.parser.Parser;
 import com.ooml_codegen.compiler.validator.ooml.OOMLValidator;
@@ -16,13 +17,14 @@ public class OOMLParser extends Parser {
 
 	@Override
 	public void parse() {
-		this.lexer.tokenize().forEach(token -> {
+		Token token = this.lexer.nextToken();
+		while (token.getType() != TokenType.EOF){
 			TokenType type = token.getType();
 			String value = token.getStringValue();
 
 			switch (type) {
 			}
-		});
+		}
 	}
 
 }
