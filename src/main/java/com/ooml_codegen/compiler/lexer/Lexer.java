@@ -1,6 +1,7 @@
 package com.ooml_codegen.compiler.lexer;
 
-import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.stream.Stream;
 
 
@@ -8,11 +9,11 @@ public abstract class Lexer {
 
 	protected final String filePath;
 
-	protected BufferedReader reader;
+	protected final CharStream cStream;
 
-	protected Lexer(String filePath) {
+	protected Lexer(String filePath) throws FileNotFoundException {
 		this.filePath = filePath;
-		this.reader = null;
+		this.cStream = new CharStream(new File(filePath));
 	}
 
 	public abstract Stream<Token> tokenize();
