@@ -12,12 +12,9 @@ import java.util.stream.Stream;
 
 public class OOMLLexer extends Lexer {
 
-    private final CharStream cStream;
 
     public OOMLLexer(String filePath) throws FileNotFoundException {
         super(filePath);
-        // TODO : Check file extension, must be .ooml
-        this.cStream = new CharStream(new File(filePath));
     }
 
     public Stream<Token> tokenize() {
