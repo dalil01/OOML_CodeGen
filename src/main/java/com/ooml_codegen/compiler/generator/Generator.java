@@ -4,6 +4,7 @@ import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,8 +17,10 @@ public abstract class Generator {
 
 	protected Generator() {
 		this.engine = new VelocityEngine();
-		this.engine.setProperty("resource.loader.classpath.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-		this.engine.setProperty("resource.loaders", "classpath");
+//		this.engine.setProperty("resource.loader.classpath.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+//		this.engine.setProperty("resource.loaders", "classpath");
+		this.engine.setProperty("resource.loader", "classpath");
+		this.engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 		this.engine.init();
 	}
 
