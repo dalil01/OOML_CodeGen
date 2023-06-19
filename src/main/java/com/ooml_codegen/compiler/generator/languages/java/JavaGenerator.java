@@ -1,10 +1,13 @@
 package com.ooml_codegen.compiler.generator.languages.java;
 
 import com.ooml_codegen.compiler.generator.Generator;
+import com.ooml_codegen.compiler.generator.GeneratorFactory;
 import com.ooml_codegen.compiler.generator.GeneratorType;
 import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.Class;
+import com.ooml_codegen.models.Package;
+import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 
 import java.util.Map;
 
@@ -29,7 +32,7 @@ public class JavaGenerator extends Generator {
 	}
 
 	private boolean autoSetTemplate(IGeneration obj) {
-		String templatePathPrefix = "java/";
+		String templatePathPrefix = "java/v20/";
 
 		if (obj instanceof Class) {
 			this.setTemplate(templatePathPrefix + "Class.vm");
@@ -38,6 +41,13 @@ public class JavaGenerator extends Generator {
 		}
 
 		return false;
+	}
+
+	public static void main(String[] args) {
+		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PUBLIC);
+
+		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
+		generator.generate(clazz);
 	}
 
 }

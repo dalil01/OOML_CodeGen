@@ -63,7 +63,7 @@ public class Class implements IGeneration {
 	@Override
 	public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {
 		return Map.of(
-				GenerationContext.PACKAGE, this.cPackage,
+				GenerationContext.PACKAGE, this.cPackage.getName(),
 				GenerationContext.CLASS_ACCESS_MODIFIER, (type == GeneratorType.JAVA) ? this.accessModifier.getValueForJava() : this.accessModifier.getValueForOOML(),
 				GenerationContext.CLASS_NAME, this.name
 		);

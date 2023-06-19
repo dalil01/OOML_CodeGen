@@ -7,13 +7,15 @@ public class AttributeAccessModifierTest {
 
 	@Test
 	public void getValueForOOMLTest() {
-		Assertions.assertEquals('+', AttributeAccessModifier.PUBLIC.getValueForOOML());
-		Assertions.assertEquals('-', AttributeAccessModifier.PRIVATE.getValueForOOML());
-		Assertions.assertEquals('#', AttributeAccessModifier.PROTECTED.getValueForOOML());
+		Assertions.assertEquals("", AttributeAccessModifier.DEFAULT.getValueForOOML());
+		Assertions.assertEquals("+", AttributeAccessModifier.PUBLIC.getValueForOOML());
+		Assertions.assertEquals("-", AttributeAccessModifier.PRIVATE.getValueForOOML());
+		Assertions.assertEquals("#", AttributeAccessModifier.PROTECTED.getValueForOOML());
 	}
 
 	@Test
 	public void getValueForJavaTest() {
+		Assertions.assertEquals("", AttributeAccessModifier.DEFAULT.getValueForJava());
 		Assertions.assertEquals("public", AttributeAccessModifier.PUBLIC.getValueForJava());
 		Assertions.assertEquals("private", AttributeAccessModifier.PRIVATE.getValueForJava());
 		Assertions.assertEquals("protected", AttributeAccessModifier.PROTECTED.getValueForJava());
