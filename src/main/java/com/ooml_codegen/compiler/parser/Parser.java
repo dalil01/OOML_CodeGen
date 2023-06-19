@@ -1,7 +1,6 @@
 package com.ooml_codegen.compiler.parser;
 
 import com.ooml_codegen.compiler.lexer.Lexer;
-import com.ooml_codegen.compiler.validator.Validator;
 
 public abstract class Parser {
 
