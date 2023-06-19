@@ -1,5 +1,6 @@
 package com.ooml_codegen.models;
 
+import com.ooml_codegen.compiler.generator.GeneratorType;
 import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
@@ -61,10 +62,10 @@ public class Class implements IGeneration {
 	}
 
 	@Override
-	public Map<GenerationContext, Object> getGenerationContext() {
+	public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {
 		return Map.of(
 				GenerationContext.PACKAGE, this.cPackage,
-				GenerationContext.CLASS_ACCESS_MODIFIER, this.accessModifier.getValue(),
+				GenerationContext.CLASS_ACCESS_MODIFIER, (type == GeneratorType.JAVA) ? this.accessModifier.getValueForJava() : this.accessModifier.getValueForOOML(),
 				GenerationContext.CLASS_NAME, this.name
 		);
 	}

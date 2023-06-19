@@ -6,25 +6,17 @@ import org.junit.jupiter.api.Test;
 public class ClassAccessModifierTest {
 
 	@Test
-	public void valuesTest() {
-		ClassAccessModifier[] expectedValues = {
-				ClassAccessModifier.PUBLIC,
-				ClassAccessModifier.PRIVATE
-		};
-
-		ClassAccessModifier[] actualValues = ClassAccessModifier.values();
-
-		Assertions.assertArrayEquals(expectedValues, actualValues);
+	public void getValueForOOMLTest() {
+		Assertions.assertEquals("", ClassAccessModifier.DEFAULT.getValueForOOML());
+		Assertions.assertEquals("+", ClassAccessModifier.PUBLIC.getValueForOOML());
+		Assertions.assertEquals("-", ClassAccessModifier.PRIVATE.getValueForOOML());
 	}
 
 	@Test
-	public void getValuePublicReturnsPlusTest() {
-		Assertions.assertEquals('+', ClassAccessModifier.PUBLIC.getValue());
-	}
-
-	@Test
-	public void getValuePrivateReturnsMinusTest() {
-		Assertions.assertEquals('-', ClassAccessModifier.PRIVATE.getValue());
+	public void getValueForJavaTest() {
+		Assertions.assertEquals("", ClassAccessModifier.DEFAULT.getValueForJava());
+		Assertions.assertEquals("public", ClassAccessModifier.PUBLIC.getValueForJava());
+		Assertions.assertEquals("private", ClassAccessModifier.PRIVATE.getValueForJava());
 	}
 
 }

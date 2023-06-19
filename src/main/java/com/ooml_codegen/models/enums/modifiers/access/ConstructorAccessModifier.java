@@ -2,18 +2,24 @@ package com.ooml_codegen.models.enums.modifiers.access;
 
 public enum ConstructorAccessModifier {
 
-	PUBLIC('+'),
-	PRIVATE('-'),
-	PROTECTED('#');
+	PUBLIC,
+	PRIVATE,
+	PROTECTED;
 
-	private final char value;
-
-	ConstructorAccessModifier(char value) {
-		this.value = value;
+	public char getValueForOOML() {
+		return switch (this) {
+			case PUBLIC -> '+';
+			case PRIVATE -> '-';
+			case PROTECTED -> '#';
+		};
 	}
 
-	public char getValue() {
-		return this.value;
+	public String getValueForJava() {
+		return switch (this) {
+			case PUBLIC -> "public";
+			case PRIVATE -> "private";
+			case PROTECTED -> "protected";
+		};
 	}
 
 }

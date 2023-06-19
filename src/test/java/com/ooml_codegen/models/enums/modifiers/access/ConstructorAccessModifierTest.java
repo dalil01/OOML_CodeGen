@@ -6,31 +6,19 @@ import org.junit.jupiter.api.Test;
 public class ConstructorAccessModifierTest {
 
 	@Test
-	public void valuesTest() {
-		ConstructorAccessModifier[] expectedValues = {
-				ConstructorAccessModifier.PUBLIC,
-				ConstructorAccessModifier.PRIVATE,
-				ConstructorAccessModifier.PROTECTED
-		};
-
-		ConstructorAccessModifier[] actualValues = ConstructorAccessModifier.values();
-
-		Assertions.assertArrayEquals(expectedValues, actualValues);
+	public void getValueForOOMLTest() {
+		Assertions.assertEquals("", ConstructorAccessModifier.DEFAULT.getValueForOOML());
+		Assertions.assertEquals("+", ConstructorAccessModifier.PUBLIC.getValueForOOML());
+		Assertions.assertEquals("-", ConstructorAccessModifier.PRIVATE.getValueForOOML());
+		Assertions.assertEquals("#", ConstructorAccessModifier.PROTECTED.getValueForOOML());
 	}
 
 	@Test
-	void getValuePublicReturnsPlusTest() {
-		Assertions.assertEquals('+', ConstructorAccessModifier.PUBLIC.getValue());
-	}
-
-	@Test
-	void getValuePrivateReturnsMinusTest() {
-		Assertions.assertEquals('-', ConstructorAccessModifier.PRIVATE.getValue());
-	}
-
-	@Test
-	void getValueProtectedReturnsHashTest() {
-		Assertions.assertEquals('#', ConstructorAccessModifier.PROTECTED.getValue());
+	public void getValueForJavaTest() {
+		Assertions.assertEquals("", ConstructorAccessModifier.DEFAULT.getValueForJava());
+		Assertions.assertEquals("public", ConstructorAccessModifier.PUBLIC.getValueForJava());
+		Assertions.assertEquals("private", ConstructorAccessModifier.PRIVATE.getValueForJava());
+		Assertions.assertEquals("protected", ConstructorAccessModifier.PROTECTED.getValueForJava());
 	}
 
 }
