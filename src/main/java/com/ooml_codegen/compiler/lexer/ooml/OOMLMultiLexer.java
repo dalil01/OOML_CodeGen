@@ -16,7 +16,7 @@ public class OOMLMultiLexer {
         this.stack.push(new OOMLLexer(file));
     }
 
-    public Token nextToken(){
+    public Token next() throws FileNotFoundException{
         if (!stack.isEmpty()){
             Token tok = this.stack.peek().nextToken();
 
@@ -32,7 +32,7 @@ public class OOMLMultiLexer {
 
             if (tok.getType() == TokenType.IMPORT){
                 manageImport(tok);
-                return nextToken();
+                return next();
             }
 
             return tok;
@@ -40,7 +40,25 @@ public class OOMLMultiLexer {
         return new Token(TokenType.EOF);
     }
 
-    private void manageImport(Token importToken){
+    private void manageImport(Token importToken) throws FileNotFoundException {
+        if (isDirectory(importToken.getStringValue())){
+            importDirectory(importToken.getStringValue());
+        }
+        else {
+            importSingleFile(new File(importToken.getStringValue()));
+        }
+    }
+
+    private void importSingleFile(File file) throws FileNotFoundException {
+        // TODO
+    }
+
+    private boolean isDirectory(String path){
+        // TODO
+        return false;
+    }
+
+    private void importDirectory(String path) throws FileNotFoundException {
         // TODO
     }
 
