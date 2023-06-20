@@ -1,0 +1,17 @@
+#if($package)
+package $package;
+#end
+
+#if($imports && !$imports.isEmpty())
+#foreach($import in $imports)
+import $import;
+#end
+#end
+
+#if($enumAccessModifier)
+$enumAccessModifier enum $enumName {
+#else
+enum $enumName {
+#end
+
+}
