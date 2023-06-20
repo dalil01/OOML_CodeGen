@@ -6,8 +6,10 @@ import com.ooml_codegen.compiler.generator.GeneratorType;
 import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.Class;
+import com.ooml_codegen.models.Enum;
 import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.EnumAccessModifier;
 
 import java.util.Map;
 
@@ -40,14 +42,22 @@ public class JavaGenerator extends Generator {
 			return true;
 		}
 
+		if (obj instanceof Enum) {
+			this.setTemplate(templatePathPrefix + "Enum.vm");
+
+			return true;
+		}
+
 		return false;
 	}
 
 	public static void main(String[] args) {
 		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PRIVATE);
+		Enum anenum = new Enum("Color", new Package("com.ooml.models"), EnumAccessModifier.PUBLIC);
 
 		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
 		generator.generate(clazz);
+		generator.generate(anenum);
 	}
 
 }
