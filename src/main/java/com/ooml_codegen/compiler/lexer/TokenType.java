@@ -10,6 +10,7 @@ public enum TokenType {
     SEMI_COLON,
     EQUAL,
     SIGN,
+    QUOTED_WORD,
     WORD,
     COMMA,
     OPENING_PARENTHESIS,

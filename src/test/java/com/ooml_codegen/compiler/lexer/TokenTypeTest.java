@@ -16,6 +16,7 @@ public class TokenTypeTest {
 				TokenType.SEMI_COLON,
 				TokenType.EQUAL,
 				TokenType.SIGN,
+				TokenType.QUOTED_WORD,
 				TokenType.WORD,
 				TokenType.COMMA,
 				TokenType.OPENING_PARENTHESIS,
@@ -43,6 +44,7 @@ public class TokenTypeTest {
 		Assertions.assertEquals("SEMI_COLON", TokenType.SEMI_COLON.toString());
 		Assertions.assertEquals("EQUAL", TokenType.EQUAL.toString());
 		Assertions.assertEquals("SIGN", TokenType.SIGN.toString());
+		Assertions.assertEquals("QUOTED_WORD", TokenType.QUOTED_WORD.toString());
 		Assertions.assertEquals("WORD", TokenType.WORD.toString());
 		Assertions.assertEquals("COMMA", TokenType.COMMA.toString());
 		Assertions.assertEquals("OPENING_PARENTHESIS", TokenType.OPENING_PARENTHESIS.toString());

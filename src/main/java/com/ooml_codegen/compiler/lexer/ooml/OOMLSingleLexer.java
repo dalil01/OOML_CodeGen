@@ -209,11 +209,11 @@ class OOMLSingleLexer extends SingleLexer {
             return new Token(TokenType.IMPORT);
         }
 
-        Optional<String> file;
+        Optional<String> optionalFilePath;
         if (this.cStream.getCurrentChar() == OOMLSymbols.DOUBLE_QUOTE.getValue() |
                 this.cStream.getCurrentChar() == OOMLSymbols.SINGLE_QUOTE.getValue() |
                 this.cStream.getCurrentChar() == OOMLSymbols.BACK_QUOTE.getValue()) {
-            file = this.generateQuotedWord().getValue();
+            optionalFilePath = this.generateQuotedWord().getValue();
         } else {
             StringBuilder s = new StringBuilder();
             while (!this.cStream.isEOF() && !containsChar(OOMLKey.FILE_END.getValue(), this.cStream.getCurrentChar())) {
@@ -221,15 +221,15 @@ class OOMLSingleLexer extends SingleLexer {
                 this.cStream.next();
             }
 
-            file = s.toString().describeConstable();
+            optionalFilePath = s.toString().describeConstable();
         }
 
-        if (file.isEmpty()) {
-            System.err.println("WARN: Import symbol found with nothing to import! Use quotes if a character isn't recognized as part of a file.");
+        if (optionalFilePath.isEmpty()) {
+            System.err.println("WARN: Import symbol found with nothing to import! Use quotes if a character isn't recognized as part of a optionalFilePath.");
             return new Token(TokenType.IMPORT);
         }
 
-        return new Token(TokenType.IMPORT, file.get());
+        return new Token(TokenType.IMPORT, optionalFilePath.get());
     }
 
     // TODO Need to implement proper Exception stuff
@@ -262,7 +262,7 @@ class OOMLSingleLexer extends SingleLexer {
             this.cStream.next();
         }
 
-        return new Token(TokenType.WORD, s.toString());
+        return new Token(TokenType.QUOTED_WORD, s.toString());
     }
 
     private Token generateWordToken() {
