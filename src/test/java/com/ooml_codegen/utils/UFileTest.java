@@ -23,16 +23,16 @@ public class UFileTest {
 		String mainOOMLPath = "main.ooml";
 		List<File> foundMainOOML = UFile.findOOMLFilesPath(mainOOMLPath, pathPrefix.toFile());
 		Assertions.assertEquals(1, foundMainOOML.size());
-		Assertions.assertEquals(pathPrefix.getParent().toString() + "/main.ooml", foundMainOOML.get(0).toPath().normalize().toString());
+		Assertions.assertEquals(pathPrefix.resolveSibling("main.ooml").toString(), foundMainOOML.get(0).toPath().normalize().toString());
 
 		List<File> OOMLFilesInDir = UFile.findOOMLFilesPath("files", pathPrefix.toFile());
 		Assertions.assertEquals(4, OOMLFilesInDir.size());
 		List<String> FilesInDirString = OOMLFilesInDir.stream().map((file) -> file.toPath().normalize().toString()).toList();
-		Assertions.assertTrue(FilesInDirString.contains(pathPrefix.getParent() + "/files/main.ooml"));
-		String srcPath = pathPrefix.getParent() + "/files/src/";
-		Assertions.assertTrue(FilesInDirString.contains(srcPath + "controllers.ooml"));
-		Assertions.assertTrue(FilesInDirString.contains(srcPath + "models.ooml"));
-		Assertions.assertTrue(FilesInDirString.contains(srcPath + "services.ooml"));
+		Assertions.assertTrue(FilesInDirString.contains(pathPrefix.resolveSibling("files/main.ooml").toString()));
+		Path srcPath = pathPrefix.resolveSibling("files/src/");
+		Assertions.assertTrue(FilesInDirString.contains(srcPath.resolve( "controllers.ooml").toString()));
+		Assertions.assertTrue(FilesInDirString.contains(srcPath.resolve("models.ooml").toString()));
+		Assertions.assertTrue(FilesInDirString.contains(srcPath.resolve("services.ooml").toString()));
 	}
 
 	@Test
