@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class LexerTest {
 
-	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml_codegen/compiler/lexerManager/ooml/files/";
+	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml_codegen/compiler/lexer/ooml/files/";
 
 	protected String filePath;
 	protected OOMLLexer lexer;
