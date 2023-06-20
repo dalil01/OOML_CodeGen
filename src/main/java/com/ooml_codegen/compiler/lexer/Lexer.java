@@ -2,7 +2,6 @@ package com.ooml_codegen.compiler.lexer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.stream.Stream;
 
 
 public abstract class Lexer {
@@ -16,6 +15,6 @@ public abstract class Lexer {
 		this.cStream = new CharStream(new File(filePath));
 	}
 
-	public abstract Stream<Token> tokenize();
+	public abstract Token nextToken();
 
 }

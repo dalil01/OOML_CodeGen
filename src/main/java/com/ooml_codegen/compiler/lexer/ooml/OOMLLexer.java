@@ -3,12 +3,9 @@ package com.ooml_codegen.compiler.lexer.ooml;
 import com.ooml_codegen.compiler.lexer.Lexer;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
-import com.ooml_codegen.compiler.lexer.CharStream;
 
 import java.io.*;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class OOMLLexer extends Lexer {
 
@@ -17,16 +14,13 @@ public class OOMLLexer extends Lexer {
         super(filePath);
     }
 
-    public Stream<Token> tokenize() {
-        Stream<Token> tokenStream = Stream.generate(this::nextToken).takeWhile(Objects::nonNull);
-        tokenStream = Stream.concat(tokenStream, Stream.of(new Token(TokenType.EOF)));
-
-        return tokenStream;
-    }
-
-    private Token nextToken() {
+    public Token nextToken() {
         this.consumePadding();
-        return generateToken();
+        Token tok = generateToken();
+        if (tok == null){
+            return new Token(TokenType.EOF);
+        }
+        return tok;
     }
 
     /**
@@ -287,6 +281,7 @@ public class OOMLLexer extends Lexer {
         return new Token(TokenType.WORD, s.toString());
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private static boolean containsChar(String characters, char c) {
         return characters.indexOf(c) != -1;
     }

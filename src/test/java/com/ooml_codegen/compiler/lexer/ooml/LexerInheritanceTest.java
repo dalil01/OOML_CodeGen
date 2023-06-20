@@ -1,6 +1,7 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
 import com.ooml_codegen.compiler.lexer.LexerTest;
+import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,8 @@ public class LexerInheritanceTest extends LexerTest {
 
 	@Test
 	public void inheritanceTest() {
-		this.lexer.tokenize().forEach(token -> {
+		Token token = this.lexer.nextToken();
+		while (token.getType() != TokenType.EOF){
 			int currentToken = this.index.getAndIncrement();
 
 			System.out.println(token.toString());
@@ -23,7 +25,8 @@ public class LexerInheritanceTest extends LexerTest {
 			if (List.of(3, 10, 16).contains(currentToken)) {
 				Assertions.assertEquals(TokenType.INHERITANCE, token.getType());
 			}
-		});
+			token = this.lexer.nextToken();
+		}
 	}
 
 }
