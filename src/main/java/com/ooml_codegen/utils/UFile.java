@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class UFile {
+public abstract class UFile {
 
 	public static List<String> findOOMLFilesPath(String mainPath) {
 		List<String> list = new ArrayList<>();
