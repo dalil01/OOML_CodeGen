@@ -5,6 +5,7 @@ import java.util.Optional;
 public class Token {
 
 	private final TokenType type;
+
 	private final Optional<String> value;
 
 	public Token(TokenType type) {

@@ -1,11 +1,15 @@
 package com.ooml_codegen.models;
 
+import com.ooml_codegen.compiler.generator.GeneratorType;
+import com.ooml_codegen.compiler.generator.enums.GenerationContext;
+import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class Class {
+public class Class implements IGeneration {
 
 	private final String name;
 	private final Package cPackage;
@@ -55,6 +59,20 @@ public class Class {
 
 	public List<Method> getMethods() {
 		return this.methods;
+	}
+
+	@Override
+	public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {
+		return Map.of(
+				GenerationContext.PACKAGE, this.cPackage.getName(),
+				GenerationContext.CLASS_ACCESS_MODIFIER, (type == GeneratorType.JAVA) ? this.accessModifier.getValueForJava() : this.accessModifier.getValueForOOML(),
+				GenerationContext.CLASS_NAME, this.name
+		);
+	}
+
+	@Override
+	public String getFileName() {
+		return this.name;
 	}
 
 }
