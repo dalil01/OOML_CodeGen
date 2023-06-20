@@ -15,25 +15,20 @@ public abstract class LexerManager {
 	}
 
 	public Token nextToken() throws FileNotFoundException{
-		if (!stack.isEmpty()){
-			Token tok = this.stack.peek().nextToken();
+		if (!stack.isEmpty()) {
+			Token t = this.stack.peek().nextToken();
 
-			while (tok.getType() == TokenType.EOF){
+			if (t.getType() == TokenType.EOF) {
 				this.stack.pop();
-
-				if (this.stack.isEmpty()) {
-					break;
-				} else {
-					tok = this.stack.peek().nextToken();
-				}
+				return this.nextToken();
 			}
 
-			if (tok.getType() == TokenType.IMPORT){
-				manageImport(tok);
-				return nextToken();
+			if (t.getType() == TokenType.IMPORT) {
+				this.manageImport(t);
+				return this.nextToken();
 			}
 
-			return tok;
+			return t;
 		}
 
 		return new Token(TokenType.EOF);

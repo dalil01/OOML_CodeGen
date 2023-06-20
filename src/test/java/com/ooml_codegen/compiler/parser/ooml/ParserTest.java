@@ -12,10 +12,10 @@ public class ParserTest {
 
 	@Test
 	public void parseTest() throws FileNotFoundException {
-		//OOMLLexerManager lexer = new OOMLLexerManager(pathPrefix + "main.ooml");
-		//Parser parser = new OOMLParser(lexer);
-//
-		//parser.parse();
+		OOMLLexerManager lexer = new OOMLLexerManager(pathPrefix + "main.ooml");
+		Parser parser = new OOMLParser(lexer);
+
+		parser.parse();
 	}
 
 }
