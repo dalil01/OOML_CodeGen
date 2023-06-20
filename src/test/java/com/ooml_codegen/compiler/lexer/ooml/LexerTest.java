@@ -1,6 +1,5 @@
-package com.ooml_codegen.compiler.lexer;
+package com.ooml_codegen.compiler.lexer.ooml;
 
-import com.ooml_codegen.compiler.lexer.ooml.OOMLSingleLexer;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.FileNotFoundException;
@@ -11,7 +10,7 @@ public abstract class LexerTest {
 	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml_codegen/compiler/lexer/ooml/files/";
 
 	protected String filePath;
-	protected SingleLexer lexer;
+	protected OOMLSingleLexer lexer;
 	protected AtomicInteger index;
 
 	protected LexerTest(String fileName) {

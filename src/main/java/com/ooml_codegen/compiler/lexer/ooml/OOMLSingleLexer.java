@@ -7,7 +7,7 @@ import com.ooml_codegen.compiler.lexer.TokenType;
 import java.io.*;
 import java.util.Optional;
 
-public class OOMLSingleLexer extends SingleLexer {
+class OOMLSingleLexer extends SingleLexer {
 
 
     public OOMLSingleLexer(String filePath) throws FileNotFoundException {

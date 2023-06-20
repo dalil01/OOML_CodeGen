@@ -1,7 +1,6 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
 import com.ooml_codegen.compiler.lexer.*;
-import com.ooml_codegen.compiler.lexer.LexerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
