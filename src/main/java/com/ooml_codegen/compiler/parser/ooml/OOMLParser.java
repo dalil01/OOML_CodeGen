@@ -24,9 +24,12 @@ public class OOMLParser extends Parser {
 			TokenType type = token.getType();
 			String value = token.getStringValue();
 
+			System.out.println("PARSER: " + token);
+
 			switch (type) {
 			}
 		}
 	}
+
 
 }
