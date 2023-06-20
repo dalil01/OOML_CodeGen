@@ -8,6 +8,7 @@ import java.util.Deque;
 public abstract class LexerManager {
 
 	protected Deque<Lexer> stack;
+
 	protected LexerManager(Lexer lexer) {
 		this.stack = new ArrayDeque<>();
 		stack.push(lexer);
@@ -34,6 +35,7 @@ public abstract class LexerManager {
 
 			return tok;
 		}
+
 		return new Token(TokenType.EOF);
 	}
 

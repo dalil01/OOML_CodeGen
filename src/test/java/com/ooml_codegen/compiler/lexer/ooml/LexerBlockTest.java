@@ -10,7 +10,7 @@ import java.util.List;
 public class LexerBlockTest extends LexerTest {
 
 	public LexerBlockTest() {
-		super("access_block.ooml");
+		super("access-block.ooml");
 	}
 
 	@Test
