@@ -6,6 +6,7 @@ import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,11 +64,20 @@ public class Class implements IGeneration {
 
 	@Override
 	public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {
-		return Map.of(
-				GenerationContext.PACKAGE, this.cPackage.getName(),
-				GenerationContext.CLASS_ACCESS_MODIFIER, (type == GeneratorType.JAVA) ? this.accessModifier.getValueForJava() : this.accessModifier.getValueForOOML(),
-				GenerationContext.CLASS_NAME, this.name
-		);
+
+		Map<GenerationContext, Object> map = new HashMap<>();
+
+		map.put(GenerationContext.PACKAGE, this.cPackage.getName());
+		map.put(GenerationContext.CLASS_ACCESS_MODIFIER, switch (type) {
+			case JAVA -> this.accessModifier.getValueForJava();
+			default -> this.accessModifier.getValueForOOML();
+		});
+		map.put(GenerationContext.CLASS_NAME, this.name);
+		map.put(GenerationContext.CONSTRUCTORS, this.constructors);
+		map.put(GenerationContext.ATTRIBUTES, this.attributes);
+		map.put(GenerationContext.METHODS, this.methods);
+
+		return map;
 	}
 
 	@Override

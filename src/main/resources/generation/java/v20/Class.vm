@@ -14,4 +14,24 @@ $classAccessModifier class $className {
 class $className {
 #end
 
+#if($attributes && !$attributes.isEmpty())
+#foreach($attribute in $attributes)
+    $attribute.toStringJava();
+#end
+#end
+
+#if($constructors && !$constructors.isEmpty())
+#foreach($constructor in $constructors)
+    $constructor.toStringJava()() {
+    }
+#end
+#end
+
+#if($methods && !$methods.isEmpty())
+#foreach($method in $methods)
+    $method.toStringJava()() {
+    }
+
+#end
+#end
 }

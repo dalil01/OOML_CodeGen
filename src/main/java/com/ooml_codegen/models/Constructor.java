@@ -32,4 +32,10 @@ public class Constructor {
 		return this.parameters;
 	}
 
+	public String toStringJava() {
+		StringBuilder s = new StringBuilder();
+		s.append(this.accessModifier.getValueForJava()).append(" ").append(this.name);
+		return s.toString();
+	}
+
 }

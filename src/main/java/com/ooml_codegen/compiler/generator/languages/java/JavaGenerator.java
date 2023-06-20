@@ -5,9 +5,14 @@ import com.ooml_codegen.compiler.generator.GeneratorFactory;
 import com.ooml_codegen.compiler.generator.GeneratorType;
 import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
+import com.ooml_codegen.models.*;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Package;
+import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.ConstructorAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
+import org.w3c.dom.Attr;
 
 import java.util.Map;
 
@@ -44,7 +49,19 @@ public class JavaGenerator extends Generator {
 	}
 
 	public static void main(String[] args) {
+		Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
+
+		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
+
+		Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
+		Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
+
 		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PRIVATE);
+
+		clazz.addConstructor(constructor);
+		clazz.addAttribute(attribute);
+		clazz.addMethod(method);
+		clazz.addMethod(method2);
 
 		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
 		generator.generate(clazz);
