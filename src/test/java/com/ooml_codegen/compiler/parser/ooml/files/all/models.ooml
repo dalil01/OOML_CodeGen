@@ -1,1 +1,14 @@
 // Models
+
+package app.models {
+
+	+ class User {
+		+ id: int
+		+ firstname: string
+		+ lastname: string
+		+ User()
+	}
+
+
+
+}
