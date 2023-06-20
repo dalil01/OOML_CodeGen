@@ -5,7 +5,9 @@ public enum GenerationContext {
 	PACKAGE("package"),
 	IMPORTS("imports"),
 	CLASS_ACCESS_MODIFIER("classAccessModifier"),
-	CLASS_NAME("className")
+	CLASS_NAME("className"),
+	INTERFACE_ACCESS_MODIFIER("interfaceAccessModifier"),
+	INTERFACE_NAME("interfaceName")
 	;
 
 	private final String value;

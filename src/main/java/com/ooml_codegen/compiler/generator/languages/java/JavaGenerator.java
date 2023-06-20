@@ -6,6 +6,7 @@ import com.ooml_codegen.compiler.generator.GeneratorType;
 import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.Class;
+import com.ooml_codegen.models.Interface;
 import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 
@@ -36,6 +37,11 @@ public class JavaGenerator extends Generator {
 
 		if (obj instanceof Class) {
 			this.setTemplate(templatePathPrefix + "Class.vm");
+
+			return true;
+		}
+		if (obj instanceof Interface) {
+			this.setTemplate(templatePathPrefix + "Interface.vm");
 
 			return true;
 		}
