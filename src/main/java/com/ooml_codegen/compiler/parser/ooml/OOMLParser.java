@@ -20,6 +20,7 @@ public class OOMLParser extends Parser {
 	@Override
 	public void parse() throws FileNotFoundException {
 		Token token = this.lexerManager.nextToken();
+
 		while (token.getType() != TokenType.EOF){
 			TokenType type = token.getType();
 			String value = token.getStringValue();
@@ -28,6 +29,8 @@ public class OOMLParser extends Parser {
 
 			switch (type) {
 			}
+
+			token = this.lexerManager.nextToken();
 		}
 	}
 

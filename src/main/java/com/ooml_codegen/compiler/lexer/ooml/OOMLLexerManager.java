@@ -23,7 +23,7 @@ public class OOMLLexerManager extends LexerManager {
         }
 
         for (String filePath: files){
-            stack.push(new OOMLLexer(filePath));
+            this.stack.push(new OOMLLexer(filePath));
         }
     }
 
