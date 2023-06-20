@@ -1,15 +1,15 @@
 package com.ooml_codegen.compiler.parser;
 
-import com.ooml_codegen.compiler.lexer.Lexer;
+import com.ooml_codegen.compiler.lexer.LexerManager;
 
 import java.io.FileNotFoundException;
 
 public abstract class Parser {
 
-	protected final Lexer lexer;
+	protected final LexerManager lexerManager;
 
-	public Parser(Lexer lexer) {
-		this.lexer = lexer;
+	public Parser(LexerManager lexerManager) {
+		this.lexerManager = lexerManager;
 	}
 
 	public abstract void parse() throws FileNotFoundException;
