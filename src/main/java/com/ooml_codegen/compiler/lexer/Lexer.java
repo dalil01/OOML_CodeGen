@@ -2,19 +2,18 @@ package com.ooml_codegen.compiler.lexer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 
 public abstract class Lexer {
 
-	protected final String filePath;
-
-	protected final CharStream cStream;
-
-	protected Lexer(String filePath) throws FileNotFoundException {
-		this.filePath = filePath;
-		this.cStream = new CharStream(new File(filePath));
+	protected Deque<SingleLexer> stack;
+	protected Lexer(SingleLexer lexer) throws FileNotFoundException {
+		this.stack = new ArrayDeque<>();
+		stack.push(lexer);
 	}
 
-	public abstract Token nextToken();
+	public abstract Token nextToken() throws FileNotFoundException;
 
 }
