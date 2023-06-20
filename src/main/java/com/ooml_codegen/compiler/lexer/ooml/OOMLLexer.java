@@ -10,8 +10,8 @@ import java.util.Optional;
 class OOMLLexer extends Lexer {
 
 
-    public OOMLLexer(String filePath) throws FileNotFoundException {
-        super(filePath);
+    public OOMLLexer(File file) throws FileNotFoundException {
+        super(file);
     }
 
     public Token nextToken() {

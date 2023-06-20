@@ -4,6 +4,7 @@ import com.ooml_codegen.compiler.lexer.ooml.OOMLLexerManager;
 import com.ooml_codegen.compiler.parser.Parser;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 public class ParserTest {
@@ -12,7 +13,7 @@ public class ParserTest {
 
 	@Test
 	public void parseTest() throws FileNotFoundException {
-		OOMLLexerManager lexer = new OOMLLexerManager(pathPrefix + "main.ooml");
+		OOMLLexerManager lexer = new OOMLLexerManager(new File(pathPrefix + "main.ooml"));
 		Parser parser = new OOMLParser(lexer);
 
 		parser.parse();

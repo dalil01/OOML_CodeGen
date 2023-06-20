@@ -5,13 +5,17 @@ import java.io.FileNotFoundException;
 
 public abstract class Lexer {
 
-    protected final String filePath;
+    private final File file;
 
     protected final CharStream cStream;
 
-    protected Lexer(String filePath) throws FileNotFoundException {
-        this.filePath = filePath;
-        this.cStream = new CharStream(new File(filePath));
+    protected Lexer(File file) throws FileNotFoundException {
+        this.file = file;
+        this.cStream = new CharStream(this.file);
+    }
+
+    public File getFile(){
+        return this.file;
     }
 
     public abstract Token nextToken();
