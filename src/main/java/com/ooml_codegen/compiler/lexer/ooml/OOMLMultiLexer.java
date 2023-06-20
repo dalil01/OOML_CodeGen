@@ -41,26 +41,7 @@ public class OOMLMultiLexer {
     }
 
     private void manageImport(Token importToken) throws FileNotFoundException {
-        if (isDirectory(importToken.getStringValue())){
-            importDirectory(importToken.getStringValue());
-        }
-        else {
-            importSingleFile(new File(importToken.getStringValue()));
-        }
-    }
-
-    private void importSingleFile(File file) throws FileNotFoundException {
         // TODO
     }
-
-    private boolean isDirectory(String path){
-        // TODO
-        return false;
-    }
-
-    private void importDirectory(String path) throws FileNotFoundException {
-        // TODO
-    }
-
 
 }
