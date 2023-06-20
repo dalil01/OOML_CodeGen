@@ -2,14 +2,12 @@ package com.ooml_codegen.models.enums.modifiers.access;
 
 public enum InterfaceAccessModifier {
     DEFAULT,
-    PUBLIC,
-    PRIVATE;
+    PUBLIC;
 
     public String getValueForOOML() {
         return switch (this) {
             case DEFAULT -> "";
             case PUBLIC -> "+";
-            case PRIVATE -> "-";
         };
     }
 
@@ -17,7 +15,6 @@ public enum InterfaceAccessModifier {
         return switch (this) {
             case DEFAULT -> "";
             case PUBLIC -> "public";
-            case PRIVATE -> "private";
         };
     }
 }

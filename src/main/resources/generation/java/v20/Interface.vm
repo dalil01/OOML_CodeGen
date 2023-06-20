@@ -2,16 +2,15 @@
 package $package;
 #end
 #if($imports && !$imports.isEmpty())
-
-    #foreach($import in $imports)
-    import $import;
-    #end
+#foreach($import in $imports)
+import $import;
+#end
 #end
 
 #if($interfaceAccessModifier)
-    $interfaceAccessModifier class $interfaceName {
+$interfaceAccessModifier interface $interfaceName {
 #else
-class $interfaceName {
+interface $interfaceName {
 #end
 
 }
