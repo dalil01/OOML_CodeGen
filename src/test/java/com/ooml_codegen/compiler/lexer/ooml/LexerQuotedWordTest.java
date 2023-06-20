@@ -19,10 +19,10 @@ public class LexerQuotedWordTest extends LexerTest {
         while (token.getType() != TokenType.EOF){
             int currentToken = this.index.getAndIncrement();
 
-            System.out.println(token.toString());
+            System.out.println(token);
 
-            if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19).contains(currentToken)) {
-                Assertions.assertEquals(TokenType.WORD, token.getType());
+            if (List.of(1, 2, 7, 8, 11, 13, 14, 15, 17).contains(currentToken)) {
+                Assertions.assertEquals(TokenType.QUOTED_WORD, token.getType());
             }
 
             if (currentToken == 20) {
