@@ -14,6 +14,7 @@ public class Class {
 	private final List<Constructor> constructors = new ArrayList<>();
 	private final List<Method> methods = new ArrayList<>();
 
+
 	public Class(String name, Package cPackage, ClassAccessModifier accessModifier) {
 		this.name = name;
 		this.cPackage = cPackage;

@@ -1,10 +1,22 @@
 package com.ooml_codegen.models.enums.modifiers.access;
 
-import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class AttributeAccessModifierTest {
+
+	@Test
+	public void valuesTest() {
+		AttributeAccessModifier[] expectedValues = {
+				AttributeAccessModifier.PUBLIC,
+				AttributeAccessModifier.PRIVATE,
+				AttributeAccessModifier.PROTECTED
+		};
+
+		AttributeAccessModifier[] actualValues = AttributeAccessModifier.values();
+
+		Assertions.assertArrayEquals(expectedValues, actualValues);
+	}
 
 	@Test
 	public void getValuePublicReturnsPlusTest() {

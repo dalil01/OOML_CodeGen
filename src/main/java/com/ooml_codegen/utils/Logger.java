@@ -1,34 +1,46 @@
 package com.ooml_codegen.utils;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import com.ooml_codegen.utils.enums.ColorCode;
+import com.ooml_codegen.utils.enums.ErrorType;
 
 public class Logger {
 
-    private static final String RESET = "\u001B[0m";
-    private static final String GREEN = "\u001B[32m";
-    private static final String YELLOW = "\u001B[33m";
-    private static final String RED = "\u001B[31m";
-
-
-    public void trace(Object message) {
-        System.out.println(new Date().toString() + " TRACE " + message);
+    public static void trace(String message) {
+        printMessage(ErrorType.TRACE, message);
     }
 
-    public void debug(Object message) {
-        System.out.println(new Date().toString() + " DEBUG " + message);
+    public static void debug(String message) {
+        printMessage(ErrorType.DEBUG, message);
     }
 
-    public void info(Object message) {
-        System.out.println(GREEN + new Date().toString() + " INFO " + message + RESET);
+    public static void info(String message) {
+        printMessage(ErrorType.INFO, message);
     }
 
-
-    public void warn(String message) {
-        System.out.println(YELLOW + new Date().toString() + " WARN " + message + RESET);
+    public static void warn(String message) {
+        printMessage(ErrorType.WARN, message);
     }
 
-
-    public void error(String message) {
-        System.out.println(RED + new Date().toString() + " ERROR " + message + RESET);
+    public static void error(String message) {
+        printMessage(ErrorType.ERROR, message);
     }
+
+    private static void printMessage(ErrorType errorType, String message)  {
+        StringBuilder errorMessage = new StringBuilder();
+
+        errorMessage.append(LocalDateTime.now());
+
+        switch (errorType) {
+            case TRACE -> errorMessage.append(" ").append(ErrorType.TRACE).append(" ").append(message);
+            case DEBUG -> errorMessage.append(" ").append(ErrorType.DEBUG).append(" ").append(message);
+            case INFO -> errorMessage.insert(0, ColorCode.GREEN).append(" ").append(ErrorType.INFO).append(" ").append(message).append(ColorCode.RESET);
+            case WARN -> errorMessage.insert(0, ColorCode.YELLOW).append(" ").append(ErrorType.WARN).append(" ").append(message).append(ColorCode.RESET);
+            case ERROR -> errorMessage.insert(0, ColorCode.RED).append(" ").append(ErrorType.ERROR).append(" ").append(message).append(ColorCode.RESET);
+        }
+
+        System.out.println(errorMessage);
+    }
+
 }

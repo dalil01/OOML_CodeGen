@@ -1,24 +1,36 @@
 package com.ooml_codegen.models.enums.modifiers.access;
 
-import com.ooml_codegen.models.enums.modifiers.access.ConstructorAccessModifier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MethodAccessModifierTest {
 
 	@Test
+	public void valuesTest() {
+		MethodAccessModifier[] expectedValues = {
+				MethodAccessModifier.PUBLIC,
+				MethodAccessModifier.PRIVATE,
+				MethodAccessModifier.PROTECTED
+		};
+
+		MethodAccessModifier[] actualValues = MethodAccessModifier.values();
+
+		Assertions.assertArrayEquals(expectedValues, actualValues);
+	}
+
+	@Test
 	void getValuePublicReturnsPlusTest() {
-		Assertions.assertEquals('+', ConstructorAccessModifier.PUBLIC.getValue());
+		Assertions.assertEquals('+', MethodAccessModifier.PUBLIC.getValue());
 	}
 
 	@Test
 	void getValuePrivateReturnsMinusTest() {
-		Assertions.assertEquals('-', ConstructorAccessModifier.PRIVATE.getValue());
+		Assertions.assertEquals('-', MethodAccessModifier.PRIVATE.getValue());
 	}
 
 	@Test
 	void getValueProtectedReturnsHashTest() {
-		Assertions.assertEquals('#', ConstructorAccessModifier.PROTECTED.getValue());
+		Assertions.assertEquals('#', MethodAccessModifier.PROTECTED.getValue());
 	}
 
 }
