@@ -1,6 +1,5 @@
 package com.ooml_codegen.compiler.lexer.ooml;
 
-import com.ooml_codegen.compiler.lexer.Lexer;
 import com.ooml_codegen.compiler.lexer.SingleLexer;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
