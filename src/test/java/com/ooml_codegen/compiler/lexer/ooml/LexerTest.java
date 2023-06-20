@@ -2,6 +2,7 @@ package com.ooml_codegen.compiler.lexer.ooml;
 
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,7 +20,7 @@ public abstract class LexerTest {
 
 	@BeforeEach
 	public void setup() throws FileNotFoundException {
-		this.lexer = new OOMLLexer(filePath);
+		this.lexer = new OOMLLexer(new File(filePath));
 		this.index = new AtomicInteger(1);
 	}
 

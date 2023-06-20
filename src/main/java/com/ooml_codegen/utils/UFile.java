@@ -7,10 +7,13 @@ import java.util.Stack;
 
 public abstract class UFile {
 
-	public static List<String> findOOMLFilesPath(String mainPath) {
-		List<String> list = new ArrayList<>();
+	public static List<File> findOOMLFilesPath(String mainPath, File original) {
+		List<File> list = new ArrayList<>();
 
 		File file = new File(mainPath);
+		if (!file.isAbsolute()) {
+			file = original.toPath().resolveSibling(file.toPath()).normalize().toFile();
+		}
 
 		if (!file.exists()) {
 			// TODO: throw error ?
@@ -31,21 +34,20 @@ public abstract class UFile {
 							stack.push(f);
 						}
 					}
-				} else if (isOOMLFile(currentFile.getAbsolutePath())) {
-					list.add(currentFile.getAbsolutePath());
+				} else if (isOOMLFile(currentFile)) {
+					list.add(currentFile);
 				}
 			}
 		}
-		else if (isOOMLFile(mainPath)) {
-			list.add(file.getAbsolutePath());
+		else if (isOOMLFile(file)) {
+			list.add(file);
 		}
 
 		return list;
 	}
 
-	public static boolean isOOMLFile(String filePath) {
-		File file = new File(filePath);
-		return file.exists() && filePath.endsWith(".ooml");
+	public static boolean isOOMLFile(File file) {
+		return file.exists() && file.toPath().toString().endsWith(".ooml");
 	}
 
 }

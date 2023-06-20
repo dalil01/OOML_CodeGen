@@ -8,6 +8,7 @@ public class CharStream {
     private char currentChar = 0;
     private boolean reachedEOF = false;
 
+
     /**
      * CharStream Constructor, opens file and loads a character in internal buffer if file is not empty.
      * Updates EOF status if file is empty.
