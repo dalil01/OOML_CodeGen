@@ -16,12 +16,19 @@ public class OOMLLexerManager extends LexerManager {
     }
 
     protected void manageImport(Token importToken) throws FileNotFoundException {
+        // Stack should never be empty when entering this function (how else would we have gotten an import token?)
+        assert this.stack.size() != 0;
         assert this.stack.peek() != null;
+        if (importToken.getStringValue().isEmpty()){
+            Logger.warn("Empty import token at " + importToken.getLocation());
+            return;
+        }
+
         List<File> files = UFile.findOOMLFilesPath(importToken.getStringValue(), this.stack.peek().getFile());
 
         if (files.isEmpty()) {
-            Logger.error("Couldn't import " + importToken.getStringValue());
-            throw new FileNotFoundException("Couldn't import " + importToken.getStringValue());
+            Logger.error("Couldn't import " + importToken.getStringValue() + " at " + importToken.getLocation());
+            throw new FileNotFoundException("Couldn't import " + importToken.getLocation());
         }
 
         for (File file: files){

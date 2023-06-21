@@ -3,6 +3,7 @@ package com.ooml_codegen.compiler.lexer.ooml;
 import com.ooml_codegen.compiler.lexer.Lexer;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
+import com.ooml_codegen.utils.Logger;
 
 import java.io.*;
 import java.util.Optional;
@@ -207,7 +208,7 @@ class OOMLLexer extends Lexer {
         this.consumePadding();
 
         if (this.cStream.isEOF()) {
-            System.err.println("WARN: Import symbol found with nothing to import before EOF!");
+            Logger.error("Import symbol found with nothing to import before EOF at " + this.getFile().toPath() + "@" + this.lineN + ":" + this.charN);
             return new Token(TokenType.IMPORT, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
@@ -227,7 +228,7 @@ class OOMLLexer extends Lexer {
         }
 
         if (optionalFilePath.isEmpty()) {
-            System.err.println("WARN: Import symbol found with nothing to import! Use quotes if a character isn't recognized as part of a optionalFilePath.");
+            Logger.error("Import symbol found with nothing to import at " + this.getFile().toPath() + "@" + this.lineN + ":" + this.charN + "; Use quotes if a character isn't recognized as part of a file path.");
             return new Token(TokenType.IMPORT, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
@@ -245,12 +246,12 @@ class OOMLLexer extends Lexer {
                 this.cStream.next();
 
                 if (this.cStream.isEOF()) {
-                    System.err.println("Reached EOF after escaping character!");
+                    Logger.warn("Reached EOF after escaping character at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
                     break;
                 }
 
                 if (this.cStream.getCurrentChar() != quote && this.cStream.getCurrentChar() != OOMLSymbols.BACKSLASH.getValue()) {
-                    System.err.println("Character '" + this.cStream.getCurrentChar() + "' did not need to be escaped.");
+                    Logger.warn("Character '" + this.cStream.getCurrentChar() + "' did not need to be escaped at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
                 }
             }
 
@@ -259,7 +260,7 @@ class OOMLLexer extends Lexer {
         }
 
         if (this.cStream.isEOF()) {
-            System.err.println("Quote closed by end of file.");
+            Logger.warn("Quote closed by end of file at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
         } else {
             this.cStream.next();
         }
