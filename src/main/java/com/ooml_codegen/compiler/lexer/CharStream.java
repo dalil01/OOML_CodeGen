@@ -6,6 +6,8 @@ public class CharStream {
 
     private final BufferedReader reader;
     private char currentChar = 0;
+    private int charN = 0;
+    private int lineN = 0;
     private boolean reachedEOF = false;
 
 
@@ -51,8 +53,11 @@ public class CharStream {
 
             return false;
         }
-
+        this.charN++;
         this.currentChar = (char) readChar;
+        if (this.currentChar == '\n'){
+            this.lineN++;
+        }
 
         return true;
     }
@@ -75,6 +80,14 @@ public class CharStream {
             } catch (IOException ignored) {
             }
         }
+    }
+
+    public int getLineN(){
+        return this.lineN;
+    }
+
+    public int getCharN(){
+        return this.charN;
     }
 
     private void closeReaderQuietly() {
