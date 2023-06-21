@@ -66,4 +66,8 @@ public class Token {
 				'}';
 	}
 
+	public String getLocation() {
+		return this.getFilePath() + "@" + this.getLineN() + ":" + this.getCharN();
+	}
+
 }
