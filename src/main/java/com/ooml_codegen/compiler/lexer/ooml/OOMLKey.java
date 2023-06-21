@@ -39,7 +39,6 @@ public enum OOMLKey {
             BRACKET.value),
 
     FILE_END(PAD.value +
-            OOMLSymbols.COLON +
             QUOTE.value +
             OOMLSymbols.EQUAL +
             OOMLSymbols.IMPORT +
