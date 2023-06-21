@@ -16,9 +16,11 @@ class OOMLLexer extends Lexer {
 
     public Token nextToken() {
         this.consumePadding();
+        this.charN = this.cStream.getCharN();
+        this.lineN = this.cStream.getLineN();
         Token tok = generateToken();
         if (tok == null){
-            return new Token(TokenType.EOF);
+            return new Token(TokenType.EOF, this.getFile().toPath(), this.lineN, this.lineN);
         }
         return tok;
     }
@@ -49,7 +51,7 @@ class OOMLLexer extends Lexer {
                 this.cStream.next();
 
                 if (this.cStream.isEOF()) {
-                    return new Token(TokenType.WORD, OOMLSymbols.SLASH.toString());
+                    return new Token(TokenType.WORD, OOMLSymbols.SLASH.toString(), this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
                 if (this.cStream.getCurrentChar() != OOMLSymbols.STAR.getValue() && this.cStream.getCurrentChar() != OOMLSymbols.SLASH.getValue()) {
@@ -60,22 +62,22 @@ class OOMLLexer extends Lexer {
             }
             case COMMA -> {
                 this.cStream.next();
-                return new Token(TokenType.COMMA);
+                return new Token(TokenType.COMMA, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case IMPORT -> {
                 return this.generateImportToken();
             }
             case COLON -> {
                 this.cStream.next();
-                return new Token(TokenType.COLON);
+                return new Token(TokenType.COLON, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case SEMI_COLON -> {
                 this.cStream.next();
-                return new Token(TokenType.SEMI_COLON);
+                return new Token(TokenType.SEMI_COLON, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case EQUAL -> {
                 this.cStream.next();
-                return new Token(TokenType.EQUAL);
+                return new Token(TokenType.EQUAL, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case PLUS, HASH -> {
                 String character = String.valueOf(cStream.getCurrentChar());
@@ -85,10 +87,10 @@ class OOMLLexer extends Lexer {
                 if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "+:" or "#:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, character);
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, character, this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
-                return new Token(TokenType.SIGN, character);
+                return new Token(TokenType.SIGN, character, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case MINUS -> {
                 this.cStream.next();
@@ -97,42 +99,42 @@ class OOMLLexer extends Lexer {
                 if (this.cStream.getCurrentChar() == OOMLSymbols.GREATER_THAN.getValue()) {
                     // matched "->"
                     this.cStream.next();
-                    return new Token(TokenType.INHERITANCE);
+                    return new Token(TokenType.INHERITANCE, this.getFile().toPath(), this.lineN, this.lineN);
                 // check for next character to find access modifier block
                 } else if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "-:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, OOMLSymbols.MINUS.toString());
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
-                return new Token(TokenType.SIGN, OOMLSymbols.MINUS.toString());
+                return new Token(TokenType.SIGN, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case DOUBLE_QUOTE, SINGLE_QUOTE, BACK_QUOTE -> {
                 return this.generateQuotedWord();
             }
             case OPENING_BRACKET -> {
                 this.cStream.next();
-                return new Token(TokenType.OPENING_BRACKET);
+                return new Token(TokenType.OPENING_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case CLOSING_BRACKET -> {
                 cStream.next();
-                return new Token(TokenType.CLOSING_BRACKET);
+                return new Token(TokenType.CLOSING_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case OPENING_PARENTHESIS -> {
                 this.cStream.next();
-                return new Token(TokenType.OPENING_PARENTHESIS);
+                return new Token(TokenType.OPENING_PARENTHESIS, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case CLOSING_PARENTHESIS -> {
                 this.cStream.next();
-                return new Token(TokenType.CLOSING_PARENTHESIS);
+                return new Token(TokenType.CLOSING_PARENTHESIS, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case OPENING_CURLY_BRACKET -> {
                 this.cStream.next();
-                return new Token(TokenType.OPENING_CURLY_BRACKET);
+                return new Token(TokenType.OPENING_CURLY_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
             }
             case CLOSING_CURLY_BRACKET -> {
                 this.cStream.next();
-                return new Token(TokenType.CLOSING_CURLY_BRACKET);
+                return new Token(TokenType.CLOSING_CURLY_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
             }
             default -> {
                 return this.generateWordToken();
@@ -159,7 +161,7 @@ class OOMLLexer extends Lexer {
             this.cStream.next();
         }
 
-        return new Token(TokenType.SINGLE_LINE_COMMENT, s.toString());
+        return new Token(TokenType.SINGLE_LINE_COMMENT, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);
     }
 
     private Token generateMultiLineCommentToken() {
@@ -193,7 +195,7 @@ class OOMLLexer extends Lexer {
             s.append(OOMLSymbols.STAR.getValue());
         }
 
-        return new Token(TokenType.MULTI_LINE_COMMENT, s.toString());
+        return new Token(TokenType.MULTI_LINE_COMMENT, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);
     }
 
     /**
@@ -206,7 +208,7 @@ class OOMLLexer extends Lexer {
 
         if (this.cStream.isEOF()) {
             System.err.println("WARN: Import symbol found with nothing to import before EOF!");
-            return new Token(TokenType.IMPORT);
+            return new Token(TokenType.IMPORT, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
         Optional<String> optionalFilePath;
@@ -226,10 +228,10 @@ class OOMLLexer extends Lexer {
 
         if (optionalFilePath.isEmpty()) {
             System.err.println("WARN: Import symbol found with nothing to import! Use quotes if a character isn't recognized as part of a optionalFilePath.");
-            return new Token(TokenType.IMPORT);
+            return new Token(TokenType.IMPORT, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
-        return new Token(TokenType.IMPORT, optionalFilePath.get());
+        return new Token(TokenType.IMPORT, optionalFilePath.get(), this.getFile().toPath(), this.lineN, this.lineN);
     }
 
     // TODO Need to implement proper Exception stuff
@@ -262,7 +264,7 @@ class OOMLLexer extends Lexer {
             this.cStream.next();
         }
 
-        return new Token(TokenType.QUOTED_WORD, s.toString());
+        return new Token(TokenType.QUOTED_WORD, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);
     }
 
     private Token generateWordToken() {
@@ -278,7 +280,7 @@ class OOMLLexer extends Lexer {
             this.cStream.next();
         }
 
-        return new Token(TokenType.WORD, s.toString());
+        return new Token(TokenType.WORD, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

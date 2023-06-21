@@ -8,6 +8,8 @@ public abstract class Lexer {
     private final File file;
 
     protected final CharStream cStream;
+    protected int charN = 0;
+    protected int lineN = 0;
 
     protected Lexer(File file) throws FileNotFoundException {
         this.file = file;
