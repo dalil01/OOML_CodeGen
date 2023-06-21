@@ -100,7 +100,6 @@ public class KeyTest {
 
 		Assertions.assertEquals(
 				OOMLKey.PAD.getValue() +
-						OOMLSymbols.COLON +
 						OOMLKey.QUOTE.getValue() +
 						OOMLSymbols.EQUAL +
 						OOMLSymbols.IMPORT +

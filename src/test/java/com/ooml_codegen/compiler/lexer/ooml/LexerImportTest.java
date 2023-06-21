@@ -22,7 +22,7 @@ public class LexerImportTest extends LexerTest {
 			System.out.println(token.toString());
 
 
-			if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 23).contains(currentToken)) {
+			if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22).contains(currentToken)) {
 				Assertions.assertEquals(TokenType.IMPORT, token.getType());
 			}
 
@@ -57,15 +57,15 @@ public class LexerImportTest extends LexerTest {
 				Assertions.assertEquals("babla2", token.getStringValue());
 			}
 			else if (currentToken == 18) {
-				Assertions.assertEquals("colon", token.getStringValue());
+				Assertions.assertEquals("colon:", token.getStringValue());
 			}
-			else if (currentToken == 20) {
+			else if (currentToken == 19) {
 				Assertions.assertEquals("space", token.getStringValue());
 			}
-			else if (currentToken == 22) {
+			else if (currentToken == 21) {
 				Assertions.assertEquals("comment//not_a_comment", token.getStringValue());
 			}
-			else if (currentToken == 23) {
+			else if (currentToken == 22) {
 				Assertions.assertEquals("comment/*not_a_comment*/", token.getStringValue());
 			}
 			token = this.lexer.nextToken();
