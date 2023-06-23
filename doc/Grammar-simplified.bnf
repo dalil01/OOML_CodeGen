@@ -1,0 +1,213 @@
+/*   Rule:
+     rule=...
+
+     Non-Terminal:
+     "..." or '...'
+
+     Terminal:
+     ...
+
+     Concat:
+     ... ...
+
+     Choice:
+     ...|...
+
+     Optional:
+     ...?
+
+     0 or more:
+     ...*
+
+     1 or more:
+     ...+
+
+     Grouping:
+     (...)
+
+     Exclusion:
+     ...-...
+
+     Comment:
+     //...
+     and C style multilines
+
+     Character Set:
+     [...] following POSIX extended regular expression rules in the manual grep(1)
+
+     A rule in CAPS is one that will be abstracted by the tokenizer.
+     They are mostly here as a referece to make sure we follow the language specifications.
+     In particular, PADDING and SEPARATOR will be removed from the token listing
+     and only serve to differenciate tokens for the tokenizer.
+*/
+
+// All rules in uppercase are defined in the lexer
+
+CLASS       = "class"
+INTERFACE   = "interface"
+PACKAGE     = "package"
+INHERITANCE = "->"
+ENUM        = "enum"
+WORD or QUOTED_WORD
+SINGLE_LINE_COMMENT
+MULTI_LINE_COMMENT
+EOF
+COLON or ":"
+SEMI_COLON or ";"
+EQUAL or "="
+ACCESS_MODIFIER or "+" | "-" | "#"
+PLUS or "+"
+MINUS or "-"
+HASH or "#"
+ACCESS_MODIFIER_BLOCK or "+:" or "-:" or "#:"
+
+
+
+comment     = SINGLE_LINE_COMMENT
+            | MULTI_LINE_COMMENT
+
+word        = WORD
+            | QUOTED_WORD
+
+// Starting rule
+Start       = list EOF
+
+list        = entry list
+            | entry
+
+entry       = class
+            | enum
+            | interface
+            | package
+
+
+/*
+            | import
+// handled in tokenizer
+import      = "@" FILE
+*/
+
+class       = restricted_access_modifier CLASS_ID modifier_list WORD inheritance class_model
+
+
+class_model = "{" class_prop_list "}"
+            | ":" class_prop_list
+
+class_prop_list
+            = class_prop class_prop_list
+            | class_prop
+
+class_prop  = attribute_with_access
+            | method_with_access
+            | constructor_with_access
+            | access_block
+
+restricted_access_modifier
+            = "+"
+            | ""
+
+class_access_block
+            = ACCESS_MODIFIER_BLOCK class_prop_block_list
+
+class_prop_block_list
+            = class_prop_block class_prop_block_list
+            | class_prop_block
+
+class_prop_block
+            = attribute
+            | method
+            | constructor
+
+// The access modifier can be optional if we want to use the 'default'
+// behaviour of java.
+attribute_with_access
+            = ACCESS_MODIFIER attribute
+            | attribute
+
+attribute   = modifier_list WORD ":" accessors type
+
+modifier_list
+            = modifier modifier_list
+            | modifier
+            | ""
+
+modifier    = WORD
+
+accessors   = getter setter
+            | getter
+            | setter getter
+            | setter
+            | ""
+
+getter      = "-"
+
+setter      = "+"
+
+method_with_access
+            = ACCESS_MODIFIER method
+            | method
+
+method      = modifier_list WORD "(" argument_list ")" ":" type
+
+argument_list
+            = modifier_list WORD ":" type argument_list
+            | modifier_list WORD ":" type
+
+type        = WORD
+
+constructor_with_access
+            = ACCESS_MODIFIER constructor
+            | constructor
+
+constructor = WORD "(" argument_list ")"
+
+interface   = restricted_access_modifier INTERFACE_ID modifier_list WORD inheritance interface_model
+
+interface_model
+            = "{" interface_prop_list "}"
+            | ":" interface_prop_list
+
+interface_prop_list
+            = interface_prop interface_prop_list
+            | interface_prop
+
+interface_prop
+            = attribute_with_access
+            | method_with_access
+            | interface_access_block
+
+interface_access_block
+            = ACCESS_MODIFIER_BLOCK interface_prop_block_list
+
+interface_prop_block_list
+            = interface_prop_block interface_prop_block_list
+            | interface_prop_block
+
+interface_prop_block
+            = attribute
+            | method
+
+package     = PACKAGE_ID WORD
+
+inheritance = INHERITANCE_ID inheritance_list
+
+inheritance_list
+            = WORD
+            | WORD ',' inheritance_list
+
+enum        = restricted_access_modifier ENUM_ID WORD enum_model
+
+enum_model  = ":" enum_value_list
+            | "{" enum_value_list "}"
+
+enum_value_list
+            = enum_key "," enum_value_list
+            | enum_key
+
+
+enum_key    = WORD
+            | WORD "=" WORD
+
+
+// TODO
+// reference -> inheritance done, other relationship in later PR
