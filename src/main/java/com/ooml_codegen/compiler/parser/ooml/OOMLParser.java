@@ -4,19 +4,14 @@ import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.lexer.ooml.OOMLLexerManager;
 import com.ooml_codegen.compiler.parser.Parser;
-import com.ooml_codegen.compiler.validator.ValidationType;
-import com.ooml_codegen.compiler.validator.ooml.OOMLValidator;
 
 import java.io.FileNotFoundException;
 
 public class OOMLParser extends Parser {
 
-	private final OOMLValidator validator;
-
 
 	public OOMLParser(OOMLLexerManager lexer) {
 		super(lexer);
-		this.validator = new OOMLValidator();
 	}
 
 	@Override
@@ -43,10 +38,6 @@ public class OOMLParser extends Parser {
 		if (nextToken.getType() != TokenType.WORD) {
 			// TODO mange error
 			return;
-		}
-
-		if (this.validator.validate(ValidationType.PACKAGE, nextToken.getValue())) {
-			// TODO : Send order to Model builder to set package
 		}
 	}
 
