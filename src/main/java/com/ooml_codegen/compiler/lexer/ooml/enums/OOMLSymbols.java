@@ -1,4 +1,4 @@
-package com.ooml_codegen.compiler.lexer.ooml;
+package com.ooml_codegen.compiler.lexer.ooml.enums;
 
 import java.util.Optional;
 

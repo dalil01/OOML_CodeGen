@@ -2,8 +2,8 @@ package com.ooml_codegen.compiler.lexer.ooml;
 
 import com.ooml_codegen.compiler.lexer.LexerManager;
 import com.ooml_codegen.compiler.lexer.Token;
-import com.ooml_codegen.utils.Logger;
-import com.ooml_codegen.utils.UFile;
+import com.ooml_codegen.utils.ULogger;
+import com.ooml_codegen.utils.UFiles;
 
 import java.io.File;
 import java.util.List;
@@ -20,14 +20,14 @@ public class OOMLLexerManager extends LexerManager {
         assert this.stack.size() != 0;
         assert this.stack.peek() != null;
         if (importToken.getStringValue().isEmpty()){
-            Logger.warn("Empty import token at " + importToken.getLocation());
+            ULogger.warn("Empty import token at " + importToken.getLocation());
             return;
         }
 
-        List<File> files = UFile.findOOMLFilesPath(importToken.getStringValue(), this.stack.peek().getFile());
+        List<File> files = UFiles.findOOMLFilesPath(importToken.getStringValue(), this.stack.peek().getFile());
 
         if (files.isEmpty()) {
-            Logger.error("Couldn't import " + importToken.getStringValue() + " at " + importToken.getLocation());
+            ULogger.error("Couldn't import " + importToken.getStringValue() + " at " + importToken.getLocation());
             throw new FileNotFoundException("Couldn't import " + importToken.getLocation());
         }
 

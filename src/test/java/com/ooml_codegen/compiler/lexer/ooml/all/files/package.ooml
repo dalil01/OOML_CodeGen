@@ -1,0 +1,4 @@
+package com.ooml.package
+	package package.package.package {
+		package package.ooml.package // Think about package inheritance
+	}

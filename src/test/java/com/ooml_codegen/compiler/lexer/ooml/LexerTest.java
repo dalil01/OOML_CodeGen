@@ -8,11 +8,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class LexerTest {
 
-	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml_codegen/compiler/lexer/ooml/files/";
+	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml_codegen/compiler/lexer/ooml/all/files/";
 
 	protected String filePath;
 	protected OOMLLexer lexer;
-	protected AtomicInteger index;
 
 	protected LexerTest(String fileName) {
 		this.filePath = pathPrefix + fileName;
@@ -20,8 +19,7 @@ public abstract class LexerTest {
 
 	@BeforeEach
 	public void setup() throws FileNotFoundException {
-		this.lexer = new OOMLLexer(new File(filePath));
-		this.index = new AtomicInteger(1);
+		this.lexer = new OOMLLexer(new File(this.filePath));
 	}
 
 	/**

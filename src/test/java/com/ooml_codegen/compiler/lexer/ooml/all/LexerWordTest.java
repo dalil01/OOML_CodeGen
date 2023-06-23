@@ -1,7 +1,8 @@
-package com.ooml_codegen.compiler.lexer.ooml;
+package com.ooml_codegen.compiler.lexer.ooml.all;
 
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
+import com.ooml_codegen.compiler.lexer.ooml.LexerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,57 +16,53 @@ public class LexerWordTest extends LexerTest {
 
     @Test
     public void wordTest() {
-        Token token = this.lexer.nextToken();
-        while (token.getType() != TokenType.EOF){
-            int currentToken = this.index.getAndIncrement();
+        this.lexer.forEach((i, token) -> {
+            System.out.println(token);
 
-            System.out.println(token.toString());
-
-            if (List.of(1, 2, 3, 5, 6, 8, 10, 12, 14, 17, 18).contains(currentToken)) {
+            if (List.of(1, 2, 3, 5, 6, 8, 10, 12, 14, 17, 18).contains(i)) {
                 Assertions.assertEquals(TokenType.WORD, token.getType());
             }
 
-            if (currentToken == 19){
+            if (i == 19){
                 Assertions.assertEquals(TokenType.EOF, token.getType());
             }
-            else if (currentToken == 1){
+            else if (i == 1){
                 Assertions.assertEquals("hello!", token.getStringValue());
             }
-            else if (currentToken == 2){
+            else if (i == 2){
                 Assertions.assertEquals("I", token.getStringValue());
             }
-            else if (currentToken == 3){
+            else if (i == 3){
                 Assertions.assertEquals("am", token.getStringValue());
             }
-            else if (currentToken == 4){
+            else if (i == 4){
                 Assertions.assertEquals("a", token.getStringValue());
             }
-            else if (currentToken == 5){
+            else if (i == 5){
                 Assertions.assertEquals("few", token.getStringValue());
             }
-            else if (currentToken == 6){
+            else if (i == 6){
                 Assertions.assertEquals("words", token.getStringValue());
             }
-            else if (currentToken == 8){
+            else if (i == 8){
                 Assertions.assertEquals("colon", token.getStringValue());
             }
-            else if (currentToken == 10){
+            else if (i == 10){
                 Assertions.assertEquals("import", token.getStringValue());
             }
-            else if (currentToken == 12){
+            else if (i == 12){
                 Assertions.assertEquals("comma", token.getStringValue());
             }
-            else if (currentToken == 14){
+            else if (i == 14){
                 Assertions.assertEquals("curlybracket", token.getStringValue());
             }
-            else if (currentToken == 17){
+            else if (i == 17){
                 Assertions.assertEquals("this_is$a|big~wordé&%withµsome§hit", token.getStringValue());
             }
-            else if (currentToken == 18){
+            else if (i == 18){
                 Assertions.assertEquals("test", token.getStringValue());
             }
-            token = this.lexer.nextToken();
-        }
+        });
     }
 
 }

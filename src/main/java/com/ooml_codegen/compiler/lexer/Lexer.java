@@ -2,6 +2,8 @@ package com.ooml_codegen.compiler.lexer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 public abstract class Lexer {
 
@@ -21,4 +23,16 @@ public abstract class Lexer {
     }
 
     public abstract Token nextToken();
+
+    public void forEach(BiConsumer<Integer, Token> action) {
+        Token token = this.nextToken();
+
+        int i = 1;
+        while (token.getType() != TokenType.EOF) {
+            action.accept(i, token);
+            token = this.nextToken();
+            i++;
+        }
+    }
+
 }

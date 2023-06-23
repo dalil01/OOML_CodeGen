@@ -3,12 +3,15 @@ package com.ooml_codegen.compiler.lexer.ooml;
 import com.ooml_codegen.compiler.lexer.Lexer;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
-import com.ooml_codegen.utils.Logger;
+import com.ooml_codegen.compiler.lexer.ooml.enums.OOMLKey;
+import com.ooml_codegen.compiler.lexer.ooml.enums.OOMLKeyword;
+import com.ooml_codegen.compiler.lexer.ooml.enums.OOMLSymbols;
+import com.ooml_codegen.utils.ULogger;
 
 import java.io.*;
 import java.util.Optional;
 
-class OOMLLexer extends Lexer {
+public class OOMLLexer extends Lexer {
 
 
     public OOMLLexer(File file) throws FileNotFoundException {
@@ -43,7 +46,7 @@ class OOMLLexer extends Lexer {
         // I don't know if the enum helped... actually seems less readable?
         Optional<OOMLSymbols> symbol = OOMLSymbols.getForChar(this.cStream.getCurrentChar());
         if (symbol.isEmpty()) {
-            return this.generateWordToken();
+            return this.generateWordOrKeywordToken();
         }
 
         switch (symbol.get()) {
@@ -56,7 +59,7 @@ class OOMLLexer extends Lexer {
                 }
 
                 if (this.cStream.getCurrentChar() != OOMLSymbols.STAR.getValue() && this.cStream.getCurrentChar() != OOMLSymbols.SLASH.getValue()) {
-                    return this.generateWordToken(OOMLSymbols.SLASH.toString());
+                    return this.generateWordOrKeywordToken(OOMLSymbols.SLASH.toString());
                 }
 
                 return this.generateCommentToken();
@@ -138,7 +141,7 @@ class OOMLLexer extends Lexer {
                 return new Token(TokenType.CLOSING_CURLY_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
             }
             default -> {
-                return this.generateWordToken();
+                return this.generateWordOrKeywordToken();
             }
         }
     }
@@ -208,7 +211,7 @@ class OOMLLexer extends Lexer {
         this.consumePadding();
 
         if (this.cStream.isEOF()) {
-            Logger.error("Import symbol found with nothing to import before EOF at " + this.getFile().toPath() + "@" + this.lineN + ":" + this.charN);
+            ULogger.error("Import symbol found with nothing to import before EOF at " + this.getFile().toPath() + "@" + this.lineN + ":" + this.charN);
             return new Token(TokenType.IMPORT, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
@@ -228,7 +231,7 @@ class OOMLLexer extends Lexer {
         }
 
         if (optionalFilePath.isEmpty()) {
-            Logger.error("Import symbol found with nothing to import at " + this.getFile().toPath() + "@" + this.lineN + ":" + this.charN + "; Use quotes if a character isn't recognized as part of a file path.");
+            ULogger.error("Import symbol found with nothing to import at " + this.getFile().toPath() + "@" + this.lineN + ":" + this.charN + "; Use quotes if a character isn't recognized as part of a file path.");
             return new Token(TokenType.IMPORT, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
@@ -246,12 +249,12 @@ class OOMLLexer extends Lexer {
                 this.cStream.next();
 
                 if (this.cStream.isEOF()) {
-                    Logger.warn("Reached EOF after escaping character at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
+                    ULogger.warn("Reached EOF after escaping character at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
                     break;
                 }
 
                 if (this.cStream.getCurrentChar() != quote && this.cStream.getCurrentChar() != OOMLSymbols.BACKSLASH.getValue()) {
-                    Logger.warn("Character '" + this.cStream.getCurrentChar() + "' did not need to be escaped at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
+                    ULogger.warn("Character '" + this.cStream.getCurrentChar() + "' did not need to be escaped at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
                 }
             }
 
@@ -260,7 +263,7 @@ class OOMLLexer extends Lexer {
         }
 
         if (this.cStream.isEOF()) {
-            Logger.warn("Quote closed by end of file at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
+            ULogger.warn("Quote closed by end of file at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
         } else {
             this.cStream.next();
         }
@@ -268,17 +271,34 @@ class OOMLLexer extends Lexer {
         return new Token(TokenType.QUOTED_WORD, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);
     }
 
-    private Token generateWordToken() {
-        return this.generateWordToken("");
+    private Token generateWordOrKeywordToken() {
+        return this.generateWordOrKeywordToken("");
     }
 
-    private Token generateWordToken(String prefix) {
+    private Token generateWordOrKeywordToken(String prefix) {
         StringBuilder s = new StringBuilder(prefix + this.cStream.getCurrentChar());
         this.cStream.next();
 
         while (!this.cStream.isEOF() && !containsChar(OOMLKey.WORD_END.getValue(), this.cStream.getCurrentChar())) {
             s.append(this.cStream.getCurrentChar());
             this.cStream.next();
+        }
+
+        String trimS = s.toString().trim();
+        TokenType keywordTokenType = null;
+
+        if (trimS.equals(OOMLKeyword.PACKAGE.getValue())) {
+            keywordTokenType = TokenType.PACKAGE;
+        } else if (trimS.equals(OOMLKeyword.CLASS.getValue())) {
+            keywordTokenType = TokenType.CLASS;
+        } else if (trimS.equals(OOMLKeyword.ENUM.getValue())) {
+            keywordTokenType = TokenType.ENUM;
+        } else if (trimS.equals(OOMLKeyword.INTERFACE.getValue())) {
+            keywordTokenType = TokenType.INTERFACE;
+        }
+
+        if (keywordTokenType != null) {
+            return new Token(keywordTokenType, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
         return new Token(TokenType.WORD, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);

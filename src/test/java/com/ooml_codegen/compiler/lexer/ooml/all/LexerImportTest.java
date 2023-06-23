@@ -1,7 +1,8 @@
-package com.ooml_codegen.compiler.lexer.ooml;
+package com.ooml_codegen.compiler.lexer.ooml.all;
 
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
+import com.ooml_codegen.compiler.lexer.ooml.LexerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,61 +16,56 @@ public class LexerImportTest extends LexerTest {
 
 	@Test
 	public void importsTest() {
-		Token token = this.lexer.nextToken();
-		while (token.getType() != TokenType.EOF){
-			int currentToken = this.index.getAndIncrement();
+		this.lexer.forEach((i, token) -> {
+			System.out.println(token);
 
-			System.out.println(token.toString());
-
-
-			if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22).contains(currentToken)) {
+			if (List.of(1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22).contains(i)) {
 				Assertions.assertEquals(TokenType.IMPORT, token.getType());
 			}
 
-			if (currentToken == 1) {
+			if (i == 1) {
 				Assertions.assertEquals("main.ooml", token.getStringValue());
 			}
-			else if (currentToken == 2) {
+			else if (i == 2) {
 				Assertions.assertEquals("../models/models.ooml", token.getStringValue());
 			}
-			else if (currentToken == 3) {
+			else if (i == 3) {
 				Assertions.assertEquals("../../controller/controllers.ooml/", token.getStringValue());
 			}
-			else if (currentToken == 5) {
+			else if (i == 5) {
 				Assertions.assertEquals("All", token.getStringValue());
 			}
-			else if (currentToken == 6) {
+			else if (i == 6) {
 				Assertions.assertEquals("Services/", token.getStringValue());
 			}
-			else if (currentToken == 7) {
+			else if (i == 7) {
 				Assertions.assertEquals("config.ooml", token.getStringValue());
 			}
-			else if (currentToken == 8) {
+			else if (i == 8) {
 				Assertions.assertEquals("/", token.getStringValue());
 			}
-			else if (currentToken == 9) {
+			else if (i == 9) {
 				Assertions.assertEquals("dir.", token.getStringValue());
 			}
-			else if (currentToken >= 11 && currentToken <= 16) {
+			else if (i >= 11 && i <= 16) {
 				Assertions.assertEquals("", token.getStringValue());
 			}
-			else if (currentToken == 17) {
+			else if (i == 17) {
 				Assertions.assertEquals("babla2", token.getStringValue());
 			}
-			else if (currentToken == 18) {
+			else if (i == 18) {
 				Assertions.assertEquals("colon:", token.getStringValue());
 			}
-			else if (currentToken == 19) {
+			else if (i == 19) {
 				Assertions.assertEquals("space", token.getStringValue());
 			}
-			else if (currentToken == 21) {
+			else if (i == 21) {
 				Assertions.assertEquals("comment//not_a_comment", token.getStringValue());
 			}
-			else if (currentToken == 22) {
+			else if (i == 22) {
 				Assertions.assertEquals("comment/*not_a_comment*/", token.getStringValue());
 			}
-			token = this.lexer.nextToken();
-		}
+		});
 	}
 
 }

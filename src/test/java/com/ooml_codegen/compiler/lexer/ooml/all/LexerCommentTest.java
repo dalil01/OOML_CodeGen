@@ -1,6 +1,7 @@
-package com.ooml_codegen.compiler.lexer.ooml;
+package com.ooml_codegen.compiler.lexer.ooml.all;
 
 import com.ooml_codegen.compiler.lexer.*;
+import com.ooml_codegen.compiler.lexer.ooml.LexerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,36 +15,31 @@ public class LexerCommentTest extends LexerTest {
 
 	@Test
 	public void singleLineCommentTest() {
-		Token token = this.lexer.nextToken();
-		while (token.getType() != TokenType.EOF){
-			int currentToken = this.index.getAndIncrement();
+		this.lexer.forEach((i, token) -> {
+			System.out.println(token);
 
-			System.out.println(token.toString());
-
-			if (List.of(1, 2, 3).contains(currentToken)) {
+			if (List.of(1, 2, 3).contains(i)) {
 				Assertions.assertEquals(TokenType.SINGLE_LINE_COMMENT, token.getType());
 			}
 
-			if (currentToken == 1) {
+			if (i == 1) {
 				Assertions.assertEquals(" Hello World!", token.getStringValue());
 			}
-			else if (currentToken == 2) {
+			else if (i == 2) {
 				Assertions.assertEquals(" Lorem ipsum /* */", token.getStringValue());
 			}
-			else if (currentToken == 3) {
+			else if (i == 3) {
 				Assertions.assertEquals("/    Test // Test", token.getStringValue());
 			}
-			token = this.lexer.nextToken();
-		}
+		});
 	}
 
 	@Test
 	public void multiLineCommentTest() {
-		Token token = this.lexer.nextToken();
-		while (token.getType() != TokenType.EOF){
-			int currentLine = this.index.getAndIncrement();
+		this.lexer.forEach((index, token) -> {
+			System.out.println(token);
 
-			if (currentLine == 4) {
+			if (index == 4) {
 				Assertions.assertEquals(TokenType.MULTI_LINE_COMMENT, token.getType());
 				Assertions.assertEquals("\n" +
 						"\tHello Mundo!\n" +
@@ -51,17 +47,17 @@ public class LexerCommentTest extends LexerTest {
 						"\t", normalizedString(token.getStringValue()));
 			}
 
-			if (currentLine == 5) {
+			if (index == 5) {
 				Assertions.assertEquals(TokenType.MULTI_LINE_COMMENT, token.getType());
 				Assertions.assertEquals("\n" +
 						"\t/* Hi ! /\n" +
 						"\t", normalizedString(token.getStringValue()));
 			}
-			else if (currentLine == 6) {
+			else if (index == 6) {
 				Assertions.assertEquals(token.getType(), TokenType.MULTI_LINE_COMMENT);
 				Assertions.assertEquals(" OOML!!!    + - / * > # { }  :  ", normalizedString(token.getStringValue()));
 			}
-			else if (currentLine == 7) {
+			else if (index == 7) {
 				Assertions.assertEquals(token.getType(), TokenType.MULTI_LINE_COMMENT);
 				Assertions.assertEquals(" Lorem\n" +
 						"Ipsum\n" +
@@ -73,8 +69,7 @@ public class LexerCommentTest extends LexerTest {
 						"\n" +
 						"\n", normalizedString(token.getStringValue()));
 			}
-			token = this.lexer.nextToken();
-		}
+		});
 	}
 
 }

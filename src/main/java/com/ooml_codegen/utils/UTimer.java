@@ -1,6 +1,6 @@
 package com.ooml_codegen.utils;
 
-public class Timer {
+public class UTimer {
 
 	private long startTime, endTime;
 
