@@ -24,6 +24,7 @@ public enum OOMLSymbols {
     COMMA(','),
     COLON(':'),
     SEMI_COLON(';'),
+    PACKAGE('~'),
     IMPORT('@'),
     GREATER_THAN('>'),
     OPENING_PARENTHESIS('('),

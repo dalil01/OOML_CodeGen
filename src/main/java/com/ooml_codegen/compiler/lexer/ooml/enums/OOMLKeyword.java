@@ -2,7 +2,6 @@ package com.ooml_codegen.compiler.lexer.ooml.enums;
 
 public enum OOMLKeyword {
 
-	PACKAGE("package"),
 	CLASS("class"),
 	ENUM("enum"),
 	INTERFACE("interface")

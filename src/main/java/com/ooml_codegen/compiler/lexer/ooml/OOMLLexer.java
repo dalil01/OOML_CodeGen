@@ -68,6 +68,10 @@ public class OOMLLexer extends Lexer {
                 this.cStream.next();
                 return new Token(TokenType.COMMA, this.getFile().toPath(), this.lineN, this.lineN);
             }
+            case PACKAGE -> {
+                this.cStream.next();
+                return new Token(TokenType.PACKAGE, this.getFile().toPath(), this.lineN, this.lineN);
+            }
             case IMPORT -> {
                 return this.generateImportToken();
             }
@@ -287,9 +291,7 @@ public class OOMLLexer extends Lexer {
         String trimS = s.toString().trim();
         TokenType keywordTokenType = null;
 
-        if (trimS.equals(OOMLKeyword.PACKAGE.getValue())) {
-            keywordTokenType = TokenType.PACKAGE;
-        } else if (trimS.equals(OOMLKeyword.CLASS.getValue())) {
+        if (trimS.equals(OOMLKeyword.CLASS.getValue())) {
             keywordTokenType = TokenType.CLASS;
         } else if (trimS.equals(OOMLKeyword.ENUM.getValue())) {
             keywordTokenType = TokenType.ENUM;
