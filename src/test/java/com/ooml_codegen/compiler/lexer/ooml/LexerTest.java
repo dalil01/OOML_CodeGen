@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class LexerTest {
 
