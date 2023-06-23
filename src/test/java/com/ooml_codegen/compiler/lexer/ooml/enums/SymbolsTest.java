@@ -30,6 +30,7 @@ public class SymbolsTest {
 				OOMLSymbols.COMMA,
 				OOMLSymbols.COLON,
 				OOMLSymbols.SEMI_COLON,
+				OOMLSymbols.PACKAGE,
 				OOMLSymbols.IMPORT,
 				OOMLSymbols.GREATER_THAN,
 				OOMLSymbols.OPENING_PARENTHESIS,
