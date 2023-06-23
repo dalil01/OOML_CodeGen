@@ -1,4 +1,4 @@
-package com.ooml_codegen.compiler.parser;
+package com.ooml_codegen.compiler.parserr;
 
 import com.ooml_codegen.compiler.lexer.LexerManager;
 

@@ -1,4 +1,4 @@
-package com.ooml_codegen.compiler.parser.ooml;
+package com.ooml_codegen.compiler.parserr.ooml;
 
 import com.ooml_codegen.models.Package;
 

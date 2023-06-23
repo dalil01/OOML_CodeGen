@@ -1,14 +1,13 @@
-package com.ooml_codegen.compiler.parser.ooml;
+package com.ooml_codegen.compiler.parserr.ooml;
 
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.lexer.ooml.OOMLLexerManager;
-import com.ooml_codegen.compiler.parser.Parser;
+import com.ooml_codegen.compiler.parserr.Parser;
 import com.ooml_codegen.compiler.validator.ValidationType;
 import com.ooml_codegen.compiler.validator.ooml.OOMLValidator;
 
 import java.io.FileNotFoundException;
-import java.util.List;
 
 public class OOMLParser extends Parser {
 
