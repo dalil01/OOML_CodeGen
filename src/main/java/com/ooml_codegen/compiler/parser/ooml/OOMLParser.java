@@ -1,9 +1,9 @@
-package com.ooml_codegen.compiler.parserr.ooml;
+package com.ooml_codegen.compiler.parser.ooml;
 
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.lexer.ooml.OOMLLexerManager;
-import com.ooml_codegen.compiler.parserr.Parser;
+import com.ooml_codegen.compiler.parser.Parser;
 import com.ooml_codegen.compiler.validator.ValidationType;
 import com.ooml_codegen.compiler.validator.ooml.OOMLValidator;
 

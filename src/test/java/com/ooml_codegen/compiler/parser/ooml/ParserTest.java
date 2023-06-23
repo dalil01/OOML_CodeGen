@@ -1,7 +1,7 @@
-package com.ooml_codegen.compiler.parserr.ooml;
+package com.ooml_codegen.compiler.parser.ooml;
 
 import com.ooml_codegen.compiler.lexer.ooml.OOMLLexerManager;
-import com.ooml_codegen.compiler.parserr.Parser;
+import com.ooml_codegen.compiler.parser.Parser;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
