@@ -29,7 +29,7 @@ public class TokenTypeTest {
 				TokenType.CLOSING_BRACKET,
 				TokenType.OPENING_CURLY_BRACKET,
 				TokenType.CLOSING_CURLY_BRACKET,
-				TokenType.ACCESS_MODIFIER_BLOCK,
+				TokenType.ACCESS_MODIFIER,
 				TokenType.EOF
 		};
 

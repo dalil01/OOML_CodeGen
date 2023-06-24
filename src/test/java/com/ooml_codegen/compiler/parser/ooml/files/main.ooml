@@ -2,4 +2,9 @@
 	Main
 */
 
-@./all/models.ooml
+~ src.app {
+
+	@./all/models.ooml
+	@all/controllers.ooml
+
+}

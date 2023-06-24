@@ -23,7 +23,7 @@ public class OOMLParser extends Parser {
 			TokenType type = token.getType();
 			String value = token.getStringValue();
 
-			System.out.println("PARSER: " + token);
+			System.out.println(token);
 
 			switch (type) {
 				case PACKAGE -> this.parsePackage();
@@ -41,6 +41,8 @@ public class OOMLParser extends Parser {
 			// TODO: need to throw the error, but need a proper exception class for that
 			return;
 		}
+
+
 	}
 
 }

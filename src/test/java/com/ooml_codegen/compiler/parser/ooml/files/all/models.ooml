@@ -1,14 +1,29 @@
 // Models
 
-package app.models {
+~ models {
 
-	+ class User {
-		+ id: int
-		+ firstname: string
-		+ lastname: string
-		+ User()
+	~ interfaces {
+
+		+ interface IUserInfo:
+			getUSerInfo() // public by default
+			+ displayInfo() // Return void by default
+
 	}
 
+	~ enums {
+		+ enum Role: ADMIN, CUSTOMER;
+	}
 
+	+ abstract class User -> IUSerInfo {
+		- id: int;
+		#: firstname, lastname: string
+	       role: Role
+		+ User()
+		+ User(firstname, lastname: string)
+	}
+
+	+ class Admin -> User:
+
+	+ class Customer -> User:
 
 }

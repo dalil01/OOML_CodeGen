@@ -95,7 +95,7 @@ public class OOMLLexer extends Lexer {
                 if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "+:" or "#:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, character, this.getFile().toPath(), this.lineN, this.lineN);
+                    return new Token(TokenType.ACCESS_MODIFIER, character, this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
                 return new Token(TokenType.SIGN, character, this.getFile().toPath(), this.lineN, this.lineN);
@@ -112,7 +112,7 @@ public class OOMLLexer extends Lexer {
                 } else if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "-:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
+                    return new Token(TokenType.ACCESS_MODIFIER, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
                 return new Token(TokenType.SIGN, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
@@ -242,39 +242,6 @@ public class OOMLLexer extends Lexer {
         return new Token(TokenType.IMPORT, optionalFilePath.get(), this.getFile().toPath(), this.lineN, this.lineN);
     }
 
-    // TODO Need to implement proper Exception stuff
-    private Token generateQuotedWord() {
-        int quote = this.cStream.getCurrentChar();
-        this.cStream.next();
-
-        StringBuilder s = new StringBuilder();
-        while (!this.cStream.isEOF() && this.cStream.getCurrentChar() != quote) {
-            if (this.cStream.getCurrentChar() == OOMLSymbols.BACKSLASH.getValue()) {
-                this.cStream.next();
-
-                if (this.cStream.isEOF()) {
-                    ULogger.warn("Reached EOF after escaping character at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
-                    break;
-                }
-
-                if (this.cStream.getCurrentChar() != quote && this.cStream.getCurrentChar() != OOMLSymbols.BACKSLASH.getValue()) {
-                    ULogger.warn("Character '" + this.cStream.getCurrentChar() + "' did not need to be escaped at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
-                }
-            }
-
-            s.append(this.cStream.getCurrentChar());
-            this.cStream.next();
-        }
-
-        if (this.cStream.isEOF()) {
-            ULogger.warn("Quote closed by end of file at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
-        } else {
-            this.cStream.next();
-        }
-
-        return new Token(TokenType.QUOTED_WORD, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);
-    }
-
     private Token generateWordOrKeywordToken() {
         return this.generateWordOrKeywordToken("");
     }
@@ -304,6 +271,39 @@ public class OOMLLexer extends Lexer {
         }
 
         return new Token(TokenType.WORD, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);
+    }
+
+    // TODO Need to implement proper Exception stuff
+    private Token generateQuotedWord() {
+        char quote = this.cStream.getCurrentChar();
+        this.cStream.next();
+
+        StringBuilder s = new StringBuilder();
+        while (!this.cStream.isEOF() && this.cStream.getCurrentChar() != quote) {
+            if (this.cStream.getCurrentChar() == OOMLSymbols.BACKSLASH.getValue()) {
+                this.cStream.next();
+
+                if (this.cStream.isEOF()) {
+                    ULogger.warn("Reached EOF after escaping character at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
+                    break;
+                }
+
+                if (this.cStream.getCurrentChar() != quote && this.cStream.getCurrentChar() != OOMLSymbols.BACKSLASH.getValue()) {
+                    ULogger.warn("Character '" + this.cStream.getCurrentChar() + "' did not need to be escaped at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
+                }
+            }
+
+            s.append(this.cStream.getCurrentChar());
+            this.cStream.next();
+        }
+
+        if (this.cStream.isEOF()) {
+            ULogger.warn("Quote closed by end of file at " + this.getFile().toPath() + "@" + this.cStream.getLineN() + ":" + this.cStream.getLineN());
+        } else {
+            this.cStream.next();
+        }
+
+        return new Token(TokenType.QUOTED_WORD, quote + s.toString() + quote, this.getFile().toPath(), this.lineN, this.lineN);
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

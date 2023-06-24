@@ -1,6 +1,5 @@
 package com.ooml_codegen.compiler.lexer.ooml.all;
 
-import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.lexer.ooml.LexerTest;
 import org.junit.jupiter.api.Assertions;
@@ -8,10 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class LexerBlockTest extends LexerTest {
+public class LexerAccessModifierTest extends LexerTest {
 
-	public LexerBlockTest() {
-		super("access-block.ooml");
+	public LexerAccessModifierTest() {
+		super("access-modifier.ooml");
 	}
 
 	@Test
@@ -24,9 +23,9 @@ public class LexerBlockTest extends LexerTest {
 			}
 
 			if (List.of(19, 27, 29).contains(i)) {
-				Assertions.assertEquals(TokenType.ACCESS_MODIFIER_BLOCK, token.getType());
+				Assertions.assertEquals(TokenType.ACCESS_MODIFIER, token.getType());
 			} else {
-				Assertions.assertNotEquals(TokenType.ACCESS_MODIFIER_BLOCK, token.getType());
+				Assertions.assertNotEquals(TokenType.ACCESS_MODIFIER, token.getType());
 			}
 
 			if (i == 19) {

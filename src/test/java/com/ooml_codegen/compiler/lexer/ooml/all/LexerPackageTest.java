@@ -22,6 +22,14 @@ public class LexerPackageTest extends LexerTest {
 			if (List.of(1, 3, 6).contains(i)) {
 				Assertions.assertEquals(TokenType.PACKAGE, token.getType());
 			}
+
+			if (i == 2) {
+				Assertions.assertEquals(token.getStringValue(), "com.ooml.package");
+			} else if (i == 4) {
+				Assertions.assertEquals(token.getStringValue(), "blabla.package.package");
+			} else if (i == 7) {
+				Assertions.assertEquals(token.getStringValue(), "dir.ooml.package");
+			}
 		});
 	}
 

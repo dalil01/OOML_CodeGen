@@ -1,6 +1,5 @@
 package com.ooml_codegen.compiler.lexer.ooml.all;
 
-import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.lexer.ooml.LexerTest;
 import org.junit.jupiter.api.Assertions;

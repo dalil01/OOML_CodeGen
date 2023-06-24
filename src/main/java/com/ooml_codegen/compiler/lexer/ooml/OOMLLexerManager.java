@@ -19,6 +19,7 @@ public class OOMLLexerManager extends LexerManager {
         // Stack should never be empty when entering this function (how else would we have gotten an import token?)
         assert this.stack.size() != 0;
         assert this.stack.peek() != null;
+
         if (importToken.getStringValue().isEmpty()){
             ULogger.warn("Empty import token at " + importToken.getLocation());
             return;

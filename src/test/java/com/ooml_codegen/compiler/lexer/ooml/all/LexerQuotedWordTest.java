@@ -1,6 +1,5 @@
 package com.ooml_codegen.compiler.lexer.ooml.all;
 
-import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.lexer.ooml.LexerTest;
 import org.junit.jupiter.api.Assertions;
@@ -27,16 +26,16 @@ public class LexerQuotedWordTest extends LexerTest {
                 Assertions.assertEquals(TokenType.EOF, token.getType());
             }
             else if (i == 1) {
-                Assertions.assertEquals("he\"llo!", token.getStringValue());
+                Assertions.assertEquals("\"he\"llo!\"", token.getStringValue());
             }
             else if (i == 2) {
-                Assertions.assertEquals("I \"'am", token.getStringValue());
+                Assertions.assertEquals("'I \"'am'", token.getStringValue());
             }
             else if (i == 3) {
                 Assertions.assertEquals("a", token.getStringValue());
             }
             else if (i == 4) {
-                Assertions.assertEquals("few words// I am", token.getStringValue());
+                Assertions.assertEquals("\"few words// I am\"", token.getStringValue());
             }
             else if (i == 5) {
                 Assertions.assertEquals("a", token.getStringValue());
@@ -45,10 +44,10 @@ public class LexerQuotedWordTest extends LexerTest {
                 Assertions.assertEquals("comment", token.getStringValue());
             }
             else if (i == 7) {
-                Assertions.assertEquals("c\"olo\\n:", token.getStringValue());
+                Assertions.assertEquals("`c\"olo\\n:`", token.getStringValue());
             }
             else if (i == 8) {
-                Assertions.assertEquals("import@tr", token.getStringValue());
+                Assertions.assertEquals("\"import@tr\"", token.getStringValue());
             }
             else if (i == 9) {
                 Assertions.assertEquals("ash", token.getStringValue());
@@ -57,25 +56,25 @@ public class LexerQuotedWordTest extends LexerTest {
                 Assertions.assertEquals("comm", token.getStringValue());
             }
             else if (i == 11) {
-                Assertions.assertEquals("a,  z\n ", normalizedString(token.getStringValue()));
+                Assertions.assertEquals("\"a,  z\n \"", normalizedString(token.getStringValue()));
             }
             else if (i == 12) {
                 Assertions.assertEquals("curlyb", token.getStringValue());
             }
             else if (i == 13) {
-                Assertions.assertEquals("rack", token.getStringValue());
+                Assertions.assertEquals("\"rack\"", token.getStringValue());
             }
             else if (i == 14) {
-                Assertions.assertEquals("", token.getStringValue());
+                Assertions.assertEquals("\"\"", token.getStringValue());
             }
             else if (i == 15) {
-                Assertions.assertEquals("et{}", token.getStringValue());
+                Assertions.assertEquals("\"et{}\"", token.getStringValue());
             }
             else if (i == 16) {
                 Assertions.assertEquals("this_is", token.getStringValue());
             }
             else if (i == 17) {
-                Assertions.assertEquals("$a|bi", token.getStringValue());
+                Assertions.assertEquals("\"$a|bi\"", token.getStringValue());
             }
             else if (i == 18) {
                 Assertions.assertEquals("g~wordé&%withµsome§hit", token.getStringValue());
