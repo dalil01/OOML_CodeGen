@@ -26,7 +26,7 @@ public class LexerPackageTest extends LexerTest {
 			if (i == 2) {
 				Assertions.assertEquals(token.getStringValue(), "com.ooml.package");
 			} else if (i == 4) {
-				Assertions.assertEquals(token.getStringValue(), "blabla.package.package");
+				Assertions.assertEquals(token.getStringValue(), "\"blabla.package.package\"");
 			} else if (i == 7) {
 				Assertions.assertEquals(token.getStringValue(), "dir.ooml.package");
 			}
