@@ -23,9 +23,9 @@ public class LexerAccessModifierTest extends LexerTest {
 			}
 
 			if (List.of(19, 27, 29).contains(i)) {
-				Assertions.assertEquals(TokenType.ACCESS_MODIFIER, token.getType());
+				Assertions.assertEquals(TokenType.ACCESS_MODIFIER_BLOCK, token.getType());
 			} else {
-				Assertions.assertNotEquals(TokenType.ACCESS_MODIFIER, token.getType());
+				Assertions.assertNotEquals(TokenType.ACCESS_MODIFIER_BLOCK, token.getType());
 			}
 
 			if (i == 19) {

@@ -7,12 +7,20 @@ import com.ooml_codegen.compiler.parser.Parser;
 import com.ooml_codegen.utils.ULogger;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class OOMLParser extends Parser {
 
+	private char accessModifierBlocState = ' ';
+
+	private boolean inStructure = false;
+
+	private Deque<Token> leftTokens;
 
 	public OOMLParser(OOMLLexerManager lexer) {
 		super(lexer);
+		this.leftTokens = new ArrayDeque<>();
 	}
 
 	@Override
@@ -27,11 +35,24 @@ public class OOMLParser extends Parser {
 
 			switch (type) {
 				case PACKAGE -> this.parsePackage();
+				case ACCESS_MODIFIER_BLOCK -> parseAccessModifierBlock(token);
 			}
 
 			token = this.lexerManager.nextToken();
 		}
 	}
+
+	private void parseAccessModifierBlock(Token token) {
+		if (inStructure) {
+			this.accessModifierBlocState = token.getStringValue().charAt(0);
+		} else {
+			ULogger.error("Access Modifier block not in a structure (class/interface/enum/...) at " + token.getLocation());
+			// TODO: need to throw a better exception
+			throw new RuntimeException();
+		}
+	}
+
+
 
 	private void parsePackage() throws FileNotFoundException {
 		Token nextToken = this.lexerManager.nextToken();

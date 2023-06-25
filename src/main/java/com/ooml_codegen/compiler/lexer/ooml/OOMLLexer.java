@@ -95,7 +95,7 @@ public class OOMLLexer extends Lexer {
                 if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "+:" or "#:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER, character, this.getFile().toPath(), this.lineN, this.lineN);
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, character, this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
                 return new Token(TokenType.SIGN, character, this.getFile().toPath(), this.lineN, this.lineN);
@@ -112,7 +112,7 @@ public class OOMLLexer extends Lexer {
                 } else if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "-:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
                 return new Token(TokenType.SIGN, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
