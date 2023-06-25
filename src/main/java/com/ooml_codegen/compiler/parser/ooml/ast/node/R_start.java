@@ -5,7 +5,7 @@ import com.ooml_codegen.compiler.parser.ooml.ast.NodeType;
 
 public class R_start extends Node {
     public R_start(){
-        super(null, NodeType.R_Start);
+        super(NodeType.R_Start);
     }
 
 }

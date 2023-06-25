@@ -11,8 +11,8 @@ public class Node {
     protected ArrayList<Node> left;
     protected ArrayList<Node> right;
 
-    public Node(Token token, NodeType nodeType){
-        this.token = token;
+    public Node(NodeType nodeType){
+        this.token = null;
         this.nodeType = nodeType;
         this.left = new ArrayList<>();
         this.right = new ArrayList<>();

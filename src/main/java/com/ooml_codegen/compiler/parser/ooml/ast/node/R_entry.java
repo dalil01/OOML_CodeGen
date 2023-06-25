@@ -5,6 +5,6 @@ import com.ooml_codegen.compiler.parser.ooml.ast.NodeType;
 
 public class R_entry extends Node {
     public R_entry(){
-        super(null, NodeType.R_entry);
+        super(NodeType.R_entry);
     }
 }

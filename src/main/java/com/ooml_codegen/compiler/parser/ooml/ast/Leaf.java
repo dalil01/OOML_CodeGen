@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Leaf extends Node {
 
     public Leaf(Token token, NodeType nodeType){
-        super(token, nodeType);
+        super(nodeType);
     }
     public ArrayList<Node> getLeft(){
         return null;
