@@ -1,4 +1,4 @@
-package com.ooml_codegen.compiler.lexer.ooml;
+package com.ooml_codegen.compiler.lexer.ooml.enums;
 
 import java.util.Optional;
 
@@ -24,6 +24,7 @@ public enum OOMLSymbols {
     COMMA(','),
     COLON(':'),
     SEMI_COLON(';'),
+    PACKAGE('~'),
     IMPORT('@'),
     GREATER_THAN('>'),
     OPENING_PARENTHESIS('('),

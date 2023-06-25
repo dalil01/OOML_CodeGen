@@ -5,11 +5,16 @@ public enum TokenType {
     SINGLE_LINE_COMMENT,
     MULTI_LINE_COMMENT,
     IMPORT,
+    PACKAGE,
+    CLASS,
+    ENUM,
+    INTERFACE,
     INHERITANCE,
     COLON,
     SEMI_COLON,
     EQUAL,
     SIGN,
+    QUOTED_WORD,
     WORD,
     COMMA,
     OPENING_PARENTHESIS,
@@ -18,7 +23,7 @@ public enum TokenType {
     CLOSING_BRACKET,
     OPENING_CURLY_BRACKET,
     CLOSING_CURLY_BRACKET,
-    ACCESS_MODIFIER_BLOCK,
+    ACCESS_MODIFIER,
     EOF
 
 }

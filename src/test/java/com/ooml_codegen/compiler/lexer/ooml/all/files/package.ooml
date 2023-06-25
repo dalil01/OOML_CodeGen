@@ -1,0 +1,4 @@
+~ com.ooml.package
+	~"blabla.package.package" {
+		~ dir.ooml.package // Think about package inheritance
+	}

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.ooml_codegen.utils.enums.ColorCode;
 
-public class LoggerTest {
+public class ULoggerTest {
 
     private final String error = "Error";
 
@@ -41,7 +41,7 @@ public class LoggerTest {
         PrintStream out = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        Logger.debug(error);
+        ULogger.debug(error);
 
         String output = outputStream.toString().trim();
         System.setOut(out);
@@ -67,7 +67,7 @@ public class LoggerTest {
         PrintStream out = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        Logger.trace(error);
+        ULogger.trace(error);
 
         String output = outputStream.toString().trim();
         System.setOut(out);
@@ -88,7 +88,7 @@ public class LoggerTest {
         PrintStream out = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        Logger.info(error);
+        ULogger.info(error);
 
         String output = "\u001B" + outputStream.toString().trim();
         System.setOut(out);
@@ -115,7 +115,7 @@ public class LoggerTest {
         PrintStream out = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        Logger.warn(error);
+        ULogger.warn(error);
 
         String output = "\u001B" + outputStream.toString().trim();
         System.setOut(out);
@@ -141,7 +141,7 @@ public class LoggerTest {
         PrintStream out = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        Logger.error(error);
+        ULogger.error(error);
 
         String output = "\u001B" + outputStream.toString().trim();
         System.setOut(out);

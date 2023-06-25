@@ -1,4 +1,4 @@
-package com.ooml_codegen.compiler.lexer.ooml;
+package com.ooml_codegen.compiler.lexer.ooml.enums;
 
 public enum OOMLKey {
 
@@ -39,7 +39,6 @@ public enum OOMLKey {
             BRACKET.value),
 
     FILE_END(PAD.value +
-            OOMLSymbols.COLON +
             QUOTE.value +
             OOMLSymbols.EQUAL +
             OOMLSymbols.IMPORT +

@@ -1,0 +1,10 @@
+/*
+	Main
+*/
+
+~ src.app {
+
+	@./all/models.ooml
+	@all/controllers.ooml
+
+}

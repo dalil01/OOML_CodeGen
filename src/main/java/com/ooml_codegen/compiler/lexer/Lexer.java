@@ -1,20 +1,37 @@
 package com.ooml_codegen.compiler.lexer;
 
-import java.io.BufferedReader;
-import java.util.stream.Stream;
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.function.BiConsumer;
 
 public abstract class Lexer {
 
-	protected final String filePath;
+    private final File file;
 
-	protected BufferedReader reader;
+    protected final CharStream cStream;
+    protected int charN = 0;
+    protected int lineN = 0;
 
-	protected Lexer(String filePath) {
-		this.filePath = filePath;
-		this.reader = null;
-	}
+    protected Lexer(File file) throws FileNotFoundException {
+        this.file = file;
+        this.cStream = new CharStream(this.file);
+    }
 
-	public abstract Stream<Token> tokenize();
+    public File getFile(){
+        return this.file;
+    }
+
+    public abstract Token nextToken();
+
+    public void forEach(BiConsumer<Integer, Token> action) {
+        Token token = this.nextToken();
+
+        int i = 1;
+        while (token.getType() != TokenType.EOF) {
+            action.accept(i, token);
+            token = this.nextToken();
+            i++;
+        }
+    }
 
 }

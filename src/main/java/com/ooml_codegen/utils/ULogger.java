@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import com.ooml_codegen.utils.enums.ColorCode;
 import com.ooml_codegen.utils.enums.ErrorType;
 
-public class Logger {
+public class ULogger {
 
     public static void trace(String message) {
         printMessage(ErrorType.TRACE, message);

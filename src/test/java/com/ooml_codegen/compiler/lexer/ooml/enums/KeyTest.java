@@ -1,7 +1,5 @@
 package com.ooml_codegen.compiler.lexer.ooml.enums;
 
-import com.ooml_codegen.compiler.lexer.ooml.OOMLKey;
-import com.ooml_codegen.compiler.lexer.ooml.OOMLSymbols;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -100,7 +98,6 @@ public class KeyTest {
 
 		Assertions.assertEquals(
 				OOMLKey.PAD.getValue() +
-						OOMLSymbols.COLON +
 						OOMLKey.QUOTE.getValue() +
 						OOMLSymbols.EQUAL +
 						OOMLSymbols.IMPORT +

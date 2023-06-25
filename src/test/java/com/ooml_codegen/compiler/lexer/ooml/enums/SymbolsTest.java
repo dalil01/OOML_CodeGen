@@ -1,6 +1,5 @@
 package com.ooml_codegen.compiler.lexer.ooml.enums;
 
-import com.ooml_codegen.compiler.lexer.ooml.OOMLSymbols;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +30,7 @@ public class SymbolsTest {
 				OOMLSymbols.COMMA,
 				OOMLSymbols.COLON,
 				OOMLSymbols.SEMI_COLON,
+				OOMLSymbols.PACKAGE,
 				OOMLSymbols.IMPORT,
 				OOMLSymbols.GREATER_THAN,
 				OOMLSymbols.OPENING_PARENTHESIS,

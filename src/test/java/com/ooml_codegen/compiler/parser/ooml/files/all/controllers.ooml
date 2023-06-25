@@ -1,0 +1,13 @@
+/*
+
+	Controllers
+
+*/
+
+~ controllers:
+
+class UserController:
+	+ add(user: User): Response
+	+get(id: int)
+	+ update(user: User): Response
+	+ delete(id: int): JsonResponse
