@@ -45,7 +45,7 @@
 
 CLASS       = "class"
 INTERFACE   = "interface"
-PACKAGE     = "package"
+PACKAGE     = "~"
 INHERITANCE = "->"
 ENUM        = "enum"
 WORD or QUOTED_WORD
@@ -70,7 +70,13 @@ word        = WORD
             | QUOTED_WORD
 
 // Starting rule
-Start       = list EOF
+Start       = package_list EOF
+
+package_list
+            = package package_list
+            | package
+
+package     = PACKAGE word "{" list "}"
 
 list        = entry list
             | entry
@@ -87,11 +93,11 @@ entry       = class
 import      = "@" FILE
 */
 
-class       = restricted_access_modifier CLASS_ID modifier_list WORD inheritance class_model
+class       = restricted_access_modifier modifier_list CLASS WORD inheritance class_model
 
 
 class_model = "{" class_prop_list "}"
-            | ":" class_prop_list
+//          | ":" class_prop_list
 
 class_prop_list
             = class_prop class_prop_list
@@ -131,7 +137,7 @@ modifier_list
             | modifier
             | ""
 
-modifier    = WORD
+modifier    = word
 
 accessors   = getter setter
             | getter
@@ -147,25 +153,25 @@ method_with_access
             = ACCESS_MODIFIER method
             | method
 
-method      = modifier_list WORD "(" argument_list ")" ":" type
+method      = modifier_list word "(" argument_list ")" ":" type
 
 argument_list
-            = modifier_list WORD ":" type argument_list
-            | modifier_list WORD ":" type
+            = modifier_list word ":" type argument_list
+            | modifier_list word ":" type
 
-type        = WORD
+type        = word
 
 constructor_with_access
             = ACCESS_MODIFIER constructor
             | constructor
 
-constructor = WORD "(" argument_list ")"
+constructor = word "(" argument_list ")"
 
-interface   = restricted_access_modifier INTERFACE_ID modifier_list WORD inheritance interface_model
+interface   = restricted_access_modifier INTERFACE modifier_list word inheritance interface_model
 
 interface_model
             = "{" interface_prop_list "}"
-            | ":" interface_prop_list
+//          | ":" interface_prop_list
 
 interface_prop_list
             = interface_prop interface_prop_list
@@ -187,26 +193,25 @@ interface_prop_block
             = attribute
             | method
 
-package     = PACKAGE_ID WORD
 
-inheritance = INHERITANCE_ID inheritance_list
+inheritance = INHERITANCE inheritance_list
 
 inheritance_list
-            = WORD
-            | WORD ',' inheritance_list
+            = word
+            | word ',' inheritance_list
 
-enum        = restricted_access_modifier ENUM_ID WORD enum_model
+enum        = restricted_access_modifier ENUM word enum_model
 
-enum_model  = ":" enum_value_list
-            | "{" enum_value_list "}"
+enum_model  = "{" enum_value_list "}"
+//          | ":" enum_value_list
 
 enum_value_list
             = enum_key "," enum_value_list
             | enum_key
 
 
-enum_key    = WORD
-            | WORD "=" WORD
+enum_key    = word
+            | word "=" word
 
 
 // TODO

@@ -16,7 +16,7 @@
 
 	+ abstract class User -> IUSerInfo {
 		- id: int;
-		#: firstname, lastname: string
+		#: firstname, lastname:++ string
 	       role: Role
 		+ User()
 		+ User(firstname, lastname: string)

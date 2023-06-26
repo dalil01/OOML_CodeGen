@@ -9,11 +9,8 @@ public class Leaf extends Node {
     public Leaf(Token token, NodeType nodeType){
         super(nodeType);
     }
-    public ArrayList<Node> getLeft(){
+    public ArrayList<InnerNode> getChildren(){
         return null;
     }
 
-    public ArrayList<Node> getRight() {
-        return null;
-    }
 }

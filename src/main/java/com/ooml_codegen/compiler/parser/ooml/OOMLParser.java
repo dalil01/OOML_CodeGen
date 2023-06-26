@@ -12,10 +12,6 @@ import java.util.Deque;
 
 public class OOMLParser extends Parser {
 
-	private char accessModifierBlocState = ' ';
-
-	private boolean inStructure = false;
-
 	private Deque<Token> leftTokens;
 
 	public OOMLParser(OOMLLexerManager lexer) {
@@ -35,13 +31,13 @@ public class OOMLParser extends Parser {
 
 			switch (type) {
 				case PACKAGE -> this.parsePackage();
-				case ACCESS_MODIFIER_BLOCK -> parseAccessModifierBlock(token);
+				//case ACCESS_MODIFIER_BLOCK -> parseAccessModifierBlock(token);
 			}
 
 			token = this.lexerManager.nextToken();
 		}
 	}
-
+/*
 	private void parseAccessModifierBlock(Token token) {
 		if (inStructure) {
 			this.accessModifierBlocState = token.getStringValue().charAt(0);
@@ -51,7 +47,7 @@ public class OOMLParser extends Parser {
 			throw new RuntimeException();
 		}
 	}
-
+*/
 
 
 	private void parsePackage() throws FileNotFoundException {
