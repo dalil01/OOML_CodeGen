@@ -7,6 +7,7 @@ import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Enum;
+import com.ooml_codegen.models.EnumProperty;
 import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.EnumAccessModifier;
@@ -14,6 +15,8 @@ import com.ooml_codegen.models.enums.modifiers.access.EnumAccessModifier;
 import java.util.Map;
 
 public class JavaGenerator extends Generator {
+
+	String filePath = "./src/main/java/com/ooml_java_generate_files/";
 
 	// TODO : Need meta data (java version, ...)
 	@Override
@@ -29,7 +32,7 @@ public class JavaGenerator extends Generator {
 			}
 
 			// TODO : find file path from package
-			this.generateFile(obj.getFileName() + ".java");
+			this.generateFile( filePath + obj.getFileName() + ".java");
 		}
 	}
 
@@ -53,11 +56,23 @@ public class JavaGenerator extends Generator {
 
 	public static void main(String[] args) {
 		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PRIVATE);
-		Enum anenum = new Enum("Color", new Package("com.ooml.models"), EnumAccessModifier.PUBLIC);
+		Enum anenum = new Enum("Color", new Package("com.ooml_java_generate_files"), EnumAccessModifier.PUBLIC);
+		EnumProperty red = new EnumProperty("RED", "red");
+		EnumProperty orange = new EnumProperty("ORANGE", "orange");
+		EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
+		EnumProperty green = new EnumProperty("GREEN", "green");
+		EnumProperty blue = new EnumProperty("BLUE");
+
+		anenum.addEnumeration(red);
+		anenum.addEnumeration(orange);
+		anenum.addEnumeration(yellow);
+		anenum.addEnumeration(green);
+		anenum.addEnumeration(blue);
 
 		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
-		generator.generate(clazz);
+		//generator.generate(clazz);
 		generator.generate(anenum);
+
 	}
 
 }

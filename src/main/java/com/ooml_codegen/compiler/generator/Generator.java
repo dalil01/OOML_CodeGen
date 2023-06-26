@@ -6,6 +6,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -44,8 +45,22 @@ public abstract class Generator {
 			return;
 		}
 
-		try (FileWriter writer = new FileWriter(filePath)) {
-			this.template.merge(this.context, writer);
+		try {
+			File parentDir = new File(filePath).getParentFile();
+			System.out.println("Parent dir: " + parentDir);
+
+			if(!parentDir.exists()){
+				boolean createDir = parentDir.mkdirs();
+
+				System.out.println("Directory created ? " + createDir);
+			}
+
+			try (FileWriter writer = new FileWriter(filePath)) {
+				this.template.merge(this.context, writer);
+
+				System.out.println("Generated file: " + filePath);
+			}
+
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

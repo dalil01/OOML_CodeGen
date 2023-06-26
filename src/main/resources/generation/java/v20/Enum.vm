@@ -13,5 +13,17 @@ $enumAccessModifier enum $enumName {
 #else
 enum $enumName {
 #end
+#if($enumerations && !$enumerations.isEmpty())
+    $enumerations;
+
+    private final String value;
+
+    $enumName(String value){ this.value = value; }
+
+    $enumName() { this.value = ""; }
+
+    public String getValue() { return this.value; }
+#end
+
 
 }
