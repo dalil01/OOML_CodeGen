@@ -11,13 +11,15 @@ import java.util.Map;
 
 public class Class implements IGeneration {
 
-	private final String name;
-	private final Package cPackage;
-	private final ClassAccessModifier accessModifier;
+	private String name;
+	private Package cPackage;
+	private ClassAccessModifier accessModifier;
 	private final List<Attribute> attributes = new ArrayList<>();
 	private final List<Constructor> constructors = new ArrayList<>();
 	private final List<Method> methods = new ArrayList<>();
 
+	public Class() {
+	}
 
 	public Class(String name, Package cPackage, ClassAccessModifier accessModifier) {
 		this.name = name;
@@ -29,12 +31,24 @@ public class Class implements IGeneration {
 		return this.name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Package getPackage() {
 		return this.cPackage;
 	}
 
+	public void setPackage(Package cPackage) {
+		this.cPackage = cPackage;
+	}
+
 	public ClassAccessModifier getAccessModifier() {
 		return this.accessModifier;
+	}
+
+	public void setAccessModifier(ClassAccessModifier accessModifier) {
+		this.accessModifier = accessModifier;
 	}
 
 	public boolean addAttribute(Attribute attribute) {

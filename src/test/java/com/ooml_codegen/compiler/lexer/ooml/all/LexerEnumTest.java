@@ -23,11 +23,11 @@ public class LexerEnumTest extends LexerTest {
 			}
 
 			if (i == 2) {
-				Assertions.assertEquals(token.getStringValue(), "DAY");
+				Assertions.assertEquals(token.getValue(), "DAY");
 			} else if (i == 6) {
-				Assertions.assertEquals(token.getStringValue(), "Type");
+				Assertions.assertEquals(token.getValue(), "Type");
 			} else if (i == 11) {
-				Assertions.assertEquals(token.getStringValue(), "AccessModifier");
+				Assertions.assertEquals(token.getValue(), "AccessModifier");
 			}
 		});
 	}

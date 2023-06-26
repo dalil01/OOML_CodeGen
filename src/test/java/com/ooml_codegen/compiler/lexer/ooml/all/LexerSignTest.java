@@ -24,17 +24,17 @@ public class LexerSignTest extends LexerTest {
 
 			if (i == 8) {
 				Assertions.assertNotEquals(TokenType.SIGN, token.getType());
-				Assertions.assertEquals("\"+\"", token.getStringValue());
+				Assertions.assertEquals("\"+\"", token.getValue());
 			}
 
 			if (List.of(1, 7, 9, 17).contains(i)) {
-				Assertions.assertEquals("+", token.getStringValue());
+				Assertions.assertEquals("+", token.getValue());
 			}
 			else if (List.of(3, 10, 11, 12, 20).contains(i)) {
-				Assertions.assertEquals("-", token.getStringValue());
+				Assertions.assertEquals("-", token.getValue());
 			}
 			else if (List.of(5, 13, 14, 15, 24).contains(i)) {
-				Assertions.assertEquals("#", token.getStringValue());
+				Assertions.assertEquals("#", token.getValue());
 			}
 		});
 	}

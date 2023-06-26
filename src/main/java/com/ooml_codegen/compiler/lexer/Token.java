@@ -1,8 +1,6 @@
 package com.ooml_codegen.compiler.lexer;
 
-import java.io.File;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class Token {
 
@@ -12,12 +10,11 @@ public class Token {
 	private final int lineN;
 	private final int charN;
 
-	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	private final Optional<String> value;
+	private final String value;
 
 	public Token(TokenType type, Path filePath, int lineN, int charN) {
 		this.type = type;
-		this.value = Optional.empty();
+		this.value = "";
 		this.filePath = filePath;
 		this.lineN = lineN;
 		this.charN = charN;
@@ -25,7 +22,7 @@ public class Token {
 
 	public Token(TokenType type, String value, Path filePath, int lineN, int charN) {
 		this.type = type;
-		this.value = Optional.of(value);
+		this.value = value;
 		this.filePath = filePath;
 		this.lineN = lineN;
 		this.charN = charN;
@@ -35,12 +32,8 @@ public class Token {
 		return this.type;
 	}
 
-	public Optional<String> getValue() {
+	public String getValue() {
 		return this.value;
-	}
-
-	public String getStringValue() {
-		return this.value.orElse("");
 	}
 
 	public Path getFilePath(){
@@ -59,7 +52,7 @@ public class Token {
 	public String toString() {
 		return "Token{" +
 				"type=" + this.type +
-				", value=" + this.getStringValue() +
+				", value=" + this.getValue() +
 				", file=" + this.getFilePath() +
 				", line=" + this.getLineN() +
 				", char=" + this.getCharN() +

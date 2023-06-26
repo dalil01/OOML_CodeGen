@@ -23,11 +23,11 @@ public class LexerClassTest extends LexerTest {
 			}
 
 			if (i == 2) {
-				Assertions.assertEquals(token.getStringValue(), "User");
+				Assertions.assertEquals(token.getValue(), "User");
 			} else if (i == 6) {
-				Assertions.assertEquals(token.getStringValue(), "Person");
+				Assertions.assertEquals(token.getValue(), "Person");
 			} else if (i == 11) {
-				Assertions.assertEquals(token.getStringValue(), "Address");
+				Assertions.assertEquals(token.getValue(), "Address");
 			}
 		});
 	}

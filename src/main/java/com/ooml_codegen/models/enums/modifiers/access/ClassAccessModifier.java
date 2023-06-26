@@ -14,6 +14,15 @@ public enum ClassAccessModifier {
 		};
 	}
 
+	public static ClassAccessModifier getModifierFromOOMLSign(String sign) {
+		return switch (sign) {
+			case "" -> ClassAccessModifier.DEFAULT;
+			case "+" -> ClassAccessModifier.PUBLIC;
+			case "-" -> ClassAccessModifier.PRIVATE;
+			default -> null;
+		};
+	}
+
 	public String getValueForJava() {
 		return switch (this) {
 			case DEFAULT -> "";

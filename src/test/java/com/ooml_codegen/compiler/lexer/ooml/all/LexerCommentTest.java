@@ -23,13 +23,13 @@ public class LexerCommentTest extends LexerTest {
 			}
 
 			if (i == 1) {
-				Assertions.assertEquals(" Hello World!", token.getStringValue());
+				Assertions.assertEquals(" Hello World!", token.getValue());
 			}
 			else if (i == 2) {
-				Assertions.assertEquals(" Lorem ipsum /* */", token.getStringValue());
+				Assertions.assertEquals(" Lorem ipsum /* */", token.getValue());
 			}
 			else if (i == 3) {
-				Assertions.assertEquals("/    Test // Test", token.getStringValue());
+				Assertions.assertEquals("/    Test // Test", token.getValue());
 			}
 		});
 	}
@@ -44,18 +44,18 @@ public class LexerCommentTest extends LexerTest {
 				Assertions.assertEquals("\n" +
 						"\tHello Mundo!\n" +
 						"\n" +
-						"\t", normalizedString(token.getStringValue()));
+						"\t", normalizedString(token.getValue()));
 			}
 
 			if (index == 5) {
 				Assertions.assertEquals(TokenType.MULTI_LINE_COMMENT, token.getType());
 				Assertions.assertEquals("\n" +
 						"\t/* Hi ! /\n" +
-						"\t", normalizedString(token.getStringValue()));
+						"\t", normalizedString(token.getValue()));
 			}
 			else if (index == 6) {
 				Assertions.assertEquals(token.getType(), TokenType.MULTI_LINE_COMMENT);
-				Assertions.assertEquals(" OOML!!!    + - / * > # { }  :  ", normalizedString(token.getStringValue()));
+				Assertions.assertEquals(" OOML!!!    + - / * > # { }  :  ", normalizedString(token.getValue()));
 			}
 			else if (index == 7) {
 				Assertions.assertEquals(token.getType(), TokenType.MULTI_LINE_COMMENT);
@@ -67,7 +67,7 @@ public class LexerCommentTest extends LexerTest {
 						"\n" +
 						"\n" +
 						"\n" +
-						"\n", normalizedString(token.getStringValue()));
+						"\n", normalizedString(token.getValue()));
 			}
 		});
 	}

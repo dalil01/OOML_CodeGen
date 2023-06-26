@@ -23,11 +23,11 @@ public class LexerInterfaceTest extends LexerTest {
 			}
 
 			if (i == 2) {
-				Assertions.assertEquals(token.getStringValue(), "IGeneration");
+				Assertions.assertEquals(token.getValue(), "IGeneration");
 			} else if (i == 6) {
-				Assertions.assertEquals(token.getStringValue(), "IServer");
+				Assertions.assertEquals(token.getValue(), "IServer");
 			} else if (i == 11) {
-				Assertions.assertEquals(token.getStringValue(), "I");
+				Assertions.assertEquals(token.getValue(), "I");
 			}
 		});
 	}

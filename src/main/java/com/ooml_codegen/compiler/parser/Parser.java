@@ -1,8 +1,11 @@
 package com.ooml_codegen.compiler.parser;
 
+import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.compiler.lexer.LexerManager;
 
 import java.io.FileNotFoundException;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public abstract class Parser {
 
@@ -12,6 +15,6 @@ public abstract class Parser {
 		this.lexerManager = lexerManager;
 	}
 
-	public abstract void parse() throws FileNotFoundException;
+	public abstract Stream<IGeneration> parse() throws FileNotFoundException;
 
 }

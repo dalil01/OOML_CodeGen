@@ -26,40 +26,40 @@ public class LexerWordTest extends LexerTest {
                 Assertions.assertEquals(TokenType.EOF, token.getType());
             }
             else if (i == 1){
-                Assertions.assertEquals("hello!", token.getStringValue());
+                Assertions.assertEquals("hello!", token.getValue());
             }
             else if (i == 2){
-                Assertions.assertEquals("I", token.getStringValue());
+                Assertions.assertEquals("I", token.getValue());
             }
             else if (i == 3){
-                Assertions.assertEquals("am", token.getStringValue());
+                Assertions.assertEquals("am", token.getValue());
             }
             else if (i == 4){
-                Assertions.assertEquals("a", token.getStringValue());
+                Assertions.assertEquals("a", token.getValue());
             }
             else if (i == 5){
-                Assertions.assertEquals("few", token.getStringValue());
+                Assertions.assertEquals("few", token.getValue());
             }
             else if (i == 6){
-                Assertions.assertEquals("words", token.getStringValue());
+                Assertions.assertEquals("words", token.getValue());
             }
             else if (i == 8){
-                Assertions.assertEquals("colon", token.getStringValue());
+                Assertions.assertEquals("colon", token.getValue());
             }
             else if (i == 10){
-                Assertions.assertEquals("import", token.getStringValue());
+                Assertions.assertEquals("import", token.getValue());
             }
             else if (i == 12){
-                Assertions.assertEquals("comma", token.getStringValue());
+                Assertions.assertEquals("comma", token.getValue());
             }
             else if (i == 14){
-                Assertions.assertEquals("curlybracket", token.getStringValue());
+                Assertions.assertEquals("curlybracket", token.getValue());
             }
             else if (i == 17){
-                Assertions.assertEquals("this_is$a|big~wordé&%withµsome§hit", token.getStringValue());
+                Assertions.assertEquals("this_is$a|big~wordé&%withµsome§hit", token.getValue());
             }
             else if (i == 18){
-                Assertions.assertEquals("test", token.getStringValue());
+                Assertions.assertEquals("test", token.getValue());
             }
         });
     }

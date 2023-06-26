@@ -20,15 +20,15 @@ public class OOMLLexerManager extends LexerManager {
         assert this.stack.size() != 0;
         assert this.stack.peek() != null;
 
-        if (importToken.getStringValue().isEmpty()){
+        if (importToken.getValue().isEmpty()){
             ULogger.warn("Empty import token at " + importToken.getLocation());
             return;
         }
 
-        List<File> files = UFiles.findOOMLFilesPath(importToken.getStringValue(), this.stack.peek().getFile());
+        List<File> files = UFiles.findOOMLFilesPath(importToken.getValue(), this.stack.peek().getFile());
 
         if (files.isEmpty()) {
-            ULogger.error("Couldn't import " + importToken.getStringValue() + " at " + importToken.getLocation());
+            ULogger.error("Couldn't import " + importToken.getValue() + " at " + importToken.getLocation());
             throw new FileNotFoundException("Couldn't import " + importToken.getLocation());
         }
 

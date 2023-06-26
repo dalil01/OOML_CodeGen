@@ -14,7 +14,7 @@ public class TokenTest {
 
 		Assertions.assertEquals(type, token.getType());
 		Assertions.assertEquals(Optional.empty(), token.getValue());
-		Assertions.assertEquals("", token.getStringValue());
+		Assertions.assertEquals("", token.getValue());
 	}
 
 	@Test
@@ -26,7 +26,7 @@ public class TokenTest {
 
 		Assertions.assertEquals(type, token.getType());
 		Assertions.assertEquals(Optional.of(value), token.getValue());
-		Assertions.assertEquals(value, token.getStringValue());
+		Assertions.assertEquals(value, token.getValue());
 		Assertions.assertEquals(path, token.getFilePath());
 		Assertions.assertEquals(5, token.getLineN());
 		Assertions.assertEquals(6, token.getCharN());
@@ -60,7 +60,7 @@ public class TokenTest {
 		Path path = Path.of("/test/test.ooml");
 		Token token = new Token(type, value, path, 5, 6);
 
-		Assertions.assertEquals(value, token.getStringValue());
+		Assertions.assertEquals(value, token.getValue());
 	}
 
 	@Test

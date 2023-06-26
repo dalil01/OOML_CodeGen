@@ -13,10 +13,16 @@ public abstract class LexerManager {
 
 	protected final File initialFile;
 
+	protected Token currentToken;
+
 	protected LexerManager(Lexer lexer) {
 		this.stack = new ArrayDeque<>();
 		stack.push(lexer);
 		this.initialFile = lexer.getFile();
+	}
+
+	public Token getCurrentToken() throws FileNotFoundException {
+		return this.currentToken == null ? this.nextToken() : this.currentToken;
 	}
 
 	public Token nextToken() throws FileNotFoundException{
@@ -32,6 +38,8 @@ public abstract class LexerManager {
 				this.manageImport(t);
 				return this.nextToken();
 			}
+
+			this.currentToken = t;
 
 			return t;
 		}

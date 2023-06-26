@@ -1,48 +1,98 @@
 package com.ooml_codegen.compiler.parser.ooml;
 
+import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.lexer.ooml.OOMLLexerManager;
 import com.ooml_codegen.compiler.parser.Parser;
+import com.ooml_codegen.compiler.parser.TokenContextStack;
+import com.ooml_codegen.compiler.parser.TokenContextType;
+import com.ooml_codegen.compiler.parser.ooml.validators.ClassValidator;
+import com.ooml_codegen.models.Class;
 import com.ooml_codegen.utils.ULogger;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.stream.Stream;
 
 public class OOMLParser extends Parser {
 
+	private final List<Token> packageTokenList = new ArrayList<>();
+	private final TokenContextStack tokenContextStack = new TokenContextStack();
+	private final List<Token> unConsumedTokenList = new ArrayList<>();
 
 	public OOMLParser(OOMLLexerManager lexer) {
 		super(lexer);
 	}
 
 	@Override
-	public void parse() throws FileNotFoundException {
+	public Stream<IGeneration> parse() throws FileNotFoundException {
 		Token token = this.lexerManager.nextToken();
 
+		Stream.Builder<IGeneration> streamBuilder = Stream.builder();
+
 		while (token.getType() != TokenType.EOF){
-			TokenType type = token.getType();
-			String value = token.getStringValue();
+			//System.out.println(token);
 
-			System.out.println(token);
-
-			switch (type) {
-				case PACKAGE -> this.parsePackage();
+			switch (token.getType()) {
+				case CLOSING_CURLY_BRACKET -> {
+					if (this.tokenContextStack.empty()) {
+						// TODO error unexpected token }
+						ULogger.error("error unexpected token }");
+						return null;
+					}
+					this.tokenContextStack.pop();
+				}
+				case PACKAGE -> this.handlePackageTokens();
+				case CLASS -> streamBuilder.add(this.parseClass());
+				default -> this.unConsumedTokenList.add(token);
 			}
 
 			token = this.lexerManager.nextToken();
 		}
+
+		return streamBuilder.build();
 	}
 
-	private void parsePackage() throws FileNotFoundException {
-		Token nextToken = this.lexerManager.nextToken();
+	private void handlePackageTokens() throws FileNotFoundException {
+		this.packageTokenList.addAll(this.unConsumedTokenList);
+		this.unConsumedTokenList.clear();
 
-		if (nextToken.getType() != TokenType.WORD && nextToken.getType() != TokenType.QUOTED_WORD) {
-			ULogger.error("Invalid package statement at " + nextToken.getLocation());
-			// TODO: need to throw the error, but need a proper exception class for that
+		this.packageTokenList.add(this.lexerManager.getCurrentToken());
+
+		Token packageNameToken = this.lexerManager.nextToken();
+		Token openingCurlyBracketToken = this.lexerManager.nextToken();
+
+		if (packageNameToken.getType() != TokenType.WORD && packageNameToken.getType() != TokenType.QUOTED_WORD) {
+			// TODO : error
+			ULogger.error("error package name");
 			return;
 		}
 
+		if (openingCurlyBracketToken.getType() != TokenType.OPENING_CURLY_BRACKET) {
+			// TODO : error missing {
+			ULogger.error("error missing {");
+			return;
+		}
 
+		this.packageTokenList.add(packageNameToken);
+		this.packageTokenList.add(openingCurlyBracketToken);
+
+		this.tokenContextStack.push(TokenContextType.PACKAGE);
 	}
+
+	private IGeneration parseClass() throws FileNotFoundException {
+		ClassValidator validator = new ClassValidator(this.lexerManager, this.unConsumedTokenList);
+		validator.validate();
+		Class clazz = validator.getClassIfIsValid();
+		this.unConsumedTokenList.clear();
+
+		// TODO : manage package
+
+		return clazz;
+	}
+
 
 }

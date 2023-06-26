@@ -29,13 +29,13 @@ public class LexerAccessModifierTest extends LexerTest {
 			}
 
 			if (i == 19) {
-				Assertions.assertEquals("#", token.getStringValue());
+				Assertions.assertEquals("#", token.getValue());
 			}
 			else if (i == 27) {
-				Assertions.assertEquals("+", token.getStringValue());
+				Assertions.assertEquals("+", token.getValue());
 			}
 			else if (i == 29) {
-				Assertions.assertEquals("-", token.getStringValue());
+				Assertions.assertEquals("-", token.getValue());
 			}
 		});
 	}

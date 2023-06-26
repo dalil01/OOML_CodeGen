@@ -66,7 +66,7 @@ public class OOMLLexer extends Lexer {
             }
             case COMMA -> {
                 this.cStream.next();
-                return new Token(TokenType.COMMA, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.COMMA, OOMLSymbols.COMMA.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case PACKAGE -> {
                 this.cStream.next();
@@ -77,15 +77,15 @@ public class OOMLLexer extends Lexer {
             }
             case COLON -> {
                 this.cStream.next();
-                return new Token(TokenType.COLON, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.COLON, OOMLSymbols.COLON.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case SEMI_COLON -> {
                 this.cStream.next();
-                return new Token(TokenType.SEMI_COLON, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.SEMI_COLON, OOMLSymbols.SEMI_COLON.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case EQUAL -> {
                 this.cStream.next();
-                return new Token(TokenType.EQUAL, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.EQUAL, OOMLSymbols.EQUAL.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case PLUS, HASH -> {
                 String character = String.valueOf(cStream.getCurrentChar());
@@ -219,11 +219,11 @@ public class OOMLLexer extends Lexer {
             return new Token(TokenType.IMPORT, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
-        Optional<String> optionalFilePath;
+        String filePath;
         if (this.cStream.getCurrentChar() == OOMLSymbols.DOUBLE_QUOTE.getValue() |
                 this.cStream.getCurrentChar() == OOMLSymbols.SINGLE_QUOTE.getValue() |
                 this.cStream.getCurrentChar() == OOMLSymbols.BACK_QUOTE.getValue()) {
-            optionalFilePath = this.generateQuotedWord().getValue();
+            filePath = this.generateQuotedWord().getValue();
         } else {
             StringBuilder s = new StringBuilder();
             while (!this.cStream.isEOF() && !containsChar(OOMLKey.FILE_END.getValue(), this.cStream.getCurrentChar())) {
@@ -231,15 +231,15 @@ public class OOMLLexer extends Lexer {
                 this.cStream.next();
             }
 
-            optionalFilePath = s.toString().describeConstable();
+            filePath = s.toString();
         }
 
-        if (optionalFilePath.isEmpty()) {
+        if (filePath.isEmpty()) {
             ULogger.error("Import symbol found with nothing to import at " + this.getFile().toPath() + "@" + this.lineN + ":" + this.charN + "; Use quotes if a character isn't recognized as part of a file path.");
             return new Token(TokenType.IMPORT, this.getFile().toPath(), this.lineN, this.lineN);
         }
 
-        return new Token(TokenType.IMPORT, optionalFilePath.get(), this.getFile().toPath(), this.lineN, this.lineN);
+        return new Token(TokenType.IMPORT, filePath, this.getFile().toPath(), this.lineN, this.lineN);
     }
 
     private Token generateWordOrKeywordToken() {

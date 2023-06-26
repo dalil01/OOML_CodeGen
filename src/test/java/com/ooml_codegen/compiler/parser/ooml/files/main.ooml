@@ -2,9 +2,16 @@
 	Main
 */
 
+
+/*
 ~ src.app {
 
 	@./all/models.ooml
 	@all/controllers.ooml
 
-}
+}*/
+
+~ src.app {
+	+ class User -> ICustomer, {
+
+

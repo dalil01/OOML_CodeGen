@@ -23,46 +23,46 @@ public class LexerImportTest extends LexerTest {
 			}
 
 			if (i == 1) {
-				Assertions.assertEquals("main.ooml", token.getStringValue());
+				Assertions.assertEquals("main.ooml", token.getValue());
 			}
 			else if (i == 2) {
-				Assertions.assertEquals("../models/models.ooml", token.getStringValue());
+				Assertions.assertEquals("../models/models.ooml", token.getValue());
 			}
 			else if (i == 3) {
-				Assertions.assertEquals("../../controller/controllers.ooml/", token.getStringValue());
+				Assertions.assertEquals("../../controller/controllers.ooml/", token.getValue());
 			}
 			else if (i == 5) {
-				Assertions.assertEquals("All", token.getStringValue());
+				Assertions.assertEquals("All", token.getValue());
 			}
 			else if (i == 6) {
-				Assertions.assertEquals("Services/", token.getStringValue());
+				Assertions.assertEquals("Services/", token.getValue());
 			}
 			else if (i == 7) {
-				Assertions.assertEquals("config.ooml", token.getStringValue());
+				Assertions.assertEquals("config.ooml", token.getValue());
 			}
 			else if (i == 8) {
-				Assertions.assertEquals("/", token.getStringValue());
+				Assertions.assertEquals("/", token.getValue());
 			}
 			else if (i == 9) {
-				Assertions.assertEquals("dir.", token.getStringValue());
+				Assertions.assertEquals("dir.", token.getValue());
 			}
 			else if (i >= 11 && i <= 16) {
-				Assertions.assertEquals("", token.getStringValue());
+				Assertions.assertEquals("", token.getValue());
 			}
 			else if (i == 17) {
-				Assertions.assertEquals("babla2", token.getStringValue());
+				Assertions.assertEquals("babla2", token.getValue());
 			}
 			else if (i == 18) {
-				Assertions.assertEquals("colon:", token.getStringValue());
+				Assertions.assertEquals("colon:", token.getValue());
 			}
 			else if (i == 19) {
-				Assertions.assertEquals("space", token.getStringValue());
+				Assertions.assertEquals("space", token.getValue());
 			}
 			else if (i == 21) {
-				Assertions.assertEquals("comment//not_a_comment", token.getStringValue());
+				Assertions.assertEquals("comment//not_a_comment", token.getValue());
 			}
 			else if (i == 22) {
-				Assertions.assertEquals("comment/*not_a_comment*/", token.getStringValue());
+				Assertions.assertEquals("comment/*not_a_comment*/", token.getValue());
 			}
 		});
 	}
