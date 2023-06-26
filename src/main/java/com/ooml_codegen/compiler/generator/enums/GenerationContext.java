@@ -7,8 +7,10 @@ public enum GenerationContext {
 	CLASS_ACCESS_MODIFIER("classAccessModifier"),
 	CLASS_NAME("className"),
 	INTERFACE_ACCESS_MODIFIER("interfaceAccessModifier"),
-	INTERFACE_NAME("interfaceName")
+	INTERFACE_NAME("interfaceName"),
+	METHODS("methods"),
 	;
+
 
 	private final String value;
 

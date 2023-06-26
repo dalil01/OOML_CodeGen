@@ -12,13 +12,9 @@ import java.util.Map;
 
 public class Interface implements IGeneration {
     private final String name;
-
     private final Package iPackage;
-
     private final InterfaceAccessModifier accessModifier;
-
     //private final List<Attribute> attributes = new ArrayList<>();
-
     private final List<Method> methods = new ArrayList<>();
 
     public Interface(String name, Package iPackage, InterfaceAccessModifier accessModifier) {
@@ -38,9 +34,6 @@ public class Interface implements IGeneration {
     public InterfaceAccessModifier getAccessModifier() {
         return this.accessModifier;
     }
-    //public List<Attribute> getAttributes() {
-        //return this.attributes;
-    //}
 
     public boolean addMethod(Method method) {
         return this.methods.add(method);
@@ -52,10 +45,16 @@ public class Interface implements IGeneration {
 
     @Override
     public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {
+
         Map<GenerationContext, Object> map = new HashMap<>();
+
         map.put(GenerationContext.PACKAGE, this.iPackage.getName());
-        map.put(GenerationContext.INTERFACE_ACCESS_MODIFIER, (type == GeneratorType.JAVA) ? this.accessModifier.getValueForJava() : this.accessModifier.getValueForOOML());
+        map.put(GenerationContext.INTERFACE_ACCESS_MODIFIER, switch (type) {
+            case JAVA -> this.accessModifier.getValueForJava();
+            default -> this.accessModifier.getValueForOOML();
+        });
         map.put(GenerationContext.INTERFACE_NAME, this.name);
+        map.put(GenerationContext.METHODS, this.methods);
         return map;
     }
 

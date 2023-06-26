@@ -38,4 +38,14 @@ public class Method {
 		return this.parameters;
 	}
 
+	public String toStringJava() {
+		StringBuilder s = new StringBuilder();
+		if (this.accessModifier != MethodAccessModifier.DEFAULT) {
+			s.append(this.accessModifier.getValueForJava()).append(" ");
+		}
+		s.append(this.returnType.getName()).append(" ").append(this.name);
+
+		return s.toString();
+	}
+
 }

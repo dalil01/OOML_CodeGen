@@ -5,11 +5,12 @@ import com.ooml_codegen.compiler.generator.GeneratorFactory;
 import com.ooml_codegen.compiler.generator.GeneratorType;
 import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
+import com.ooml_codegen.models.*;
 import com.ooml_codegen.models.Class;
-import com.ooml_codegen.models.Interface;
 import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.InterfaceAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
 
 import java.util.Map;
 
@@ -51,11 +52,14 @@ public class JavaGenerator extends Generator {
 	}
 
 	public static void main(String[] args) {
-		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PRIVATE);
 		Interface inter = new Interface("bonjour", new Package("com.ooml.models"), InterfaceAccessModifier.PUBLIC);
+		Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
+		Method method2 = new Method("getMethod2", MethodAccessModifier.DEFAULT, new Type("String"));
+
+		inter.addMethod(method);
+		inter.addMethod(method2);
 
 		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
-		generator.generate(clazz);
 		generator.generate(inter);
 	}
 
