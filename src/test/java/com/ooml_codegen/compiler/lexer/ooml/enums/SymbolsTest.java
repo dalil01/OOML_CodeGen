@@ -30,8 +30,8 @@ public class SymbolsTest {
 				OOMLSymbols.COMMA,
 				OOMLSymbols.COLON,
 				OOMLSymbols.SEMI_COLON,
-				OOMLSymbols.PACKAGE,
-				OOMLSymbols.IMPORT,
+				OOMLSymbols.TIDLE,
+				OOMLSymbols.AT,
 				OOMLSymbols.GREATER_THAN,
 				OOMLSymbols.OPENING_PARENTHESIS,
 				OOMLSymbols.CLOSING_PARENTHESIS,
@@ -68,7 +68,7 @@ public class SymbolsTest {
 		Assertions.assertEquals(',', OOMLSymbols.COMMA.getValue());
 		Assertions.assertEquals(':', OOMLSymbols.COLON.getValue());
 		Assertions.assertEquals(';', OOMLSymbols.SEMI_COLON.getValue());
-		Assertions.assertEquals('@', OOMLSymbols.IMPORT.getValue());
+		Assertions.assertEquals('@', OOMLSymbols.AT.getValue());
 		Assertions.assertEquals('>', OOMLSymbols.GREATER_THAN.getValue());
 		Assertions.assertEquals('(', OOMLSymbols.OPENING_PARENTHESIS.getValue());
 		Assertions.assertEquals(')', OOMLSymbols.CLOSING_PARENTHESIS.getValue());
@@ -100,7 +100,7 @@ public class SymbolsTest {
 		Assertions.assertEquals(",", OOMLSymbols.COMMA.toString());
 		Assertions.assertEquals(":", OOMLSymbols.COLON.toString());
 		Assertions.assertEquals(";", OOMLSymbols.SEMI_COLON.toString());
-		Assertions.assertEquals("@", OOMLSymbols.IMPORT.toString());
+		Assertions.assertEquals("@", OOMLSymbols.AT.toString());
 		Assertions.assertEquals(">", OOMLSymbols.GREATER_THAN.toString());
 		Assertions.assertEquals("(", OOMLSymbols.OPENING_PARENTHESIS.toString());
 		Assertions.assertEquals(")", OOMLSymbols.CLOSING_PARENTHESIS.toString());
@@ -132,7 +132,7 @@ public class SymbolsTest {
 		Assertions.assertEquals(Optional.of(OOMLSymbols.COMMA), OOMLSymbols.getForChar(','));
 		Assertions.assertEquals(Optional.of(OOMLSymbols.COLON), OOMLSymbols.getForChar(':'));
 		Assertions.assertEquals(Optional.of(OOMLSymbols.SEMI_COLON), OOMLSymbols.getForChar(';'));
-		Assertions.assertEquals(Optional.of(OOMLSymbols.IMPORT), OOMLSymbols.getForChar('@'));
+		Assertions.assertEquals(Optional.of(OOMLSymbols.AT), OOMLSymbols.getForChar('@'));
 		Assertions.assertEquals(Optional.of(OOMLSymbols.GREATER_THAN), OOMLSymbols.getForChar('>'));
 		Assertions.assertEquals(Optional.of(OOMLSymbols.OPENING_PARENTHESIS), OOMLSymbols.getForChar('('));
 		Assertions.assertEquals(Optional.of(OOMLSymbols.CLOSING_PARENTHESIS), OOMLSymbols.getForChar(')'));

@@ -5,6 +5,7 @@ import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Name;
+import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.utils.ULogger;
@@ -29,13 +30,10 @@ public class ClassValidator extends Validator {
 
 	@Override
 	public void validate() throws FileNotFoundException {
-		Token token = this.nextToken();
+		Token currentToken = this.nextToken();
 
-		TokenType type = token.getType();
-		String value = token.getValue();
-
-		if (type == TokenType.SIGN) {
-			this.validateAccessModifier(value);
+		if (currentToken.getType() == TokenType.SIGN) {
+			this.validateAccessModifier(currentToken.getValue());
 		}
 
 		/*
@@ -44,49 +42,49 @@ public class ClassValidator extends Validator {
 
 		 */
 
-		Token keywordToken = this.nextToken();
-		if (keywordToken.getType() != TokenType.CLASS) {
-			ULogger.error("Missing token class");
+		currentToken = this.nextToken();
+		if (currentToken.getType() != TokenType.CLASS) {
+			ULogger.error("Missing currentToken class");
 			return;
 		}
-
 		this.clazz.addKeyword();
 
-		Token classNameToken = this.nextToken();
-		if (classNameToken.getType() != TokenType.WORD && classNameToken.getType() != TokenType.QUOTED_WORD) {
+		currentToken = this.nextToken();
+		if (currentToken.getType() != TokenType.WORD && currentToken.getType() != TokenType.QUOTED_WORD) {
 			// TODO
 			ULogger.error("Missing classname");
 			return;
 		}
+		this.clazz.setName(new Name(currentToken.getValue()));
 
-		this.clazz.setName(new Name(classNameToken.getValue()));
-
-		Token nextToken = this.nextToken();
-		System.out.println(nextToken);
-		if (nextToken.getType() == TokenType.INHERITANCE) {
+		currentToken = this.nextToken();
+		if (currentToken.getType() == TokenType.CLASS_INHERITANCE) {
 			List<Token> tokenList = new ArrayList<>();
 
-			nextToken = this.nextToken();
-			while (nextToken.getType() != TokenType.EOF && nextToken.getType() != TokenType.OPENING_CURLY_BRACKET) {
-				tokenList.add(nextToken);
-				nextToken = this.nextToken();
+			while (currentToken.getType() != TokenType.EOF) {
+				currentToken = this.nextToken();
+
+				if (currentToken.getType() == TokenType.INTERFACE_INHERITANCE || currentToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
+					break;
+				}
+
+				tokenList.add(currentToken);
 			}
 
 			for (int i = 0; i < tokenList.size(); i++) {
-				token = tokenList.get(i);
-				type = token.getType();
+				Token t = tokenList.get(i);
 
 				if (i % 2 == 0) {
-					if (type != TokenType.WORD && type != TokenType.QUOTED_WORD) {
+					if (t.getType() != TokenType.WORD && t.getType() != TokenType.QUOTED_WORD) {
 						// TODO error
-						ULogger.error("unexpected " + token.getValue());
+						ULogger.error("unexpected " + t.getValue());
 						return;
 					}
 
-					// TODO : manage relation
+					// TODO : manage class inheritance
 					// this.clazz.
 				} else {
-					if (type != TokenType.COMMA) {
+					if (t.getType() != TokenType.COMMA) {
 						// TODO error
 						ULogger.error("missing comma");
 						return;
@@ -98,13 +96,57 @@ public class ClassValidator extends Validator {
 				Token lastToken = tokenList.get(tokenList.size() - 1);
 				if (lastToken.getType() != TokenType.WORD && lastToken.getType() != TokenType.QUOTED_WORD) {
 					// TODO error
-					ULogger.error("missing " + lastToken.getValue());
+					ULogger.error("Unexpected currentToken " + lastToken.getValue());
 					return;
 				}
 			}
 		}
 
-		if (nextToken.getType() != TokenType.OPENING_CURLY_BRACKET) {
+		if (currentToken.getType() == TokenType.INTERFACE_INHERITANCE) {
+			List<Token> tokenList = new ArrayList<>();
+
+			while (currentToken.getType() != TokenType.EOF) {
+				currentToken = this.nextToken();
+
+				if (currentToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
+					break;
+				}
+
+				tokenList.add(currentToken);
+			}
+
+			for (int i = 0; i < tokenList.size(); i++) {
+				Token t = tokenList.get(i);
+
+				if (i % 2 == 0) {
+					if (t.getType() != TokenType.WORD && t.getType() != TokenType.QUOTED_WORD) {
+						// TODO error
+						ULogger.error("unexpected " + t.getValue());
+						return;
+					}
+
+					// TODO : manage interface inheritance
+					// this.clazz.
+				} else {
+					if (t.getType() != TokenType.COMMA) {
+						// TODO error
+						ULogger.error("missing comma");
+						return;
+					}
+				}
+			}
+
+			if (tokenList.size() % 2 == 0) {
+				Token lastToken = tokenList.get(tokenList.size() - 1);
+				if (lastToken.getType() != TokenType.WORD && lastToken.getType() != TokenType.QUOTED_WORD) {
+					// TODO error
+					ULogger.error("Unexpected token " + lastToken.getValue());
+					return;
+				}
+			}
+		}
+
+		if (currentToken.getType() != TokenType.OPENING_CURLY_BRACKET) {
 			// TODO
 			ULogger.error("Missing {");
 		}
@@ -114,6 +156,14 @@ public class ClassValidator extends Validator {
 
 	protected void addComment(Comment comment) {
 		this.clazz.addComment(comment);
+	}
+
+	protected void addPackage(Package cPackage) {
+		this.clazz.setPackage(cPackage);
+	}
+
+	private void validatePackage() {
+
 	}
 
 	private void validateAccessModifier(String signValue) {

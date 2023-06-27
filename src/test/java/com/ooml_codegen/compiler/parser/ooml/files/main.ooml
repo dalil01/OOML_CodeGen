@@ -12,6 +12,6 @@
 }*/
 
 ~ src.app {
-	+ /**/ class /* */ User -> ICustomer {
+	 +/**/ class /* */ User -> AbstractUser ~> ICustomer {
 
 

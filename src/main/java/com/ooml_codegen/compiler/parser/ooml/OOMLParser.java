@@ -39,7 +39,7 @@ public class OOMLParser extends Parser {
 			switch (token.getType()) {
 				case CLOSING_CURLY_BRACKET -> {
 					if (this.tokenContextStack.empty()) {
-						// TODO error unexpected token }
+						// TODO
 						ULogger.error("error unexpected token }");
 						return null;
 					}
@@ -63,14 +63,13 @@ public class OOMLParser extends Parser {
 		this.packageTokenList.add(this.lexerManager.getCurrentToken());
 
 		Token packageNameToken = this.lexerManager.nextToken();
-		Token openingCurlyBracketToken = this.lexerManager.nextToken();
-
 		if (packageNameToken.getType() != TokenType.WORD && packageNameToken.getType() != TokenType.QUOTED_WORD) {
 			// TODO : error
 			ULogger.error("error package name");
 			return;
 		}
 
+		Token openingCurlyBracketToken = this.lexerManager.nextToken();
 		if (openingCurlyBracketToken.getType() != TokenType.OPENING_CURLY_BRACKET) {
 			// TODO : error missing {
 			ULogger.error("error missing {");
@@ -78,12 +77,17 @@ public class OOMLParser extends Parser {
 		}
 
 		this.packageTokenList.add(packageNameToken);
-		this.packageTokenList.add(openingCurlyBracketToken);
 
 		this.tokenContextStack.push(TokenContextType.PACKAGE);
 	}
 
+	private void updateUnConsumedTokenList() {
+		this.unConsumedTokenList.addAll(0, this.packageTokenList);
+	}
+
 	private IGeneration parseClass() throws FileNotFoundException {
+		this.updateUnConsumedTokenList();
+
 		ClassValidator validator = new ClassValidator(this.lexerManager, this.unConsumedTokenList);
 		validator.validate();
 		Class clazz = validator.getToBeGeneratedClass();
@@ -93,6 +97,5 @@ public class OOMLParser extends Parser {
 
 		return clazz;
 	}
-
 
 }

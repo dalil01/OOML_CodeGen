@@ -3,6 +3,7 @@ package com.ooml_codegen.compiler.parser.ooml.validators;
 import com.ooml_codegen.compiler.lexer.LexerManager;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
+import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.comment.MultiLineComment;
 import com.ooml_codegen.models.comment.SingleLineComment;
@@ -34,6 +35,14 @@ public abstract class Validator {
 		if (this.unConsumedTokenList.size() > 0) {
 			this.currentToken = this.unConsumedTokenList.get(0);
 			this.unConsumedTokenList.remove(0);
+
+			if (this.currentToken.getType() == TokenType.PACKAGE) {
+				// We are sure to have the package name in the following token.
+				this.currentToken = this.unConsumedTokenList.get(0);
+				this.addPackage(new Package(this.currentToken.getValue()));
+				this.unConsumedTokenList.remove(0);
+				this.nextToken();
+			}
 		} else {
 			if (this.lexerManagerUsedOnce) {
 				this.currentToken = this.lexerManager.nextToken();
@@ -70,5 +79,7 @@ public abstract class Validator {
 	}
 
 	protected abstract void addComment(Comment comment);
+
+	protected abstract void addPackage(Package cPackage);
 
 }

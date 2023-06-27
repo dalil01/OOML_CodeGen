@@ -19,7 +19,7 @@ public class LexerInheritanceTest extends LexerTest {
 			System.out.println(token);
 
 			if (List.of(3, 10, 16).contains(i)) {
-				Assertions.assertEquals(TokenType.INHERITANCE, token.getType());
+				Assertions.assertEquals(TokenType.CLASS_INHERITANCE, token.getType());
 			}
 		});
 	}

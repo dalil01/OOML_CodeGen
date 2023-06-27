@@ -86,7 +86,7 @@ public class KeyTest {
 						OOMLSymbols.SEMI_COLON +
 						OOMLKey.QUOTE.getValue() +
 						OOMLSymbols.EQUAL +
-						OOMLSymbols.IMPORT +
+						OOMLSymbols.AT +
 						OOMLKey.ACCESS_MODIFIER.getValue() +
 						OOMLSymbols.COMMA +
 						OOMLSymbols.SLASH +
@@ -100,7 +100,7 @@ public class KeyTest {
 				OOMLKey.PAD.getValue() +
 						OOMLKey.QUOTE.getValue() +
 						OOMLSymbols.EQUAL +
-						OOMLSymbols.IMPORT +
+						OOMLSymbols.AT +
 						OOMLKey.ACCESS_MODIFIER.getValue() +
 						OOMLSymbols.COMMA +
 						OOMLKey.CURLY_BRACKET.getValue() +

@@ -30,7 +30,7 @@ public enum OOMLKey {
             OOMLSymbols.SEMI_COLON +
             QUOTE.value +
             OOMLSymbols.EQUAL +
-            OOMLSymbols.IMPORT +
+            OOMLSymbols.AT +
             ACCESS_MODIFIER.value +
             OOMLSymbols.COMMA +
             OOMLSymbols.SLASH +
@@ -41,7 +41,7 @@ public enum OOMLKey {
     FILE_END(PAD.value +
             QUOTE.value +
             OOMLSymbols.EQUAL +
-            OOMLSymbols.IMPORT +
+            OOMLSymbols.AT +
             ACCESS_MODIFIER.value +
             OOMLSymbols.COMMA +
             CURLY_BRACKET.value +

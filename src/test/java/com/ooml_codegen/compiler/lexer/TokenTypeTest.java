@@ -15,7 +15,7 @@ public class TokenTypeTest {
 				TokenType.CLASS,
 				TokenType.ENUM,
 				TokenType.INTERFACE,
-				TokenType.INHERITANCE,
+				TokenType.CLASS_INHERITANCE,
 				TokenType.COLON,
 				TokenType.SEMI_COLON,
 				TokenType.EQUAL,

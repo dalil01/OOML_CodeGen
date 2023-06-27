@@ -68,11 +68,17 @@ public class OOMLLexer extends Lexer {
                 this.cStream.next();
                 return new Token(TokenType.COMMA, OOMLSymbols.COMMA.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
-            case PACKAGE -> {
+            case TIDLE -> {
                 this.cStream.next();
+
+                if (this.cStream.getCurrentChar() == OOMLSymbols.GREATER_THAN.getValue()) {
+                    this.cStream.next();
+                    return new Token(TokenType.INTERFACE_INHERITANCE, this.getFile().toPath(), this.lineN, this.lineN);
+                }
+
                 return new Token(TokenType.PACKAGE, this.getFile().toPath(), this.lineN, this.lineN);
             }
-            case IMPORT -> {
+            case AT -> {
                 return this.generateImportToken();
             }
             case COLON -> {
@@ -107,7 +113,7 @@ public class OOMLLexer extends Lexer {
                 if (this.cStream.getCurrentChar() == OOMLSymbols.GREATER_THAN.getValue()) {
                     // matched "->"
                     this.cStream.next();
-                    return new Token(TokenType.INHERITANCE, this.getFile().toPath(), this.lineN, this.lineN);
+                    return new Token(TokenType.CLASS_INHERITANCE, this.getFile().toPath(), this.lineN, this.lineN);
                 // check for next character to find access modifier block
                 } else if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "-:"
