@@ -53,24 +53,23 @@ public class Enum implements IGeneration {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < this.enumerations.size(); i++) {
+
             EnumProperty enumeration = this.enumerations.get(i);
 
-            if(enumeration.getValue() != null){
-                this.setWithValue(true);
-            } else {
-                this.setWithoutValue(true);
-            }
+            if(!this.withValue) this.withValue = enumeration.getValue() != null;
+
+            if(!this.withoutValue) this.withoutValue = (enumeration.getValue() == null) || enumeration.getValue().isEmpty();
 
             if (i > 0) {
                 sb.append("\t");
             }
+
             sb.append(this.enumerations.get(i));
 
             if (i < this.enumerations.size() - 1) {
                 sb.append(",\n");
             }
         }
-
         return sb.toString();
     }
 
@@ -81,15 +80,6 @@ public class Enum implements IGeneration {
     public boolean isWithoutValue() {
         return withoutValue;
     }
-
-    public void setWithValue(boolean withValue) {
-        this.withValue = withValue;
-    }
-
-    public void setWithoutValue(boolean withoutValue) {
-        this.withoutValue = withoutValue;
-    }
-
 
     @Override
     public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {

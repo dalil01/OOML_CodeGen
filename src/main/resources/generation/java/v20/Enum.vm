@@ -22,8 +22,9 @@ enum $enumName {
 #end
 
 #if($withoutValue)
-    $enumName() { this.value = ""; }
+    $enumName() { this.value = ordinal(); }
 #end
+
 #if($withValue)
     public Object getValue() { return this.value; }
 #end
