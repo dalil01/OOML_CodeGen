@@ -24,7 +24,6 @@ enum $enumName {
 #if($withoutValue)
     $enumName() { this.value = ""; }
 #end
-
 #if($withValue)
     public Object getValue() { return this.value; }
 #end

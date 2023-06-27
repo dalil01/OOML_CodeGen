@@ -16,8 +16,8 @@ public class Enum implements IGeneration {
     private final EnumAccessModifier accessModifier;
     private final List<EnumProperty> enumerations = new ArrayList<>();
 
-    private boolean withValue = true;
-    private boolean withoutValue = true;
+    private boolean withValue = false;
+    private boolean withoutValue = false;
 
     public Enum(String name, Package ePackage, EnumAccessModifier accessModifier) {
         this.name = name;
@@ -53,7 +53,14 @@ public class Enum implements IGeneration {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < this.enumerations.size(); i++) {
-            // TODO: define enumerations value or not with setter
+            EnumProperty enumeration = this.enumerations.get(i);
+
+            if(enumeration.getValue() != null){
+                this.setWithValue(true);
+            } else {
+                this.setWithoutValue(true);
+            }
+
             if (i > 0) {
                 sb.append("\t");
             }

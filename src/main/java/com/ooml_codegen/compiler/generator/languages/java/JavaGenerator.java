@@ -69,7 +69,7 @@ public class JavaGenerator extends Generator {
 		anenum.addEnumeration(yellow);
 		anenum.addEnumeration(green);
 		anenum.addEnumeration(weight);
-		anenum.addEnumeration(blue);
+		/*anenum.addEnumeration(blue);*/
 
 		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
 		//generator.generate(clazz);
