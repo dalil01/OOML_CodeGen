@@ -40,7 +40,7 @@ public class JavaGeneratorTest {
         javaGenerator.generate(clazz);
 
         String generatedCode =  new String(Files.readAllBytes(Paths.get("User.java")));
-        String expectedCode = new String(Files.readAllBytes(Paths.get("src/test/java/template/JavaGeneratorTestExample.txt")));
+        String expectedCode = new String(Files.readAllBytes(Paths.get("src/test/java/template/User.txt")));
 
         assertEquals(expectedCode, generatedCode);
     }

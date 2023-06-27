@@ -56,7 +56,7 @@ public class JavaGenerator extends Generator {
 		Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
 		Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
 
-		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PRIVATE);
+		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PUBLIC);
 
 		clazz.addConstructor(constructor);
 		clazz.addAttribute(attribute);
