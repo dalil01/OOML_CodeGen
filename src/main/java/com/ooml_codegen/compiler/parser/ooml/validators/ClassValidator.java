@@ -3,6 +3,7 @@ package com.ooml_codegen.compiler.parser.ooml.validators;
 import com.ooml_codegen.compiler.lexer.LexerManager;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
+import com.ooml_codegen.models.BehaviorModifier;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Name;
 import com.ooml_codegen.models.Package;
@@ -10,15 +11,12 @@ import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.utils.ULogger;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassValidator extends Validator {
 
-	private Class clazz = new Class();
-
-	private boolean accessModifierIsSet = false;
+	private final Class clazz = new Class();
 
 	public ClassValidator(LexerManager lexerManager, List<Token> unConsumedTokenList) {
 		super(lexerManager, unConsumedTokenList);
@@ -29,25 +27,29 @@ public class ClassValidator extends Validator {
 	}
 
 	@Override
-	public void validate() throws FileNotFoundException {
+	public void validate() throws Exception {
 		Token currentToken = this.nextToken();
 
 		if (currentToken.getType() == TokenType.SIGN) {
-			this.validateAccessModifier(currentToken.getValue());
+			this.validateAccessModifier(currentToken);
+			currentToken = this.nextToken();
 		}
 
-		/*
-		TODO : Manage access modifiers
-			this.validateBehaviorModifiers();
+		while (currentToken.getType() == TokenType.WORD || currentToken.getType() == TokenType.QUOTED_WORD) {
+			this.validateBehaviorModifier(currentToken);
 
-		 */
+			currentToken = this.nextToken();
+			if (currentToken.getType() == TokenType.EOF || currentToken.getType() == TokenType.CLASS) {
+				break;
+			}
+		}
 
-		currentToken = this.nextToken();
-		if (currentToken.getType() != TokenType.CLASS) {
+		if (currentToken.getType() == TokenType.CLASS) {
+			this.clazz.addKeyword();
+		} else {
 			ULogger.error("Missing currentToken class");
 			return;
 		}
-		this.clazz.addKeyword();
 
 		currentToken = this.nextToken();
 		if (currentToken.getType() != TokenType.WORD && currentToken.getType() != TokenType.QUOTED_WORD) {
@@ -162,30 +164,19 @@ public class ClassValidator extends Validator {
 		this.clazz.setPackage(cPackage);
 	}
 
-	private void validatePackage() {
-
-	}
-
-	private void validateAccessModifier(String signValue) {
-		if (this.accessModifierIsSet) {
-			ULogger.error("Unexpected " + signValue);
-			return;
-		}
-
-		ClassAccessModifier accessModifier = ClassAccessModifier.getModifierFromOOMLSign(signValue);
+	private void validateAccessModifier(Token token) throws Exception {
+		ClassAccessModifier accessModifier = ClassAccessModifier.getModifierFromOOMLSign(token.getValue());
 		if (accessModifier == null) {
 			// TODO error
 			ULogger.error("invalid accessModifier");
-			return;
+			throw new Exception();
 		}
 
-		clazz.setAccessModifier(accessModifier);
-		this.accessModifierIsSet = true;
+		this.clazz.setAccessModifier(accessModifier);
 	}
 
-	private void validateBehaviorModifiers(List<Token> tokenList) {
-		// TODO
+	private void validateBehaviorModifier(Token token) {
+		this.clazz.addBehaviorModifier(new BehaviorModifier(token.getValue()));
 	}
-
 
 }

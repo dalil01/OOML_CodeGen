@@ -15,6 +15,6 @@ public abstract class Parser {
 		this.lexerManager = lexerManager;
 	}
 
-	public abstract Stream<IGeneration> parse() throws FileNotFoundException;
+	public abstract Stream<IGeneration> parse() throws Exception;
 
 }

@@ -28,7 +28,7 @@ public class OOMLParser extends Parser {
 	}
 
 	@Override
-	public Stream<IGeneration> parse() throws FileNotFoundException {
+	public Stream<IGeneration> parse() throws Exception {
 		Token token = this.lexerManager.nextToken();
 
 		Stream.Builder<IGeneration> streamBuilder = Stream.builder();
@@ -85,7 +85,7 @@ public class OOMLParser extends Parser {
 		this.unConsumedTokenList.addAll(0, this.packageTokenList);
 	}
 
-	private IGeneration parseClass() throws FileNotFoundException {
+	private IGeneration parseClass() throws Exception {
 		this.updateUnConsumedTokenList();
 
 		ClassValidator validator = new ClassValidator(this.lexerManager, this.unConsumedTokenList);

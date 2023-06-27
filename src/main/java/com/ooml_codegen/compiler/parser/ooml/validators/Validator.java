@@ -29,7 +29,7 @@ public abstract class Validator {
 		return this.currentToken;
 	}
 
-	public abstract void validate() throws FileNotFoundException;
+	public abstract void validate() throws Exception;
 
 	public Token nextToken() throws FileNotFoundException {
 		if (this.unConsumedTokenList.size() > 0) {
@@ -53,8 +53,6 @@ public abstract class Validator {
 		}
 
 		this.consumeComment();
-
-		System.out.println("Next token" + this.currentToken);
 
 		return this.currentToken;
 	}

@@ -16,6 +16,7 @@ public class Class implements IGeneration {
 	private Keyword keyword;
 	private Package cPackage;
 	private ClassAccessModifier accessModifier;
+	private List<BehaviorModifier> behaviorModifiers = new ArrayList<>();
 	private final List<Attribute> attributes = new ArrayList<>();
 	private final List<Constructor> constructors = new ArrayList<>();
 	private final List<Method> methods = new ArrayList<>();
@@ -67,6 +68,15 @@ public class Class implements IGeneration {
 	public void setAccessModifier(ClassAccessModifier accessModifier) {
 		this.accessModifier = accessModifier;
 		this.generationOrder.add(this.accessModifier);
+	}
+
+	public void addBehaviorModifier(BehaviorModifier modifier) {
+		this.behaviorModifiers.add(modifier);
+		this.generationOrder.add(modifier);
+	}
+
+	public List<BehaviorModifier> getBehaviorModifiers() {
+		return this.behaviorModifiers;
 	}
 
 	public boolean addAttribute(Attribute attribute) {
