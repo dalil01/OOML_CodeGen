@@ -61,12 +61,14 @@ public class JavaGenerator extends Generator {
 		EnumProperty orange = new EnumProperty("ORANGE", "orange");
 		EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
 		EnumProperty green = new EnumProperty("GREEN", "green");
+		EnumProperty weight = new EnumProperty("WEIGH", "84.5");
 		EnumProperty blue = new EnumProperty("BLUE");
 
 		anenum.addEnumeration(red);
 		anenum.addEnumeration(orange);
 		anenum.addEnumeration(yellow);
 		anenum.addEnumeration(green);
+		anenum.addEnumeration(weight);
 		anenum.addEnumeration(blue);
 
 		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);

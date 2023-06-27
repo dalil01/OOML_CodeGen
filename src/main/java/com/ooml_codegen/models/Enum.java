@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Enum implements IGeneration {
     private final String name;
@@ -46,6 +45,10 @@ public class Enum implements IGeneration {
         return this.enumerations;
     }
 
+    // TODO: define type attribute for enum value
+    /*public void defineType(){}*/
+    // for the moment the default type is an Object written in hard copy in vm filer
+
     public String toStringEnums() {
         StringBuilder sb = new StringBuilder();
 
@@ -74,10 +77,10 @@ public class Enum implements IGeneration {
         });
         map.put(GenerationContext.ENUMS_NAME, this.name);
         map.put(GenerationContext.ENUMERATIONS, this.toStringEnums());
+
+        // TODO: Create a constructor conditionally if we have value or not in enum
         map.put(GenerationContext.ENUM_WITH_VALUE, this.withValue);
         map.put(GenerationContext.ENUM_WITHOUT_VALUE, this.withoutValue);
-
-
 
         return map;
     }
