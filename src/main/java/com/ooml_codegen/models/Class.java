@@ -3,6 +3,7 @@ package com.ooml_codegen.models;
 import com.ooml_codegen.compiler.generator.GeneratorType;
 import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
+import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 
 import java.util.ArrayList;
@@ -11,28 +12,43 @@ import java.util.Map;
 
 public class Class implements IGeneration {
 
-	private String name;
+	private Name name;
+	private Keyword keyword;
 	private Package cPackage;
 	private ClassAccessModifier accessModifier;
 	private final List<Attribute> attributes = new ArrayList<>();
 	private final List<Constructor> constructors = new ArrayList<>();
 	private final List<Method> methods = new ArrayList<>();
+	private final List<Comment> comments = new ArrayList<>();
+
+	private final List<Object> generationOrder = new ArrayList<>();
+
 
 	public Class() {
 	}
 
-	public Class(String name, Package cPackage, ClassAccessModifier accessModifier) {
+
+	/**
+	 *
+	 * TODO : to be remove
+	 */
+	public Class(Name name, Package cPackage, ClassAccessModifier accessModifier) {
 		this.name = name;
 		this.cPackage = cPackage;
 		this.accessModifier = accessModifier;
 	}
 
-	public String getName() {
+	public Name getName() {
 		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(Name name) {
 		this.name = name;
+		this.generationOrder.add(this.name);
+	}
+
+	public void addKeyword() {
+		this.generationOrder.add(new Keyword());
 	}
 
 	public Package getPackage() {
@@ -41,6 +57,7 @@ public class Class implements IGeneration {
 
 	public void setPackage(Package cPackage) {
 		this.cPackage = cPackage;
+		this.generationOrder.add(this.cPackage);
 	}
 
 	public ClassAccessModifier getAccessModifier() {
@@ -49,6 +66,7 @@ public class Class implements IGeneration {
 
 	public void setAccessModifier(ClassAccessModifier accessModifier) {
 		this.accessModifier = accessModifier;
+		this.generationOrder.add(this.accessModifier);
 	}
 
 	public boolean addAttribute(Attribute attribute) {
@@ -75,6 +93,15 @@ public class Class implements IGeneration {
 		return this.methods;
 	}
 
+	public void addComment(Comment comment) {
+		this.comments.add(comment);
+		this.generationOrder.add(comment);
+	}
+
+	public List<Object> getGenerationOrder() {
+		return this.generationOrder;
+	}
+
 	@Override
 	public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {
 		return Map.of(
@@ -86,7 +113,7 @@ public class Class implements IGeneration {
 
 	@Override
 	public String getFileName() {
-		return this.name;
+		return this.name.getValue();
 	}
 
 }

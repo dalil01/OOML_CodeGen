@@ -86,7 +86,7 @@ public class OOMLParser extends Parser {
 	private IGeneration parseClass() throws FileNotFoundException {
 		ClassValidator validator = new ClassValidator(this.lexerManager, this.unConsumedTokenList);
 		validator.validate();
-		Class clazz = validator.getClassIfIsValid();
+		Class clazz = validator.getToBeGeneratedClass();
 		this.unConsumedTokenList.clear();
 
 		// TODO : manage package

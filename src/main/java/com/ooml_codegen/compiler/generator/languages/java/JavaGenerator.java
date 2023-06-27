@@ -44,10 +44,12 @@ public class JavaGenerator extends Generator {
 	}
 
 	public static void main(String[] args) {
-		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PRIVATE);
+		/*Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PRIVATE);
 
 		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
 		generator.generate(clazz);
+
+		 */
 	}
 
 }
