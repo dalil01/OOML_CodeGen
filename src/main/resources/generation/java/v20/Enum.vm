@@ -16,15 +16,16 @@ enum $enumName {
 #if($enumerations && !$enumerations.isEmpty())
     $enumerations;
 #end
-#if($withValue)
     private final Object value;
-
+#if($withValue)
     $enumName(Object value){ this.value = value; }
+#end
 
-    #if($withoutValue)
-        $enumName() { this.value = ""; }
-    #end
+#if($withoutValue)
+    $enumName() { this.value = ""; }
+#end
 
+#if($withValue)
     public Object getValue() { return this.value; }
 #end
 }

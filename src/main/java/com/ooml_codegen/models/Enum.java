@@ -16,8 +16,8 @@ public class Enum implements IGeneration {
     private final EnumAccessModifier accessModifier;
     private final List<EnumProperty> enumerations = new ArrayList<>();
 
-    private final boolean withValue = false;
-    private final boolean withoutValue = false;
+    private boolean withValue = true;
+    private boolean withoutValue = true;
 
     public Enum(String name, Package ePackage, EnumAccessModifier accessModifier) {
         this.name = name;
@@ -53,6 +53,7 @@ public class Enum implements IGeneration {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < this.enumerations.size(); i++) {
+            // TODO: define enumerations value or not with setter
             if (i > 0) {
                 sb.append("\t");
             }
@@ -65,6 +66,23 @@ public class Enum implements IGeneration {
 
         return sb.toString();
     }
+
+    public boolean isWithValue() {
+        return withValue;
+    }
+
+    public boolean isWithoutValue() {
+        return withoutValue;
+    }
+
+    public void setWithValue(boolean withValue) {
+        this.withValue = withValue;
+    }
+
+    public void setWithoutValue(boolean withoutValue) {
+        this.withoutValue = withoutValue;
+    }
+
 
     @Override
     public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {
