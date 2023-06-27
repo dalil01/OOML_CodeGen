@@ -3,12 +3,16 @@ package com.ooml_codegen.compiler.parser.ooml.validators;
 import com.ooml_codegen.compiler.lexer.LexerManager;
 import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
+import com.ooml_codegen.compiler.parser.ContextStack;
+import com.ooml_codegen.compiler.parser.ContextType;
 import com.ooml_codegen.models.BehaviorModifier;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Name;
 import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
+import com.ooml_codegen.models.inheritance.ClassInheritance;
+import com.ooml_codegen.models.inheritance.InterfaceInheritance;
 import com.ooml_codegen.utils.ULogger;
 
 import java.io.FileNotFoundException;
@@ -20,6 +24,8 @@ public class ClassValidator extends Validator {
 	private Token currentToken;
 
 	private final Class clazz = new Class();
+
+	private final ContextStack contextStack = new ContextStack();
 
 	public ClassValidator(LexerManager lexerManager, List<Token> unConsumedTokenList) {
 		super(lexerManager, unConsumedTokenList);
@@ -35,16 +41,10 @@ public class ClassValidator extends Validator {
 
 		this.validateAccessModifier();
 		this.validateBehaviorModifiers();
-		this.validateClass();
+		this.validateClassDeclaration();
 		this.validateClassInheritance();
 		this.validateInterfaceInheritance();
-
-
-		if (this.currentToken.getType() != TokenType.OPENING_CURLY_BRACKET) {
-			// TODO
-			ULogger.error("Missing {");
-			return;
-		}
+		this.validateClassBody();
 
 		System.out.println(this.clazz.getGenerationOrder());
 	}
@@ -84,20 +84,21 @@ public class ClassValidator extends Validator {
 		}
 	}
 
-	private void validateClass() throws Exception {
+	private void validateClassDeclaration() throws Exception {
 		if (this.currentToken.getType() != TokenType.CLASS) {
 			ULogger.error("Missing currentToken class");
-			return;
+			throw new Exception();
 		}
+
+		this.clazz.addKeyword();
 
 		this.currentToken = this.nextToken();
 		if (this.currentToken.getType() != TokenType.WORD && this.currentToken.getType() != TokenType.QUOTED_WORD) {
 			// TODO
 			ULogger.error("Missing classname");
-			return;
+			throw new Exception();
 		}
 
-		this.clazz.addKeyword();
 		this.clazz.setName(new Name(this.currentToken.getValue()));
 	}
 
@@ -116,7 +117,7 @@ public class ClassValidator extends Validator {
 				tokenList.add(this.currentToken);
 			}
 
-			this.validateInheritances(tokenList);
+			this.validateInheritances(tokenList, TokenType.CLASS_INHERITANCE);
 		}
 	}
 
@@ -134,27 +135,30 @@ public class ClassValidator extends Validator {
 				tokenList.add(this.currentToken);
 			}
 
-			this.validateInheritances(tokenList);
+			this.validateInheritances(tokenList, TokenType.INTERFACE_INHERITANCE);
 		}
 	}
 
-	private void validateInheritances(List<Token> tokenList) throws Exception {
+	private void validateInheritances(List<Token> tokenList, TokenType inheritanceType) throws Exception {
 		for (int i = 0; i < tokenList.size(); i++) {
-			Token t = tokenList.get(i);
+			Token token = tokenList.get(i);
 
 			if (i % 2 == 0) {
-				if (t.getType() != TokenType.WORD && t.getType() != TokenType.QUOTED_WORD) {
+				if (token.getType() != TokenType.WORD && token.getType() != TokenType.QUOTED_WORD) {
 					// TODO error
-					ULogger.error("unexpected " + t.getValue());
+					ULogger.error("unexpected " + token.getValue());
 					throw new Exception();
 				}
 
-				// TODO : manage class inheritance
-				// this.clazz.
+				if (inheritanceType == TokenType.CLASS_INHERITANCE) {
+					this.clazz.addClassInheritance(new ClassInheritance(token.getValue()));
+				} else if (inheritanceType == TokenType.INTERFACE_INHERITANCE) {
+					this.clazz.addInterfaceInheritance(new InterfaceInheritance(token.getValue()));
+				}
 			} else {
-				if (t.getType() != TokenType.COMMA) {
+				if (token.getType() != TokenType.COMMA) {
 					// TODO error
-					ULogger.error("missing comma");
+					ULogger.error("missing unexpected token " + token.getValue());
 					throw new Exception();
 				}
 			}
@@ -170,5 +174,70 @@ public class ClassValidator extends Validator {
 		}
 	}
 
+	private void validateClassBody() throws Exception {
+		this.handleClassContext();
+
+		while (this.currentToken.getType() != TokenType.EOF) {
+			System.out.println(this.currentToken);
+
+			switch (this.currentToken.getType()) {
+				case SIGN -> {
+
+				}
+				case ACCESS_MODIFIER_BLOCK -> {
+
+				}
+				case WORD -> {
+
+				}
+				case CLOSING_CURLY_BRACKET -> {
+					if (this.contextStack.empty()) {
+						// TODO
+						ULogger.error("unexpected token }");
+						throw new Exception();
+					}
+
+					this.contextStack.pop();
+
+					if (this.contextStack.empty()) {
+						return;
+					}
+				}
+				case PACKAGE -> {
+					if (this.contextStack.empty()) {
+						this.unConsumedTokenList.add(this.currentToken);
+						return;
+					}
+
+					ULogger.error("unexpected token " + this.currentToken.getValue());
+					throw new Exception();
+				}
+				case CLASS, ENUM, INTERFACE  -> {
+					if (this.contextStack.empty()) {
+						this.unConsumedTokenList.add(this.currentToken);
+						return;
+					}
+
+					// TODO Manage intern class, enum, interface
+				}
+				default -> {
+					// TODO
+					ULogger.error("unexpected token " + this.currentToken.getValue());
+					throw new Exception();
+				}
+			}
+
+			this.currentToken = this.nextToken();
+		}
+	}
+
+	private void handleClassContext() throws FileNotFoundException {
+		if (this.currentToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
+			this.contextStack.push(ContextType.CLASS);
+			this.currentToken = this.nextToken();
+		} else if (this.currentToken.getType() == TokenType.COLON) {
+			this.currentToken = this.nextToken();
+		}
+	}
 
 }

@@ -5,6 +5,9 @@ import com.ooml_codegen.compiler.generator.enums.GenerationContext;
 import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
 import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
+import com.ooml_codegen.models.inheritance.ClassInheritance;
+import com.ooml_codegen.models.inheritance.Inheritance;
+import com.ooml_codegen.models.inheritance.InterfaceInheritance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +19,12 @@ public class Class implements IGeneration {
 	private Keyword keyword;
 	private Package cPackage;
 	private ClassAccessModifier accessModifier;
-	private List<BehaviorModifier> behaviorModifiers = new ArrayList<>();
+	private final List<BehaviorModifier> behaviorModifiers = new ArrayList<>();
 	private final List<Attribute> attributes = new ArrayList<>();
 	private final List<Constructor> constructors = new ArrayList<>();
 	private final List<Method> methods = new ArrayList<>();
+	private final List<ClassInheritance> classInheritances = new ArrayList<>();
+	private final List<InterfaceInheritance> interfaceInheritances = new ArrayList<>();
 	private final List<Comment> comments = new ArrayList<>();
 
 	private final List<Object> generationOrder = new ArrayList<>();
@@ -28,9 +33,7 @@ public class Class implements IGeneration {
 	public Class() {
 	}
 
-
 	/**
-	 *
 	 * TODO : to be remove
 	 */
 	public Class(Name name, Package cPackage, ClassAccessModifier accessModifier) {
@@ -49,7 +52,8 @@ public class Class implements IGeneration {
 	}
 
 	public void addKeyword() {
-		this.generationOrder.add(new Keyword());
+		this.keyword = new Keyword();
+		this.generationOrder.add(this.keyword);
 	}
 
 	public Package getPackage() {
@@ -101,6 +105,32 @@ public class Class implements IGeneration {
 
 	public List<Method> getMethods() {
 		return this.methods;
+	}
+
+	public void addInheritance(Inheritance inheritance) {
+		if (inheritance instanceof ClassInheritance) {
+			this.addClassInheritance((ClassInheritance) inheritance);
+		} else if (inheritance instanceof InterfaceInheritance) {
+			this.addInterfaceInheritance((InterfaceInheritance) inheritance);
+		}
+	}
+
+	public void addClassInheritance(ClassInheritance inheritance) {
+		this.classInheritances.add(inheritance);
+		this.generationOrder.add(inheritance);
+	}
+
+	public List<ClassInheritance> getClassInheritances() {
+		return this.classInheritances;
+	}
+
+	public void addInterfaceInheritance(InterfaceInheritance inheritance) {
+		this.interfaceInheritances.add(inheritance);
+		this.generationOrder.add(inheritance);
+	}
+
+	public List<InterfaceInheritance> getInterfaceInheritances() {
+		return this.interfaceInheritances;
 	}
 
 	public void addComment(Comment comment) {

@@ -16,31 +16,33 @@ public abstract class Validator {
 
 	private final LexerManager lexerManager;
 	private boolean lexerManagerUsedOnce = false;
-	private final List<Token> unConsumedTokenList;
+	private final List<Token> unConsumedParserTokenList;
 
 	private Token currentToken = null;
 
-	protected Validator(LexerManager lexerManager, List<Token> unConsumedTokenList) {
+	protected final List<Token> unConsumedTokenList = new ArrayList<>();
+
+	protected Validator(LexerManager lexerManager, List<Token> unConsumedParserTokenList) {
 		this.lexerManager = lexerManager;
-		this.unConsumedTokenList = new ArrayList<>(unConsumedTokenList);
+		this.unConsumedParserTokenList = new ArrayList<>(unConsumedParserTokenList);
 	}
 
-	public Token getCurrentToken() {
-		return this.currentToken;
+	public List<Token> getUnConsumedTokenList() {
+		return this.unConsumedTokenList;
 	}
 
 	public abstract void validate() throws Exception;
 
 	public Token nextToken() throws FileNotFoundException {
-		if (this.unConsumedTokenList.size() > 0) {
-			this.currentToken = this.unConsumedTokenList.get(0);
-			this.unConsumedTokenList.remove(0);
+		if (this.unConsumedParserTokenList.size() > 0) {
+			this.currentToken = this.unConsumedParserTokenList.get(0);
+			this.unConsumedParserTokenList.remove(0);
 
 			if (this.currentToken.getType() == TokenType.PACKAGE) {
 				// We are sure to have the package name in the following token.
-				this.currentToken = this.unConsumedTokenList.get(0);
+				this.currentToken = this.unConsumedParserTokenList.get(0);
 				this.addPackage(new Package(this.currentToken.getValue()));
-				this.unConsumedTokenList.remove(0);
+				this.unConsumedParserTokenList.remove(0);
 				this.nextToken();
 			}
 		} else {

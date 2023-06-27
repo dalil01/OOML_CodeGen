@@ -11,7 +11,20 @@
 
 }*/
 
-~ src.app {
-	 + abstract static class /* */ User -> AbstractUser ~> ICustomer {
+~ src.app :
+
+	 + abstract static class /* */ User -> AbstractUser, Abs ~> ICustomer {
+		// Attributs */
+		id: int
+		+ firstname: string;
+		- lastname: String;
+		# roles: Roles
+		+ a: int
+		# c: string d: int e: Person
+		- id2: int
+
+		// Constructors
+
+	 }
 
 

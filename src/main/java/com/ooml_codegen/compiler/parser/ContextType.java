@@ -1,6 +1,6 @@
 package com.ooml_codegen.compiler.parser;
 
-public enum TokenContextType {
+public enum ContextType {
 
 	PACKAGE,
 	CLASS,

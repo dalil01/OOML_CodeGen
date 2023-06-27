@@ -101,7 +101,7 @@ public class OOMLLexer extends Lexer {
                 if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "+:" or "#:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER, character, this.getFile().toPath(), this.lineN, this.lineN);
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, character, this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
                 return new Token(TokenType.SIGN, character, this.getFile().toPath(), this.lineN, this.lineN);
@@ -113,12 +113,13 @@ public class OOMLLexer extends Lexer {
                 if (this.cStream.getCurrentChar() == OOMLSymbols.GREATER_THAN.getValue()) {
                     // matched "->"
                     this.cStream.next();
-                    return new Token(TokenType.CLASS_INHERITANCE, this.getFile().toPath(), this.lineN, this.lineN);
+                    // TODO set value
+                    return new Token(TokenType.CLASS_INHERITANCE, OOMLSymbols.MINUS.toString() + OOMLSymbols.GREATER_THAN,   this.getFile().toPath(), this.lineN, this.lineN);
                 // check for next character to find access modifier block
                 } else if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
                     // matched "-:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
                 return new Token(TokenType.SIGN, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
@@ -128,27 +129,27 @@ public class OOMLLexer extends Lexer {
             }
             case OPENING_BRACKET -> {
                 this.cStream.next();
-                return new Token(TokenType.OPENING_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.OPENING_BRACKET, OOMLSymbols.OPENING_BRACKET.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case CLOSING_BRACKET -> {
                 cStream.next();
-                return new Token(TokenType.CLOSING_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.CLOSING_BRACKET, OOMLSymbols.CLOSING_BRACKET.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case OPENING_PARENTHESIS -> {
                 this.cStream.next();
-                return new Token(TokenType.OPENING_PARENTHESIS, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.OPENING_PARENTHESIS, OOMLSymbols.OPENING_PARENTHESIS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case CLOSING_PARENTHESIS -> {
                 this.cStream.next();
-                return new Token(TokenType.CLOSING_PARENTHESIS, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.CLOSING_PARENTHESIS, OOMLSymbols.CLOSING_PARENTHESIS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case OPENING_CURLY_BRACKET -> {
                 this.cStream.next();
-                return new Token(TokenType.OPENING_CURLY_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.OPENING_CURLY_BRACKET, OOMLSymbols.OPENING_CURLY_BRACKET.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             case CLOSING_CURLY_BRACKET -> {
                 this.cStream.next();
-                return new Token(TokenType.CLOSING_CURLY_BRACKET, this.getFile().toPath(), this.lineN, this.lineN);
+                return new Token(TokenType.CLOSING_CURLY_BRACKET, OOMLSymbols.CLOSING_CURLY_BRACKET.toString(), this.getFile().toPath(), this.lineN, this.lineN);
             }
             default -> {
                 return this.generateWordOrKeywordToken();
