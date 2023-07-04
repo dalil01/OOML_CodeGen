@@ -5,11 +5,11 @@ import com.ooml_codegen.compiler.lexer.Token;
 import com.ooml_codegen.compiler.lexer.TokenType;
 import com.ooml_codegen.compiler.parser.ContextStack;
 import com.ooml_codegen.compiler.parser.ContextType;
-import com.ooml_codegen.models.BehaviorModifier;
+import com.ooml_codegen.models.*;
 import com.ooml_codegen.models.Class;
-import com.ooml_codegen.models.Name;
 import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.comment.Comment;
+import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.models.inheritance.ClassInheritance;
 import com.ooml_codegen.models.inheritance.InterfaceInheritance;
@@ -177,15 +177,21 @@ public class ClassValidator extends Validator {
 	private void validateClassBody() throws Exception {
 		this.handleClassContext();
 
+		List<Token> tokenList = new ArrayList<>();
+
 		while (this.currentToken.getType() != TokenType.EOF) {
-			System.out.println(this.currentToken);
+			//System.out.println(this.currentToken);
 
 			switch (this.currentToken.getType()) {
 				case SIGN, WORD, QUOTED_WORD -> {
-					this.unConsumedTokenList.add(this.currentToken);
+					tokenList.add(this.currentToken);
 				}
 				case COLON -> {
-					// TODO manage attribute
+					this.validateAttribut(tokenList);
+					tokenList.clear();
+				}
+				case ACCESS_MODIFIER_BLOCK -> {
+					// TODO manage multiple attributes
 				}
 				case OPENING_PARENTHESIS -> {
 					// TODO manage constructor or method
@@ -240,8 +246,69 @@ public class ClassValidator extends Validator {
 		}
 	}
 
-	private void validateClassContent() {
+	private void validateAttribut(List<Token> beforeColonTokenList) throws Exception {
+		if (beforeColonTokenList.size() == 0) {
+			ULogger.error("Invalid syntax");
+			throw new Exception();
+		}
 
+		Token nextToken = beforeColonTokenList.get(0);
+
+		AttributeAccessModifier accessModifier = null;
+		if (nextToken.getType() == TokenType.SIGN) {
+			beforeColonTokenList.remove(0);
+
+			accessModifier = AttributeAccessModifier.getModifierFromOOMLSign(nextToken.getValue());
+			if (accessModifier == null) {
+				// TODO
+				ULogger.error("Unexpected token");
+				throw new Exception();
+			}
+		}
+
+		if (beforeColonTokenList.size() == 0) {
+			// TODO
+			ULogger.error("Name not found");
+			throw new Exception();
+		}
+
+		String attributeName = null;
+		List<BehaviorModifier> behaviorModifiers = new ArrayList<>();
+		for (int i = 0; i < beforeColonTokenList.size(); i++) {
+			Token token = beforeColonTokenList.get(i);
+
+			if (token.getType() != TokenType.WORD || token.getType() != TokenType.QUOTED_WORD) {
+				// TODO
+				ULogger.error("Unexpected token");
+				throw new Exception();
+			}
+
+			if (i == beforeColonTokenList.size() - 1) {
+				attributeName = token.getValue();
+			} else {
+				behaviorModifiers.add(new BehaviorModifier(token.getValue()));
+			}
+		}
+
+		nextToken = this.nextToken();
+		if (nextToken.getType() != TokenType.WORD || nextToken.getType() != TokenType.QUOTED_WORD) {
+			// TODO
+			ULogger.error("Missing type");
+			throw new Exception();
+		}
+
+		Type type = new Type(nextToken.getValue());
+
+		nextToken = this.nextToken();
+		if (nextToken.getType() != TokenType.SEMI_COLON) {
+			this.insertTokenInQueue(nextToken);
+		}
+
+		Attribute attribute = new Attribute(attributeName, type);
+		attribute.setAccessModifier(accessModifier);
+		attribute.addBehaviorModifiers(behaviorModifiers);
+
+		this.clazz.addAttribute(attribute);
 	}
 
 }

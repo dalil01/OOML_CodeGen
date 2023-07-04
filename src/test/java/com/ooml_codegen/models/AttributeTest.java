@@ -12,7 +12,8 @@ public class AttributeTest {
 		String expectedName = "name";
 		Type expectedType = new Type("string");
 
-		Attribute attribute = new Attribute(expectedName, AttributeAccessModifier.PROTECTED, expectedType);
+		Attribute attribute = new Attribute(expectedName, expectedType);
+		attribute.setAccessModifier(AttributeAccessModifier.PROTECTED);
 
 		Assertions.assertEquals(expectedName, attribute.getName());
 		Assertions.assertEquals(expectedType, attribute.getType());
@@ -22,7 +23,8 @@ public class AttributeTest {
 	public void getNameTest() {
 		String expectedName = "id";
 		Type type = new Type("int");
-		Attribute attribute = new Attribute(expectedName, AttributeAccessModifier.PRIVATE, type);
+		Attribute attribute = new Attribute(expectedName, type);
+		attribute.setAccessModifier(AttributeAccessModifier.PRIVATE);
 		Assertions.assertEquals(expectedName, attribute.getName());
 	}
 
@@ -30,7 +32,8 @@ public class AttributeTest {
 	public void getAccessModifierTest() {
 		String expectedName = "id";
 		Type type = new Type("int");
-		Attribute attribute = new Attribute(expectedName, AttributeAccessModifier.PRIVATE, type);
+		Attribute attribute = new Attribute(expectedName, type);
+		attribute.setAccessModifier(AttributeAccessModifier.PRIVATE);
 		Assertions.assertEquals(AttributeAccessModifier.PRIVATE, attribute.getAccessModifier());
 	}
 
@@ -38,7 +41,8 @@ public class AttributeTest {
 	public void getTypeTest() {
 		String expectedName = "user";
 		Type type = new Type("User");
-		Attribute attribute = new Attribute(expectedName, AttributeAccessModifier.PUBLIC, type);
+		Attribute attribute = new Attribute(expectedName, type);
+		attribute.setAccessModifier(AttributeAccessModifier.PUBLIC);
 		Assertions.assertEquals(type, attribute.getType());
 	}
 

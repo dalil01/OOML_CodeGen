@@ -16,6 +16,16 @@ public enum AttributeAccessModifier {
 		};
 	}
 
+	public static AttributeAccessModifier getModifierFromOOMLSign(String sign) {
+		return switch (sign) {
+			case "" -> AttributeAccessModifier.DEFAULT;
+			case "+" -> AttributeAccessModifier.PUBLIC;
+			case "-" -> AttributeAccessModifier.PRIVATE;
+			case "#" -> AttributeAccessModifier.PROTECTED;
+			default -> null;
+		};
+	}
+
 	public String getValueForJava() {
 		return switch (this) {
 			case DEFAULT -> "";

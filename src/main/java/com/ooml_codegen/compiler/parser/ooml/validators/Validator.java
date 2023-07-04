@@ -59,6 +59,10 @@ public abstract class Validator {
 		return this.currentToken;
 	}
 
+	public void insertTokenInQueue(Token token) {
+		this.unConsumedParserTokenList.add(token);
+	}
+
 	private void consumeComment() throws FileNotFoundException {
 		TokenType type = this.currentToken.getType();
 		while (type == TokenType.SINGLE_LINE_COMMENT || type == TokenType.MULTI_LINE_COMMENT) {
