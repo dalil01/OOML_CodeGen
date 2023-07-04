@@ -1,4 +1,4 @@
-package com.ooml_java_generate_files;
+package com.ooml_codegen.compiler.generator.files;
 
 public class User {
 

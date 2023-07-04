@@ -37,3 +37,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Generated test files ###
+.src/test/java/com/ooml_codegen/compiler/generator/files/*

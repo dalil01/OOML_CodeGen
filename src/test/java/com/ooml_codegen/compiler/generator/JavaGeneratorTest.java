@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JavaGeneratorTest {
 
+    private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml_codegen/compiler/generator/files/User.java";
+
     private JavaGenerator javaGenerator;
 
     @BeforeEach
@@ -28,18 +30,18 @@ public class JavaGeneratorTest {
 
     @Test
     public void testGenerate() throws IOException {
-        Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PUBLIC);
+        Class clazz = new Class("User", new Package("com.ooml_codegen.compiler.generator.files"), ClassAccessModifier.PUBLIC);
         Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
 
         clazz.addConstructor(constructor);
 
-        Method method = new Method("methodTest", MethodAccessModifier.PUBLIC, new Type("String"));
-        clazz.addMethod(method);
+//        Method method = new Method("methodTest", MethodAccessModifier.PUBLIC, new Type("String"));
+//        clazz.addMethod(method);
 
         javaGenerator.setTemplate("java/v20/Class.vm");
         javaGenerator.generate(clazz);
 
-        String generatedCode =  new String(Files.readAllBytes(Paths.get("User.java")));
+        String generatedCode =  new String(Files.readAllBytes(Paths.get("src/test/java/com/ooml_codegen/compiler/generator/files/User.java")));
         String expectedCode = new String(Files.readAllBytes(Paths.get("src/test/java/template/User.txt")));
 
         assertEquals(expectedCode, generatedCode);

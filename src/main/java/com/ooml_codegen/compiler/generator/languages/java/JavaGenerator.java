@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class JavaGenerator extends Generator {
 
-    String filePath = "./src/main/java/com/ooml_java_generate_files/";
+    String filePath = "./src/test/java/com/ooml_codegen/compiler/generator/files/";
 
     // TODO : Need meta data (java version, ...)
     @Override
@@ -70,13 +70,15 @@ public class JavaGenerator extends Generator {
 
 	public static void main(String[] args) {
 
+        String filesPackage = "com.ooml_codegen.compiler.generator.files";
+
         Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
         Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
 
         // class
 		Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
 //		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
-		Class clazz = new Class("User", new Package("com.ooml_java_generate_files"), ClassAccessModifier.PUBLIC);
+		Class clazz = new Class("User", new Package(filesPackage), ClassAccessModifier.PUBLIC);
 
 		clazz.addConstructor(constructor);
 //		clazz.addAttribute(attribute);
@@ -84,7 +86,7 @@ public class JavaGenerator extends Generator {
 //		clazz.addMethod(method2);
 
         // enum
-        Enum anenum = new Enum("Color", new Package("com.ooml_java_generate_files"), EnumAccessModifier.PUBLIC);
+        Enum anenum = new Enum("Color", new Package(filesPackage), EnumAccessModifier.PUBLIC);
         EnumProperty red = new EnumProperty("RED", "red");
         EnumProperty orange = new EnumProperty("ORANGE", "orange");
         EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
@@ -100,7 +102,7 @@ public class JavaGenerator extends Generator {
         anenum.addEnumeration(blue);
 
         // interface
-        Interface inter = new Interface("Inter", new Package("com.ooml_java_generate_files"), InterfaceAccessModifier.PUBLIC);
+        Interface inter = new Interface("Inter", new Package(filesPackage), InterfaceAccessModifier.PUBLIC);
         Constant constant1 = new Constant("age", new Type("int"), "10", ConstantAccessModifier.DEFAULT);
 
         inter.addMethod(method);
