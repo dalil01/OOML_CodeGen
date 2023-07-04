@@ -182,12 +182,9 @@ public class ClassValidator extends Validator {
 
 			switch (this.currentToken.getType()) {
 				case SIGN -> {
+					Token sign = this.currentToken;
 
-				}
-				case ACCESS_MODIFIER_BLOCK -> {
-
-				}
-				case WORD -> {
+					//Token new
 
 				}
 				case CLOSING_CURLY_BRACKET -> {
@@ -238,6 +235,10 @@ public class ClassValidator extends Validator {
 		} else if (this.currentToken.getType() == TokenType.COLON) {
 			this.currentToken = this.nextToken();
 		}
+	}
+
+	private void validateClassContent() {
+
 	}
 
 }

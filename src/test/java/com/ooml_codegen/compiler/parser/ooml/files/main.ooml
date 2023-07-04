@@ -15,15 +15,21 @@
 
 	 + abstract static class /* */ User -> AbstractUser, Abs ~> ICustomer {
 		// Attributs */
-		id: int
-		+ firstname: string;
-		- lastname: String;
+		- id: int
+		+ firstname: string
+		lastname: String;
 		# roles: Roles
 		+ a: int
 		# c: string d: int e: Person
 		- id2: int
 
 		// Constructors
+		- User()
+		+ User(firstname: string, lastname: string)
+
+		// Methods
+		+ addNewUser(user: User): boolean
+		static removeUser(id: int, id2: int): boolean
 
 	 }
 
