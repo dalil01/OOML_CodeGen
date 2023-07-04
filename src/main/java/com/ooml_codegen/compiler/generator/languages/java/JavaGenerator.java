@@ -80,8 +80,8 @@ public class JavaGenerator extends Generator {
 
 		clazz.addConstructor(constructor);
 //		clazz.addAttribute(attribute);
-		clazz.addMethod(method);
-		clazz.addMethod(method2);
+//		clazz.addMethod(method);
+//		clazz.addMethod(method2);
 
         // enum
         Enum anenum = new Enum("Color", new Package("com.ooml_java_generate_files"), EnumAccessModifier.PUBLIC);

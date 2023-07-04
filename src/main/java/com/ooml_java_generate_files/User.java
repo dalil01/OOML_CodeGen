@@ -6,10 +6,4 @@ public class User {
     public User() {
     }
 
-    public String getMethod() {
-    }
-
-    public String getMethod2() {
-    }
-
 }
