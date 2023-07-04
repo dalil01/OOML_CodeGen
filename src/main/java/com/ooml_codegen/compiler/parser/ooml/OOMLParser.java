@@ -11,7 +11,6 @@ import com.ooml_codegen.compiler.parser.ooml.validators.ClassValidator;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.utils.ULogger;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +47,6 @@ public class OOMLParser extends Parser {
 						return null;
 					}
 				}
-				case COLON  -> {
-					if (!this.inPackageBlockContext) {
-						// TODO
-						ULogger.error("error unexpected token :");
-						return null;
-					}
-				}
 				case CLOSING_CURLY_BRACKET -> {
 					if (this.packageContextStack.empty()) {
 						// TODO
@@ -75,7 +67,7 @@ public class OOMLParser extends Parser {
 		return streamBuilder.build();
 	}
 
-	private void handlePackageTokens() throws FileNotFoundException {
+	private void handlePackageTokens() throws Exception {
 		this.packageTokenList.addAll(this.unConsumedTokenList);
 		this.unConsumedTokenList.clear();
 
@@ -90,6 +82,11 @@ public class OOMLParser extends Parser {
 
 		this.packageTokenList.add(packageNameToken);
 
+		Token nextToken = this.nextToken();
+		if (nextToken.getType() != TokenType.COLON) {
+			this.unConsumedTokenList.add(nextToken);
+		}
+
 		this.inPackageBlockContext = true;
 	}
 
@@ -102,7 +99,7 @@ public class OOMLParser extends Parser {
 
 		ClassValidator validator = new ClassValidator(this.getLexerManager(), this.unConsumedTokenList);
 		validator.validate();
-		Class clazz = validator.getToBeGeneratedClass();
+		Class clazz = validator.getValidatedClass();
 		this.unConsumedTokenList.clear();
 		this.insertTokensBefore(validator.getUnConsumedTokenList());
 

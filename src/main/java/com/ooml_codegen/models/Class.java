@@ -16,7 +16,6 @@ import java.util.Map;
 public class Class implements IGeneration {
 
 	private Name name;
-	private Keyword keyword;
 	private Package cPackage;
 	private ClassAccessModifier accessModifier;
 	private final List<BehaviorModifier> behaviorModifiers = new ArrayList<>();
@@ -52,8 +51,7 @@ public class Class implements IGeneration {
 	}
 
 	public void addKeyword() {
-		this.keyword = new Keyword();
-		this.generationOrder.add(this.keyword);
+		this.generationOrder.add(new Keyword());
 	}
 
 	public Package getPackage() {
@@ -84,6 +82,7 @@ public class Class implements IGeneration {
 	}
 
 	public boolean addAttribute(Attribute attribute) {
+		this.generationOrder.add(attribute);
 		return this.attributes.add(attribute);
 	}
 
@@ -92,6 +91,7 @@ public class Class implements IGeneration {
 	}
 
 	public boolean addConstructor(Constructor constructor) {
+		this.generationOrder.add(constructor);
 		return this.constructors.add(constructor);
 	}
 
@@ -100,6 +100,7 @@ public class Class implements IGeneration {
 	}
 
 	public boolean addMethod(Method method) {
+		this.generationOrder.add(method);
 		return this.methods.add(method);
 	}
 

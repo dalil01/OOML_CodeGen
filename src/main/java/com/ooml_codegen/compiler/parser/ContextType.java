@@ -5,6 +5,7 @@ public enum ContextType {
 	PACKAGE,
 	CLASS,
 	ENUM,
-	INTERFACE
+	INTERFACE,
+	PARENTHESIS
 
 }

@@ -12,10 +12,11 @@
 }*/
 
 ~ src.app :
-:
+
 	 + abstract static class /* */ User -> AbstractUser, Abs ~> ICustomer {
 		// Attributs */
-		- id: int = 1;
+		- id: int = (new Arraylist());
+		/*
 		+ firstname: string
 		static lastname: String;
 		# roles: Roles
@@ -30,6 +31,7 @@
 		// Methods
 		+ addNewUser(user: User): void
 		static removeUser(id: int, id2: int): boolean
+		*/
 
 	 }
 

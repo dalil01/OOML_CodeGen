@@ -9,13 +9,11 @@ import com.ooml_codegen.models.*;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.comment.Comment;
-import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.models.inheritance.ClassInheritance;
 import com.ooml_codegen.models.inheritance.InterfaceInheritance;
 import com.ooml_codegen.utils.ULogger;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class ClassValidator extends Validator {
 		super(lexerManager, unConsumedTokenList);
 	}
 
-	public Class getToBeGeneratedClass() {
+	public Class getValidatedClass() {
 		return this.clazz;
 	}
 
@@ -47,14 +45,6 @@ public class ClassValidator extends Validator {
 		this.validateClassBody();
 
 		System.out.println(this.clazz.getGenerationOrder());
-	}
-
-	protected void addComment(Comment comment) {
-		this.clazz.addComment(comment);
-	}
-
-	protected void addPackage(Package cPackage) {
-		this.clazz.setPackage(cPackage);
 	}
 
 	private void validateAccessModifier() throws Exception {
@@ -74,11 +64,11 @@ public class ClassValidator extends Validator {
 	}
 
 	private void validateBehaviorModifiers() throws Exception {
-		while (this.currentToken.getType() == TokenType.WORD || this.currentToken.getType() == TokenType.QUOTED_WORD) {
+		while (this.currentToken.getType() != TokenType.CLASS) {
 			this.clazz.addBehaviorModifier(new BehaviorModifier(this.currentToken.getValue()));
 
 			this.currentToken = this.nextToken();
-			if (this.currentToken.getType() == TokenType.EOF || this.currentToken.getType() == TokenType.CLASS) {
+			if (this.currentToken.getType() == TokenType.EOF) {
 				break;
 			}
 		}
@@ -187,7 +177,9 @@ public class ClassValidator extends Validator {
 					tokenList.add(this.currentToken);
 				}
 				case COLON -> {
-					this.validateAttribut(tokenList);
+					AttributeValidator attributeValidator = (AttributeValidator) this.newValidator(ValidatorType.ATTRIBUTE, tokenList);
+					attributeValidator.validate();
+					this.clazz.addAttribute(attributeValidator.getValidatedAttribute());
 					tokenList.clear();
 				}
 				case ACCESS_MODIFIER_BLOCK -> {
@@ -237,7 +229,7 @@ public class ClassValidator extends Validator {
 		}
 	}
 
-	private void handleClassContext() throws FileNotFoundException {
+	private void handleClassContext() throws Exception {
 		if (this.currentToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
 			this.contextStack.push(ContextType.CLASS);
 			this.currentToken = this.nextToken();
@@ -246,69 +238,14 @@ public class ClassValidator extends Validator {
 		}
 	}
 
-	private void validateAttribut(List<Token> beforeColonTokenList) throws Exception {
-		if (beforeColonTokenList.size() == 0) {
-			ULogger.error("Invalid syntax");
-			throw new Exception();
-		}
+	@Override
+	protected void addComment(Comment comment) {
+		this.clazz.addComment(comment);
+	}
 
-		Token nextToken = beforeColonTokenList.get(0);
-
-		AttributeAccessModifier accessModifier = null;
-		if (nextToken.getType() == TokenType.SIGN) {
-			beforeColonTokenList.remove(0);
-
-			accessModifier = AttributeAccessModifier.getModifierFromOOMLSign(nextToken.getValue());
-			if (accessModifier == null) {
-				// TODO
-				ULogger.error("Unexpected token");
-				throw new Exception();
-			}
-		}
-
-		if (beforeColonTokenList.size() == 0) {
-			// TODO
-			ULogger.error("Name not found");
-			throw new Exception();
-		}
-
-		String attributeName = null;
-		List<BehaviorModifier> behaviorModifiers = new ArrayList<>();
-		for (int i = 0; i < beforeColonTokenList.size(); i++) {
-			Token token = beforeColonTokenList.get(i);
-
-			if (token.getType() != TokenType.WORD || token.getType() != TokenType.QUOTED_WORD) {
-				// TODO
-				ULogger.error("Unexpected token");
-				throw new Exception();
-			}
-
-			if (i == beforeColonTokenList.size() - 1) {
-				attributeName = token.getValue();
-			} else {
-				behaviorModifiers.add(new BehaviorModifier(token.getValue()));
-			}
-		}
-
-		nextToken = this.nextToken();
-		if (nextToken.getType() != TokenType.WORD || nextToken.getType() != TokenType.QUOTED_WORD) {
-			// TODO
-			ULogger.error("Missing type");
-			throw new Exception();
-		}
-
-		Type type = new Type(nextToken.getValue());
-
-		nextToken = this.nextToken();
-		if (nextToken.getType() != TokenType.SEMI_COLON) {
-			this.insertTokenInQueue(nextToken);
-		}
-
-		Attribute attribute = new Attribute(attributeName, type);
-		attribute.setAccessModifier(accessModifier);
-		attribute.addBehaviorModifiers(behaviorModifiers);
-
-		this.clazz.addAttribute(attribute);
+	@Override
+	protected void addPackage(Package cPackage) {
+		this.clazz.setPackage(cPackage);
 	}
 
 }

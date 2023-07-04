@@ -8,7 +8,6 @@ import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.comment.MultiLineComment;
 import com.ooml_codegen.models.comment.SingleLineComment;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +17,12 @@ public abstract class Validator {
 	private boolean lexerManagerUsedOnce = false;
 	private final List<Token> unConsumedParserTokenList;
 
+	// TODO : remove this
 	private Token currentToken = null;
 
 	protected final List<Token> unConsumedTokenList = new ArrayList<>();
 
-	protected Validator(LexerManager lexerManager, List<Token> unConsumedParserTokenList) {
+	public Validator(LexerManager lexerManager, List<Token> unConsumedParserTokenList) {
 		this.lexerManager = lexerManager;
 		this.unConsumedParserTokenList = new ArrayList<>(unConsumedParserTokenList);
 	}
@@ -33,7 +33,7 @@ public abstract class Validator {
 
 	public abstract void validate() throws Exception;
 
-	public Token nextToken() throws FileNotFoundException {
+	public Token nextToken() throws Exception {
 		if (this.unConsumedParserTokenList.size() > 0) {
 			this.currentToken = this.unConsumedParserTokenList.get(0);
 			this.unConsumedParserTokenList.remove(0);
@@ -63,7 +63,7 @@ public abstract class Validator {
 		this.unConsumedParserTokenList.add(token);
 	}
 
-	private void consumeComment() throws FileNotFoundException {
+	private void consumeComment() throws Exception {
 		TokenType type = this.currentToken.getType();
 		while (type == TokenType.SINGLE_LINE_COMMENT || type == TokenType.MULTI_LINE_COMMENT) {
 			String value = this.currentToken.getValue();
@@ -84,6 +84,13 @@ public abstract class Validator {
 
 	protected abstract void addComment(Comment comment);
 
-	protected abstract void addPackage(Package cPackage);
+	protected abstract void addPackage(Package cPackage) throws Exception;
+
+	protected Validator newValidator(ValidatorType type, List<Token> unConsumedTokenList) {
+		return switch (type) {
+			case CLASS -> new ClassValidator(this.lexerManager, unConsumedTokenList);
+			case ATTRIBUTE -> new AttributeValidator(this.lexerManager, unConsumedTokenList);
+		};
+	}
 
 }
