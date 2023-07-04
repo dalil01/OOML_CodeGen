@@ -20,8 +20,8 @@ public class AttributeValidator extends Validator {
 
 	private final Attribute attribute = new Attribute();
 
-	public AttributeValidator(LexerManager lexerManager, List<Token> unConsumedTokenList) {
-		super(lexerManager, unConsumedTokenList);
+	public AttributeValidator(LexerManager lexerManager) {
+		super(lexerManager);
 	}
 
 	public Attribute getValidatedAttribute() {
@@ -31,14 +31,14 @@ public class AttributeValidator extends Validator {
 	@Override
 	public void validate() throws Exception {
 		this.validateAccessModifier();
-		this.validateBehaviorModifier();
+		this.validateBehaviorModifiers();
 		this.validateName();
 		this.validateType();
 		this.validateDefaultValue();
 
 		Token nextToken = this.nextToken();
 		if (nextToken.getType() != TokenType.SEMI_COLON) {
-			this.insertTokenInQueue(nextToken);
+			this.insertToken(nextToken);
 		}
 
 		if (!attribute.isValid()) {
@@ -60,41 +60,43 @@ public class AttributeValidator extends Validator {
 
 			this.attribute.setAccessModifier(accessModifier);
 		} else {
-			this.insertTokenInQueue(nextToken);
+			this.insertToken(nextToken);
 		}
 	}
 
-	private void validateBehaviorModifier() throws Exception {
+	private void validateBehaviorModifiers() throws Exception {
 		List<Token> beforeColonTokenList = new ArrayList<>();
 
 		Token nextToken = this.nextToken();
+
 		while (nextToken.getType() != TokenType.COLON) {
+			beforeColonTokenList.add(nextToken);
+
+			nextToken = this.nextToken();
+			System.out.println(nextToken);
+
 			if (nextToken.getType() == TokenType.EOF) {
 				// TODO :
 				ULogger.error("error");
 				throw new Exception();
 			}
-
-			beforeColonTokenList.add(nextToken);
-
-			nextToken = this.nextToken();
 		}
 
 		if (beforeColonTokenList.size() == 0) {
-			this.insertTokenInQueue(nextToken);
+			this.insertToken(nextToken);
 			return;
 		}
 
 		if (beforeColonTokenList.size() == 1) {
-			this.insertTokenInQueue(beforeColonTokenList.get(0));
-			this.insertTokenInQueue(nextToken);
+			this.insertToken(beforeColonTokenList.get(0));
+			this.insertToken(nextToken);
 			return;
 		}
 
-		this.insertTokenInQueue(beforeColonTokenList.get(beforeColonTokenList.size() - 1));
+		this.insertToken(beforeColonTokenList.get(beforeColonTokenList.size() - 1));
 		beforeColonTokenList.remove(beforeColonTokenList.size() - 1);
 
-		this.insertTokenInQueue(nextToken);
+		this.insertToken(nextToken);
 
 		for (Token token : beforeColonTokenList) {
 			this.attribute.addBehaviorModifier(new BehaviorModifier(token.getValue()));
@@ -135,7 +137,7 @@ public class AttributeValidator extends Validator {
 		Token nextToken = this.nextToken();
 
 		if (nextToken.getType() != TokenType.EQUAL) {
-			this.insertTokenInQueue(nextToken);
+			this.insertToken(nextToken);
 			return;
 		}
 

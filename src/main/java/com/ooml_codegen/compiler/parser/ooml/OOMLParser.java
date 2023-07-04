@@ -33,9 +33,8 @@ public class OOMLParser extends Parser {
 	public Stream<IGeneration> parse() throws Exception {
 		Stream.Builder<IGeneration> streamBuilder = Stream.builder();
 
-		Token token = this.nextToken();
+		Token token = this.lexerManager.nextToken();
 		while (token.getType() != TokenType.EOF){
-			//System.out.println(token);
 
 			switch (token.getType()) {
 				case OPENING_CURLY_BRACKET -> {
@@ -56,12 +55,18 @@ public class OOMLParser extends Parser {
 					this.packageContextStack.pop();
 					this.inPackageBlockContext = this.packageContextStack.empty();
 				}
-				case PACKAGE -> this.handlePackageTokens();
-				case CLASS -> streamBuilder.add(this.parseClass());
+				case PACKAGE -> {
+					this.lexerManager.insertToken(token);
+					this.handlePackageTokens();
+				}
+				case CLASS -> {
+					this.unConsumedTokenList.add(token);
+					streamBuilder.add(this.parseClass());
+				}
 				default -> this.unConsumedTokenList.add(token);
 			}
 
-			token = this.nextToken();
+			token = this.lexerManager.nextToken();
 		}
 
 		return streamBuilder.build();
@@ -71,9 +76,9 @@ public class OOMLParser extends Parser {
 		this.packageTokenList.addAll(this.unConsumedTokenList);
 		this.unConsumedTokenList.clear();
 
-		this.packageTokenList.add(this.getCurrentToken());
+		this.packageTokenList.add(this.lexerManager.nextToken());
 
-		Token packageNameToken = this.nextToken();
+		Token packageNameToken = this.lexerManager.nextToken();
 		if (packageNameToken.getType() != TokenType.WORD && packageNameToken.getType() != TokenType.QUOTED_WORD) {
 			// TODO : error
 			ULogger.error("error package name");
@@ -82,7 +87,7 @@ public class OOMLParser extends Parser {
 
 		this.packageTokenList.add(packageNameToken);
 
-		Token nextToken = this.nextToken();
+		Token nextToken = this.lexerManager.nextToken();
 		if (nextToken.getType() != TokenType.COLON) {
 			this.unConsumedTokenList.add(nextToken);
 		}
@@ -90,18 +95,22 @@ public class OOMLParser extends Parser {
 		this.inPackageBlockContext = true;
 	}
 
-	private void updateUnConsumedTokenList() {
+	private void handleUnConsumedTokens() {
 		this.unConsumedTokenList.addAll(0, this.packageTokenList);
+
+		for (Token token : this.unConsumedTokenList) {
+			this.lexerManager.insertToken(token);
+		}
+
+		this.unConsumedTokenList.clear();
 	}
 
 	private IGeneration parseClass() throws Exception {
-		this.updateUnConsumedTokenList();
+		this.handleUnConsumedTokens();
 
-		ClassValidator validator = new ClassValidator(this.getLexerManager(), this.unConsumedTokenList);
+		ClassValidator validator = new ClassValidator(this.lexerManager);
 		validator.validate();
 		Class clazz = validator.getValidatedClass();
-		this.unConsumedTokenList.clear();
-		this.insertTokensBefore(validator.getUnConsumedTokenList());
 
 		// TODO : manage package
 

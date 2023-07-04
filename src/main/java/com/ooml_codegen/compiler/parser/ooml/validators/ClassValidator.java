@@ -19,14 +19,12 @@ import java.util.List;
 
 public class ClassValidator extends Validator {
 
-	private Token currentToken;
-
 	private final Class clazz = new Class();
 
 	private final ContextStack contextStack = new ContextStack();
 
-	public ClassValidator(LexerManager lexerManager, List<Token> unConsumedTokenList) {
-		super(lexerManager, unConsumedTokenList);
+	public ClassValidator(LexerManager lexerManager) {
+		super(lexerManager);
 	}
 
 	public Class getValidatedClass() {
@@ -35,8 +33,6 @@ public class ClassValidator extends Validator {
 
 	@Override
 	public void validate() throws Exception {
-		this.currentToken = this.nextToken();
-
 		this.validateAccessModifier();
 		this.validateBehaviorModifiers();
 		this.validateClassDeclaration();
@@ -48,11 +44,14 @@ public class ClassValidator extends Validator {
 	}
 
 	private void validateAccessModifier() throws Exception {
-		if (this.currentToken.getType() != TokenType.SIGN) {
+		Token nextToken = this.nextToken();
+
+		if (nextToken.getType() != TokenType.SIGN) {
+			this.insertToken(nextToken);
 			return;
 		}
 
-		ClassAccessModifier accessModifier = ClassAccessModifier.getModifierFromOOMLSign(this.currentToken.getValue());
+		ClassAccessModifier accessModifier = ClassAccessModifier.getModifierFromOOMLSign(nextToken.getValue());
 		if (accessModifier == null) {
 			// TODO error
 			ULogger.error("invalid accessModifier");
@@ -60,86 +59,94 @@ public class ClassValidator extends Validator {
 		}
 
 		this.clazz.setAccessModifier(accessModifier);
-		this.currentToken = this.nextToken();
 	}
 
 	private void validateBehaviorModifiers() throws Exception {
-		while (this.currentToken.getType() != TokenType.CLASS) {
-			this.clazz.addBehaviorModifier(new BehaviorModifier(this.currentToken.getValue()));
+		Token nextToken = this.nextToken();
 
-			this.currentToken = this.nextToken();
-			if (this.currentToken.getType() == TokenType.EOF) {
-				break;
+		while (nextToken.getType() != TokenType.CLASS) {
+			if (nextToken.getType() == TokenType.EOF) {
+				return;
 			}
+
+			this.clazz.addBehaviorModifier(new BehaviorModifier(nextToken.getValue()));
+
+			nextToken = this.nextToken();
 		}
+
+		this.insertToken(nextToken);
 	}
 
 	private void validateClassDeclaration() throws Exception {
-		if (this.currentToken.getType() != TokenType.CLASS) {
+		Token nextToken = this.nextToken();
+
+		if (nextToken.getType() != TokenType.CLASS) {
 			ULogger.error("Missing currentToken class");
 			throw new Exception();
 		}
 
 		this.clazz.addKeyword();
 
-		this.currentToken = this.nextToken();
-		if (this.currentToken.getType() != TokenType.WORD && this.currentToken.getType() != TokenType.QUOTED_WORD) {
+		nextToken = this.nextToken();
+		if (nextToken.getType() == TokenType.EOF) {
 			// TODO
 			ULogger.error("Missing classname");
 			throw new Exception();
 		}
 
-		this.clazz.setName(new Name(this.currentToken.getValue()));
+		this.clazz.setName(new Name(nextToken.getValue()));
 	}
 
 	private void validateClassInheritance() throws Exception {
-		this.currentToken = this.nextToken();
-		if (this.currentToken.getType() == TokenType.CLASS_INHERITANCE) {
+		Token nextToken = this.nextToken();
+		if (nextToken.getType() == TokenType.CLASS_INHERITANCE) {
 			List<Token> tokenList = new ArrayList<>();
 
-			while (this.currentToken.getType() != TokenType.EOF) {
-				this.currentToken = this.nextToken();
+			while (nextToken.getType() != TokenType.EOF) {
+				nextToken = this.nextToken();
 
-				if (this.currentToken.getType() == TokenType.INTERFACE_INHERITANCE || this.currentToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
+				if (nextToken.getType() == TokenType.INTERFACE_INHERITANCE
+						|| nextToken.getType() == TokenType.OPENING_CURLY_BRACKET
+						|| nextToken.getType() == TokenType.COLON
+				) {
+					this.insertToken(nextToken);
 					break;
 				}
 
-				tokenList.add(this.currentToken);
+				tokenList.add(nextToken);
 			}
 
-			this.validateInheritances(tokenList, TokenType.CLASS_INHERITANCE);
+			this.validateInheritances(TokenType.CLASS_INHERITANCE, tokenList);
 		}
 	}
 
 	private void validateInterfaceInheritance() throws Exception {
-		if (this.currentToken.getType() == TokenType.INTERFACE_INHERITANCE) {
+		Token nextToken = this.nextToken();
+		if (nextToken.getType() == TokenType.INTERFACE_INHERITANCE) {
 			List<Token> tokenList = new ArrayList<>();
 
-			while (this.currentToken.getType() != TokenType.EOF) {
-				this.currentToken = this.nextToken();
+			while (nextToken.getType() != TokenType.EOF) {
+				nextToken = this.nextToken();
 
-				if (this.currentToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
+				if (nextToken.getType() == TokenType.OPENING_CURLY_BRACKET
+						|| nextToken.getType() == TokenType.COLON
+				) {
+					this.insertToken(nextToken);
 					break;
 				}
 
-				tokenList.add(this.currentToken);
+				tokenList.add(nextToken);
 			}
 
-			this.validateInheritances(tokenList, TokenType.INTERFACE_INHERITANCE);
+			this.validateInheritances(TokenType.INTERFACE_INHERITANCE, tokenList);
 		}
 	}
 
-	private void validateInheritances(List<Token> tokenList, TokenType inheritanceType) throws Exception {
+	private void validateInheritances(TokenType inheritanceType, List<Token> tokenList) throws Exception {
 		for (int i = 0; i < tokenList.size(); i++) {
 			Token token = tokenList.get(i);
 
 			if (i % 2 == 0) {
-				if (token.getType() != TokenType.WORD && token.getType() != TokenType.QUOTED_WORD) {
-					// TODO error
-					ULogger.error("unexpected " + token.getValue());
-					throw new Exception();
-				}
-
 				if (inheritanceType == TokenType.CLASS_INHERITANCE) {
 					this.clazz.addClassInheritance(new ClassInheritance(token.getValue()));
 				} else if (inheritanceType == TokenType.INTERFACE_INHERITANCE) {
@@ -156,31 +163,44 @@ public class ClassValidator extends Validator {
 
 		if (tokenList.size() % 2 == 0) {
 			Token lastToken = tokenList.get(tokenList.size() - 1);
-			if (lastToken.getType() != TokenType.WORD && lastToken.getType() != TokenType.QUOTED_WORD) {
+			if (lastToken.getType() == TokenType.COLON) {
 				// TODO error
-				ULogger.error("Unexpected currentToken " + lastToken.getValue());
+				ULogger.error("Unexpected token " + lastToken.getValue());
 				throw new Exception();
 			}
 		}
 	}
 
 	private void validateClassBody() throws Exception {
-		this.handleClassContext();
+		Token nextToken = this.nextToken();
+		if (nextToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
+			this.contextStack.push(ContextType.CLASS);
+			nextToken = this.nextToken();
+		} else if (nextToken.getType() != TokenType.COLON) {
+			// TODO
+			ULogger.error("Missing : or {");
+			throw new Exception();
+		}
 
 		List<Token> tokenList = new ArrayList<>();
 
-		while (this.currentToken.getType() != TokenType.EOF) {
+		while (nextToken.getType() != TokenType.EOF) {
 			//System.out.println(this.currentToken);
 
-			switch (this.currentToken.getType()) {
+			switch (nextToken.getType()) {
 				case SIGN, WORD, QUOTED_WORD -> {
-					tokenList.add(this.currentToken);
+					tokenList.add(nextToken);
 				}
 				case COLON -> {
-					AttributeValidator attributeValidator = (AttributeValidator) this.newValidator(ValidatorType.ATTRIBUTE, tokenList);
-					attributeValidator.validate();
-					this.clazz.addAttribute(attributeValidator.getValidatedAttribute());
+					this.insertTokens(tokenList);
 					tokenList.clear();
+
+					this.insertToken(nextToken);
+
+					AttributeValidator attributeValidator = this.newAttributValidator();
+					attributeValidator.validate();
+
+					this.clazz.addAttribute(attributeValidator.getValidatedAttribute());
 				}
 				case ACCESS_MODIFIER_BLOCK -> {
 					// TODO manage multiple attributes
@@ -203,16 +223,16 @@ public class ClassValidator extends Validator {
 				}
 				case PACKAGE -> {
 					if (this.contextStack.empty()) {
-						this.unConsumedTokenList.add(this.currentToken);
+						this.unConsumedTokenList.add(nextToken);
 						return;
 					}
 
-					ULogger.error("unexpected token " + this.currentToken.getValue());
+					ULogger.error("unexpected token " + nextToken.getValue());
 					throw new Exception();
 				}
-				case CLASS, ENUM, INTERFACE  -> {
+				case CLASS, ENUM, INTERFACE -> {
 					if (this.contextStack.empty()) {
-						this.unConsumedTokenList.add(this.currentToken);
+						this.unConsumedTokenList.add(nextToken);
 						return;
 					}
 
@@ -220,21 +240,12 @@ public class ClassValidator extends Validator {
 				}
 				default -> {
 					// TODO
-					ULogger.error("unexpected token " + this.currentToken.getValue() + " at " + this.currentToken.getLocation());
+					ULogger.error("unexpected token ");
 					throw new Exception();
 				}
 			}
 
-			this.currentToken = this.nextToken();
-		}
-	}
-
-	private void handleClassContext() throws Exception {
-		if (this.currentToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
-			this.contextStack.push(ContextType.CLASS);
-			this.currentToken = this.nextToken();
-		} else if (this.currentToken.getType() == TokenType.COLON) {
-			this.currentToken = this.nextToken();
+			nextToken = this.nextToken();
 		}
 	}
 

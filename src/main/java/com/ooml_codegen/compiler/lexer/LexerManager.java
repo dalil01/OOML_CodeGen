@@ -3,9 +3,10 @@ package com.ooml_codegen.compiler.lexer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 import java.util.function.BiConsumer;
-
 
 public abstract class LexerManager {
 
@@ -14,6 +15,8 @@ public abstract class LexerManager {
 	protected final File initialFile;
 
 	protected Token currentToken;
+
+	private final List<Token> unConsumedTokenList = new ArrayList<>();
 
 	protected LexerManager(Lexer lexer) {
 		this.stack = new ArrayDeque<>();
@@ -26,6 +29,18 @@ public abstract class LexerManager {
 	}
 
 	public Token nextToken() throws FileNotFoundException{
+		for (Token token : this.unConsumedTokenList) {
+			if (token.getType() == TokenType.IMPORT) {
+				this.manageImport(token);
+				return this.nextToken();
+			}
+
+			this.currentToken = token;
+			this.unConsumedTokenList.remove(0);
+
+			return this.currentToken;
+		}
+
 		if (!stack.isEmpty()) {
 			Token t = this.stack.peek().nextToken();
 
@@ -45,6 +60,14 @@ public abstract class LexerManager {
 		}
 
 		return new Token(TokenType.EOF, this.initialFile.toPath(), 0, 0);
+	}
+
+	public void insertToken(Token token) {
+		this.unConsumedTokenList.add(token);
+	}
+
+	public void insertTokens(List<Token> tokens) {
+		this.unConsumedTokenList.addAll(tokens);
 	}
 
 	public void forEach(BiConsumer<Integer, Token> action) throws FileNotFoundException {

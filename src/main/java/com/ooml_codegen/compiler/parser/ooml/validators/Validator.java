@@ -14,44 +14,25 @@ import java.util.List;
 public abstract class Validator {
 
 	private final LexerManager lexerManager;
-	private boolean lexerManagerUsedOnce = false;
-	private final List<Token> unConsumedParserTokenList;
 
-	// TODO : remove this
 	private Token currentToken = null;
 
 	protected final List<Token> unConsumedTokenList = new ArrayList<>();
 
-	public Validator(LexerManager lexerManager, List<Token> unConsumedParserTokenList) {
+	public Validator(LexerManager lexerManager) {
 		this.lexerManager = lexerManager;
-		this.unConsumedParserTokenList = new ArrayList<>(unConsumedParserTokenList);
-	}
-
-	public List<Token> getUnConsumedTokenList() {
-		return this.unConsumedTokenList;
 	}
 
 	public abstract void validate() throws Exception;
 
 	public Token nextToken() throws Exception {
-		if (this.unConsumedParserTokenList.size() > 0) {
-			this.currentToken = this.unConsumedParserTokenList.get(0);
-			this.unConsumedParserTokenList.remove(0);
+		this.currentToken = this.lexerManager.nextToken();
 
-			if (this.currentToken.getType() == TokenType.PACKAGE) {
-				// We are sure to have the package name in the following token.
-				this.currentToken = this.unConsumedParserTokenList.get(0);
-				this.addPackage(new Package(this.currentToken.getValue()));
-				this.unConsumedParserTokenList.remove(0);
-				this.nextToken();
-			}
-		} else {
-			if (this.lexerManagerUsedOnce) {
-				this.currentToken = this.lexerManager.nextToken();
-			} else {
-				this.currentToken = this.lexerManager.getCurrentToken();
-				this.lexerManagerUsedOnce = true;
-			}
+		if (this.currentToken.getType() == TokenType.PACKAGE) {
+			// We are sure to have the package name in the following token.
+			this.currentToken = this.lexerManager.nextToken();
+			this.addPackage(new Package(this.currentToken.getValue()));
+			this.nextToken();
 		}
 
 		this.consumeComment();
@@ -59,8 +40,20 @@ public abstract class Validator {
 		return this.currentToken;
 	}
 
-	public void insertTokenInQueue(Token token) {
-		this.unConsumedParserTokenList.add(token);
+	public void insertToken(Token token) {
+		this.lexerManager.insertToken(token);
+	}
+
+	public void insertTokens(List<Token> tokens) {
+		this.lexerManager.insertTokens(tokens);
+	}
+
+	protected abstract void addComment(Comment comment);
+
+	protected abstract void addPackage(Package cPackage) throws Exception;
+
+	protected AttributeValidator newAttributValidator() {
+		return new AttributeValidator(this.lexerManager);
 	}
 
 	private void consumeComment() throws Exception {
@@ -80,17 +73,6 @@ public abstract class Validator {
 				break;
 			}
 		}
-	}
-
-	protected abstract void addComment(Comment comment);
-
-	protected abstract void addPackage(Package cPackage) throws Exception;
-
-	protected Validator newValidator(ValidatorType type, List<Token> unConsumedTokenList) {
-		return switch (type) {
-			case CLASS -> new ClassValidator(this.lexerManager, unConsumedTokenList);
-			case ATTRIBUTE -> new AttributeValidator(this.lexerManager, unConsumedTokenList);
-		};
 	}
 
 }
