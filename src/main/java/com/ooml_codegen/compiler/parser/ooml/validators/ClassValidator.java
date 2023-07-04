@@ -181,11 +181,14 @@ public class ClassValidator extends Validator {
 			System.out.println(this.currentToken);
 
 			switch (this.currentToken.getType()) {
-				case SIGN -> {
-					Token sign = this.currentToken;
-
-					//Token new
-
+				case SIGN, WORD, QUOTED_WORD -> {
+					this.unConsumedTokenList.add(this.currentToken);
+				}
+				case COLON -> {
+					// TODO manage attribute
+				}
+				case OPENING_PARENTHESIS -> {
+					// TODO manage constructor or method
 				}
 				case CLOSING_CURLY_BRACKET -> {
 					if (this.contextStack.empty()) {
@@ -219,7 +222,7 @@ public class ClassValidator extends Validator {
 				}
 				default -> {
 					// TODO
-					ULogger.error("unexpected token " + this.currentToken.getValue());
+					ULogger.error("unexpected token " + this.currentToken.getValue() + " at " + this.currentToken.getLocation());
 					throw new Exception();
 				}
 			}
