@@ -9,14 +9,18 @@ public enum GenerationContext {
 	METHODS("methods"),
 	CONSTRUCTORS("constructors"),
 	ATTRIBUTES("attributes"),
+
 	ENUMS_ACCESS_MODIFIER("enumAccessModifier"),
 	ENUMS_NAME("enumName"),
 	ENUMERATIONS("enumerations"),
-
 	ENUM_WITH_VALUE("withValue"),
-
 	ENUM_WITHOUT_VALUE("withoutValue"),
+
+	INTERFACE_ACCESS_MODIFIER("interfaceAccessModifier"),
+	INTERFACE_NAME("interfaceName"),
+	CONSTANTS("constants"),
 	;
+
 
 	private final String value;
 

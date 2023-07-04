@@ -1,0 +1,28 @@
+#if($package)
+package $package;
+#end
+#if($imports && !$imports.isEmpty())
+#foreach($import in $imports)
+import $import;
+#end
+#end
+
+#if($interfaceAccessModifier)
+$interfaceAccessModifier interface $interfaceName {
+#else
+interface $interfaceName {
+#end
+
+#if($constants && !$constants.isEmpty())
+    #foreach($constant in $constants)
+    $constant.toStringJava();
+#end
+#end
+
+#if($methods && !$methods.isEmpty())
+#foreach($method in $methods)
+    $method.toStringJava()();
+
+#end
+#end
+}

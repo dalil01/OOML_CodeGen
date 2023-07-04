@@ -16,6 +16,9 @@ import com.ooml_codegen.models.enums.modifiers.access.EnumAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.ConstructorAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
 import org.w3c.dom.Attr;
+import com.ooml_codegen.models.enums.modifiers.access.ConstantAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.InterfaceAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
 
 import java.util.Map;
 
