@@ -9,6 +9,7 @@ public enum GenerationContext {
 	INTERFACE_ACCESS_MODIFIER("interfaceAccessModifier"),
 	INTERFACE_NAME("interfaceName"),
 	METHODS("methods"),
+	CONSTANTS("constants"),
 	;
 
 

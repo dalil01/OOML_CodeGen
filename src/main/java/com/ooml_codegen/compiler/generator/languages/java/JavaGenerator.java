@@ -9,6 +9,7 @@ import com.ooml_codegen.models.*;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.ConstantAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.InterfaceAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
 
@@ -55,9 +56,11 @@ public class JavaGenerator extends Generator {
 		Interface inter = new Interface("bonjour", new Package("com.ooml.models"), InterfaceAccessModifier.PUBLIC);
 		Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
 		Method method2 = new Method("getMethod2", MethodAccessModifier.DEFAULT, new Type("String"));
+		Constant constant1 = new Constant("age", new Type("int"), "10", ConstantAccessModifier.DEFAULT);
 
 		inter.addMethod(method);
 		inter.addMethod(method2);
+		inter.addConstant(constant1);
 
 		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
 		generator.generate(inter);

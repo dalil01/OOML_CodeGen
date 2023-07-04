@@ -13,6 +13,12 @@ $interfaceAccessModifier interface $interfaceName {
 interface $interfaceName {
 #end
 
+#if($constants && !$constants.isEmpty())
+    #foreach($constant in $constants)
+    $constant.toStringJava();
+#end
+#end
+
 #if($methods && !$methods.isEmpty())
 #foreach($method in $methods)
     $method.toStringJava()();

@@ -14,7 +14,7 @@ public class Interface implements IGeneration {
     private final String name;
     private final Package iPackage;
     private final InterfaceAccessModifier accessModifier;
-    //private final List<Attribute> attributes = new ArrayList<>();
+    private final List<Constant> constants = new ArrayList<>();
     private final List<Method> methods = new ArrayList<>();
 
     public Interface(String name, Package iPackage, InterfaceAccessModifier accessModifier) {
@@ -38,10 +38,17 @@ public class Interface implements IGeneration {
     public boolean addMethod(Method method) {
         return this.methods.add(method);
     }
-
     public List<Method> getMethods() {
         return this.methods;
     }
+
+    public boolean addConstant(Constant constant) {
+        return this.constants.add(constant);
+    }
+    public List<Constant> getConstants() {
+        return this.constants;
+    }
+
 
     @Override
     public Map<GenerationContext, Object> getGenerationContext(GeneratorType type) {
@@ -55,6 +62,7 @@ public class Interface implements IGeneration {
         });
         map.put(GenerationContext.INTERFACE_NAME, this.name);
         map.put(GenerationContext.METHODS, this.methods);
+        map.put(GenerationContext.CONSTANTS, this.constants);
         return map;
     }
 
