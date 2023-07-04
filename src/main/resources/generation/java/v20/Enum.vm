@@ -1,0 +1,31 @@
+#if($package)
+package $package;
+#end
+
+#if($imports && !$imports.isEmpty())
+#foreach($import in $imports)
+import $import;
+#end
+#end
+
+#if($enumAccessModifier)
+$enumAccessModifier enum $enumName {
+#else
+enum $enumName {
+#end
+#if($enumerations && !$enumerations.isEmpty())
+    $enumerations;
+#end
+    private final Object value;
+#if($withValue)
+    $enumName(Object value){ this.value = value; }
+#end
+
+#if($withoutValue)
+    $enumName() { this.value = ordinal(); }
+#end
+
+#if($withValue)
+    public Object getValue() { return this.value; }
+#end
+}
