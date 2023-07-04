@@ -1,4 +1,4 @@
-package com.ooml.models;
+package com.ooml_java_generate_files;
 
 public class User {
 
@@ -6,7 +6,10 @@ public class User {
     public User() {
     }
 
-    public String methodTest() {
+    public String getMethod() {
+    }
+
+    public String getMethod2() {
     }
 
 }

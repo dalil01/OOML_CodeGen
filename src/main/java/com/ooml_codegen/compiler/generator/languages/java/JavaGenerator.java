@@ -59,26 +59,61 @@ public class JavaGenerator extends Generator {
             return true;
         }
 
+        if (obj instanceof Interface) {
+            this.setTemplate(templatePathPrefix + "Interface.vm");
+
+            return true;
+        }
+
         return false;
     }
 
 	public static void main(String[] args) {
+
+        Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
+        Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
+
+        // class
 		Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
-
-		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
-
-		Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
-		Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
-
-		Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PUBLIC);
+//		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
+		Class clazz = new Class("User", new Package("com.ooml_java_generate_files"), ClassAccessModifier.PUBLIC);
 
 		clazz.addConstructor(constructor);
-		clazz.addAttribute(attribute);
+//		clazz.addAttribute(attribute);
 		clazz.addMethod(method);
 		clazz.addMethod(method2);
 
-		Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
-		generator.generate(clazz);
+        // enum
+        Enum anenum = new Enum("Color", new Package("com.ooml_java_generate_files"), EnumAccessModifier.PUBLIC);
+        EnumProperty red = new EnumProperty("RED", "red");
+        EnumProperty orange = new EnumProperty("ORANGE", "orange");
+        EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
+        EnumProperty green = new EnumProperty("GREEN", "green");
+        EnumProperty weight = new EnumProperty("WEIGH", "84.5");
+        EnumProperty blue = new EnumProperty("BLUE");
+
+        anenum.addEnumeration(red);
+        anenum.addEnumeration(orange);
+        anenum.addEnumeration(yellow);
+        anenum.addEnumeration(green);
+        anenum.addEnumeration(weight);
+        anenum.addEnumeration(blue);
+
+        // interface
+        Interface inter = new Interface("Inter", new Package("com.ooml_java_generate_files"), InterfaceAccessModifier.PUBLIC);
+        Constant constant1 = new Constant("age", new Type("int"), "10", ConstantAccessModifier.DEFAULT);
+
+        inter.addMethod(method);
+        inter.addMethod(method2);
+        inter.addConstant(constant1);
+
+
+        // generate
+        Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
+        generator.generate(clazz);
+        generator.generate(anenum);
+        generator.generate(inter);
+
 	}
 
 }

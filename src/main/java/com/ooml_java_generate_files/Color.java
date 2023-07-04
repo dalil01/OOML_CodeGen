@@ -6,15 +6,12 @@ public enum Color {
 	ORANGE("orange"),
 	YELLOW("yellow"),
 	GREEN("green"),
+	WEIGH("84.5"),
 	BLUE;
+    private final Object value;
+    Color(Object value){ this.value = value; }
 
-    private final String value;
+    Color() { this.value = ordinal(); }
 
-    Color(String value){ this.value = value; }
-
-    Color() { this.value = ""; }
-
-    public String getValue() { return this.value; }
-
-
+    public Object getValue() { return this.value; }
 }
