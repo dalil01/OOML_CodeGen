@@ -5,6 +5,7 @@ import com.ooml_codegen.compiler.generator.languages.java.JavaGenerator;
 import com.ooml_codegen.models.*;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Package;
+import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.ConstructorAccessModifier;
 import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
@@ -35,8 +36,10 @@ public class JavaGeneratorTest {
 
         clazz.addConstructor(constructor);
 
-//        Method method = new Method("methodTest", MethodAccessModifier.PUBLIC, new Type("String"));
-//        clazz.addMethod(method);
+		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("int"), "5");
+        Method method = new Method("methodTest", MethodAccessModifier.PUBLIC, new Type("int"));
+        clazz.addAttribute(attribute);
+        clazz.addMethod(method);
 
         javaGenerator.setTemplate("java/v20/Class.vm");
         javaGenerator.generate(clazz);

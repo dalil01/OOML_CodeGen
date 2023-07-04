@@ -77,7 +77,7 @@ public class JavaGenerator extends Generator {
 
         // class
 		Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
-//		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
+		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
 		Class clazz = new Class("User", new Package(filesPackage), ClassAccessModifier.PUBLIC);
 
 		clazz.addConstructor(constructor);

@@ -30,6 +30,7 @@ class $className {
 #if($methods && !$methods.isEmpty())
 #foreach($method in $methods)
     $method.toStringJava()() {
+        return attribute;
     }
 
 #end
