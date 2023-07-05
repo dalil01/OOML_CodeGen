@@ -76,8 +76,4 @@ public class Attribute {
 		this.generationOrder.add(comment);
 	}
 
-	public boolean isValid() {
-		return this.name != null && this.type != null;
-	}
-
 }

@@ -21,7 +21,7 @@ public abstract class Generator {
 		this.engine.init();
 	}
 
-	public abstract void generate(IGeneration obj);
+	public abstract void generate(ICodeGenNode obj);
 
 	protected void setTemplate(String filePath) {
 		this.template = this.engine.getTemplate("generation/" + filePath);

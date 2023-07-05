@@ -7,6 +7,7 @@ import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.comment.MultiLineComment;
 import com.ooml_codegen.models.comment.SingleLineComment;
 import com.ooml_codegen.validator.Validator;
+import com.ooml_codegen.validator.ooml.nodes.OOMLAttributeValidator;
 
 public abstract class OOMLValidator extends Validator {
 

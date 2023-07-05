@@ -1,4 +1,4 @@
-package com.ooml_codegen.validator.ooml;
+package com.ooml_codegen.validator.ooml.nodes;
 
 import com.ooml_codegen.lexer.LexerManager;
 import com.ooml_codegen.lexer.Token;
@@ -14,6 +14,7 @@ import com.ooml_codegen.models.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.models.inheritance.ClassInheritance;
 import com.ooml_codegen.models.inheritance.InterfaceInheritance;
 import com.ooml_codegen.utils.ULogger;
+import com.ooml_codegen.validator.ooml.OOMLValidator;
 
 import java.util.ArrayList;
 import java.util.List;

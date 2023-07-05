@@ -1,13 +1,13 @@
 package com.ooml_codegen.parser.ooml;
 
-import com.ooml_codegen.generator.IGeneration;
+import com.ooml_codegen.generator.ICodeGenNode;
 import com.ooml_codegen.lexer.Token;
 import com.ooml_codegen.lexer.TokenType;
 import com.ooml_codegen.lexer.ooml.OOMLLexerManager;
 import com.ooml_codegen.parser.Parser;
 import com.ooml_codegen.utils.UContextStack;
 import com.ooml_codegen.utils.enums.ContextType;
-import com.ooml_codegen.validator.ooml.OOMLClassValidator;
+import com.ooml_codegen.validator.ooml.nodes.OOMLClassValidator;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.utils.ULogger;
 
@@ -30,8 +30,8 @@ public class OOMLParser extends Parser {
 	}
 
 	@Override
-	public Stream<IGeneration> parse() throws Exception {
-		Stream.Builder<IGeneration> streamBuilder = Stream.builder();
+	public Stream<ICodeGenNode> parse() throws Exception {
+		Stream.Builder<ICodeGenNode> streamBuilder = Stream.builder();
 
 		Token token = this.lexerManager.nextToken();
 		while (token.getType() != TokenType.EOF){
@@ -105,7 +105,7 @@ public class OOMLParser extends Parser {
 		this.unConsumedTokenList.clear();
 	}
 
-	private IGeneration parseClass() throws Exception {
+	private ICodeGenNode parseClass() throws Exception {
 		this.handleUnConsumedTokens();
 
 		OOMLClassValidator validator = new OOMLClassValidator(this.lexerManager);

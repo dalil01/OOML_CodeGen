@@ -1,4 +1,4 @@
-package com.ooml_codegen.validator.ooml;
+package com.ooml_codegen.validator.ooml.nodes;
 
 import com.ooml_codegen.lexer.LexerManager;
 import com.ooml_codegen.lexer.Token;
@@ -11,6 +11,7 @@ import com.ooml_codegen.models.Type;
 import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.modifiers.access.AttributeAccessModifier;
 import com.ooml_codegen.utils.ULogger;
+import com.ooml_codegen.validator.ooml.OOMLValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +39,6 @@ public class OOMLAttributeValidator extends OOMLValidator {
 		Token nextToken = this.nextToken();
 		if (nextToken.getType() != TokenType.SEMI_COLON) {
 			this.insertToken(nextToken);
-		}
-
-		if (!attribute.isValid()) {
-			// TODO
-			ULogger.error("Invalid attribute");
-			throw new Exception();
 		}
 	}
 

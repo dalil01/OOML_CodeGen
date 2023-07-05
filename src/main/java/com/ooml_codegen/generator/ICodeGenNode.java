@@ -1,11 +1,8 @@
 package com.ooml_codegen.generator;
 
-import com.ooml_codegen.generator.GeneratorType;
-import com.ooml_codegen.generator.GenerationContext;
-
 import java.util.Map;
 
-public interface IGeneration {
+public interface ICodeGenNode {
 
 	Map<GenerationContext, Object> getGenerationContext(GeneratorType type);
 

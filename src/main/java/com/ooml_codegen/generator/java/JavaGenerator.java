@@ -3,7 +3,7 @@ package com.ooml_codegen.generator.java;
 import com.ooml_codegen.generator.Generator;
 import com.ooml_codegen.generator.GeneratorType;
 import com.ooml_codegen.generator.GenerationContext;
-import com.ooml_codegen.generator.IGeneration;
+import com.ooml_codegen.generator.ICodeGenNode;
 import com.ooml_codegen.models.Class;
 
 import java.util.Map;
@@ -12,7 +12,7 @@ public class JavaGenerator extends Generator {
 
 	// TODO : Need meta data (java version, ...)
 	@Override
-	public void generate(IGeneration obj) {
+	public void generate(ICodeGenNode obj) {
 		Map<GenerationContext, Object> context = obj.getGenerationContext(GeneratorType.JAVA);
 
 		// TODO : Check & Add missing contexts & make reverse engineering to get existed file content & merge data
@@ -28,7 +28,7 @@ public class JavaGenerator extends Generator {
 		}
 	}
 
-	private boolean autoSetTemplate(IGeneration obj) {
+	private boolean autoSetTemplate(ICodeGenNode obj) {
 		String templatePathPrefix = "java/v20/";
 
 		if (obj instanceof Class) {

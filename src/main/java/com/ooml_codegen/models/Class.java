@@ -2,7 +2,7 @@ package com.ooml_codegen.models;
 
 import com.ooml_codegen.generator.GeneratorType;
 import com.ooml_codegen.generator.GenerationContext;
-import com.ooml_codegen.generator.IGeneration;
+import com.ooml_codegen.generator.ICodeGenNode;
 import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.modifiers.BehaviorModifier;
 import com.ooml_codegen.models.modifiers.access.ClassAccessModifier;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Class implements IGeneration {
+public class Class implements ICodeGenNode {
 
 	private Name name;
 	private Package cPackage;
