@@ -99,9 +99,11 @@ public class OOMLLexer extends Lexer {
                 this.cStream.next();
                 // check for next character to find access modifier block
                 if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
+                    String colon = String.valueOf(this.cStream.getCurrentChar());
+
                     // matched "+:" or "#:"
                     this.cStream.next();
-                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, character, this.getFile().toPath(), this.lineN, this.lineN);
+                    return new Token(TokenType.ACCESS_MODIFIER_BLOCK, character + colon, this.getFile().toPath(), this.lineN, this.lineN);
                 }
 
                 return new Token(TokenType.SIGN, character, this.getFile().toPath(), this.lineN, this.lineN);

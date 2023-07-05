@@ -7,7 +7,6 @@ import com.ooml_codegen.compiler.parser.ContextStack;
 import com.ooml_codegen.compiler.parser.ContextType;
 import com.ooml_codegen.models.Attribute;
 import com.ooml_codegen.models.BehaviorModifier;
-import com.ooml_codegen.models.Package;
 import com.ooml_codegen.models.Type;
 import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
@@ -50,7 +49,7 @@ public class AttributeValidator extends Validator {
 
 	private void validateAccessModifier() throws Exception {
 		Token nextToken = this.nextToken();
-		if (nextToken.getType() == TokenType.SIGN) {
+		if (nextToken.getType() == TokenType.SIGN || nextToken.getType() == TokenType.ACCESS_MODIFIER_BLOCK) {
 			AttributeAccessModifier accessModifier = AttributeAccessModifier.getModifierFromOOMLSign(nextToken.getValue());
 			if (accessModifier == null) {
 				// TODO
@@ -73,7 +72,6 @@ public class AttributeValidator extends Validator {
 			beforeColonTokenList.add(nextToken);
 
 			nextToken = this.nextToken();
-			System.out.println(nextToken);
 
 			if (nextToken.getType() == TokenType.EOF) {
 				// TODO :
@@ -169,21 +167,15 @@ public class AttributeValidator extends Validator {
 				}
 			}
 
-			attribute.setValue(s.toString().trim());
+			this.attribute.setValue(s.toString().trim());
 		} else {
-			attribute.setValue(nextToken.getValue());
+			this.attribute.setValue(nextToken.getValue());
 		}
 	}
 
 	@Override
 	protected void addComment(Comment comment) {
 		this.attribute.addComment(comment);
-	}
-
-	@Override
-	protected void addPackage(Package cPackage) throws Exception {
-		ULogger.error("Invalid syntax");
-		throw new Exception();
 	}
 
 }

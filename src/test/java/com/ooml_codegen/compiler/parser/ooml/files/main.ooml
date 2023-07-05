@@ -16,6 +16,10 @@
 	 + abstract static class /* */ User -> AbstractUser, Abs ~> ICustomer {
 		// Attributs */
 		- id: int = (new Arraylist());
+		#:
+			firstname: string;
+			lastname: String;
+		- roles: Roles
 		/*
 		+ firstname: string
 		static lastname: String;
@@ -35,4 +39,6 @@
 
 	 }
 
++ class Person:
 
++ class Animal:

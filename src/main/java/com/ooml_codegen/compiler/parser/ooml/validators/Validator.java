@@ -8,7 +8,6 @@ import com.ooml_codegen.models.comment.Comment;
 import com.ooml_codegen.models.comment.MultiLineComment;
 import com.ooml_codegen.models.comment.SingleLineComment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Validator {
@@ -16,8 +15,6 @@ public abstract class Validator {
 	private final LexerManager lexerManager;
 
 	private Token currentToken = null;
-
-	protected final List<Token> unConsumedTokenList = new ArrayList<>();
 
 	public Validator(LexerManager lexerManager) {
 		this.lexerManager = lexerManager;
@@ -27,13 +24,6 @@ public abstract class Validator {
 
 	public Token nextToken() throws Exception {
 		this.currentToken = this.lexerManager.nextToken();
-
-		if (this.currentToken.getType() == TokenType.PACKAGE) {
-			// We are sure to have the package name in the following token.
-			this.currentToken = this.lexerManager.nextToken();
-			this.addPackage(new Package(this.currentToken.getValue()));
-			this.nextToken();
-		}
 
 		this.consumeComment();
 
@@ -49,8 +39,6 @@ public abstract class Validator {
 	}
 
 	protected abstract void addComment(Comment comment);
-
-	protected abstract void addPackage(Package cPackage) throws Exception;
 
 	protected AttributeValidator newAttributValidator() {
 		return new AttributeValidator(this.lexerManager);

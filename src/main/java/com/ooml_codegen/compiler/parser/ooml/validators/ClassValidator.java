@@ -33,6 +33,7 @@ public class ClassValidator extends Validator {
 
 	@Override
 	public void validate() throws Exception {
+		this.validatePackage();
 		this.validateAccessModifier();
 		this.validateBehaviorModifiers();
 		this.validateClassDeclaration();
@@ -41,6 +42,17 @@ public class ClassValidator extends Validator {
 		this.validateClassBody();
 
 		System.out.println(this.clazz.getGenerationOrder());
+	}
+
+	private void validatePackage() throws Exception {
+		Token nextToken = this.nextToken();
+		if (nextToken.getType() == TokenType.PACKAGE) {
+			// We are sure to have the package name in the following token.
+			nextToken = this.nextToken();
+			this.clazz.setPackage(new Package(nextToken.getValue()));
+		} else {
+			this.insertToken(nextToken);
+		}
 	}
 
 	private void validateAccessModifier() throws Exception {
@@ -117,6 +129,8 @@ public class ClassValidator extends Validator {
 			}
 
 			this.validateInheritances(TokenType.CLASS_INHERITANCE, tokenList);
+		} else {
+			this.insertToken(nextToken);
 		}
 	}
 
@@ -139,6 +153,8 @@ public class ClassValidator extends Validator {
 			}
 
 			this.validateInheritances(TokenType.INTERFACE_INHERITANCE, tokenList);
+		} else {
+			this.insertToken(nextToken);
 		}
 	}
 
@@ -176,24 +192,35 @@ public class ClassValidator extends Validator {
 		if (nextToken.getType() == TokenType.OPENING_CURLY_BRACKET) {
 			this.contextStack.push(ContextType.CLASS);
 			nextToken = this.nextToken();
-		} else if (nextToken.getType() != TokenType.COLON) {
+		} else if (nextToken.getType() == TokenType.COLON) {
+			nextToken = this.nextToken();
+		} else {
 			// TODO
 			ULogger.error("Missing : or {");
 			throw new Exception();
 		}
 
-		List<Token> tokenList = new ArrayList<>();
+		List<Token> unConsumedTokenList = new ArrayList<>();
+		Token currentAccessModifierBlock = null;
 
 		while (nextToken.getType() != TokenType.EOF) {
-			//System.out.println(this.currentToken);
+			//System.out.println(nextToken);
 
 			switch (nextToken.getType()) {
 				case SIGN, WORD, QUOTED_WORD -> {
-					tokenList.add(nextToken);
+					if (nextToken.getType() == TokenType.SIGN) {
+						currentAccessModifierBlock = null;
+					}
+
+					unConsumedTokenList.add(nextToken);
 				}
 				case COLON -> {
-					this.insertTokens(tokenList);
-					tokenList.clear();
+					if (currentAccessModifierBlock != null) {
+						this.insertToken(currentAccessModifierBlock);
+					}
+
+					this.insertTokens(unConsumedTokenList);
+					unConsumedTokenList.clear();
 
 					this.insertToken(nextToken);
 
@@ -203,7 +230,7 @@ public class ClassValidator extends Validator {
 					this.clazz.addAttribute(attributeValidator.getValidatedAttribute());
 				}
 				case ACCESS_MODIFIER_BLOCK -> {
-					// TODO manage multiple attributes
+					currentAccessModifierBlock = nextToken;
 				}
 				case OPENING_PARENTHESIS -> {
 					// TODO manage constructor or method
@@ -223,7 +250,9 @@ public class ClassValidator extends Validator {
 				}
 				case PACKAGE -> {
 					if (this.contextStack.empty()) {
-						this.unConsumedTokenList.add(nextToken);
+						this.insertTokens(unConsumedTokenList);
+						unConsumedTokenList.clear();
+						this.insertToken(nextToken);
 						return;
 					}
 
@@ -232,7 +261,9 @@ public class ClassValidator extends Validator {
 				}
 				case CLASS, ENUM, INTERFACE -> {
 					if (this.contextStack.empty()) {
-						this.unConsumedTokenList.add(nextToken);
+						this.insertTokens(unConsumedTokenList);
+						unConsumedTokenList.clear();
+						this.insertToken(nextToken);
 						return;
 					}
 
@@ -252,11 +283,6 @@ public class ClassValidator extends Validator {
 	@Override
 	protected void addComment(Comment comment) {
 		this.clazz.addComment(comment);
-	}
-
-	@Override
-	protected void addPackage(Package cPackage) {
-		this.clazz.setPackage(cPackage);
 	}
 
 }
