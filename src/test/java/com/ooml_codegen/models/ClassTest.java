@@ -1,13 +1,8 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
-import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
-import com.ooml_codegen.models.enums.modifiers.access.ConstructorAccessModifier;
-import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
+import com.ooml_codegen.models.modifiers.access.ClassAccessModifier;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class ClassTest {
 

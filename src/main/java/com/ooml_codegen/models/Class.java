@@ -1,10 +1,11 @@
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.compiler.generator.GeneratorType;
-import com.ooml_codegen.compiler.generator.enums.GenerationContext;
-import com.ooml_codegen.compiler.generator.interfaces.IGeneration;
+import com.ooml_codegen.generator.GeneratorType;
+import com.ooml_codegen.generator.GenerationContext;
+import com.ooml_codegen.generator.IGeneration;
 import com.ooml_codegen.models.comment.Comment;
-import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
+import com.ooml_codegen.models.modifiers.BehaviorModifier;
+import com.ooml_codegen.models.modifiers.access.ClassAccessModifier;
 import com.ooml_codegen.models.inheritance.ClassInheritance;
 import com.ooml_codegen.models.inheritance.Inheritance;
 import com.ooml_codegen.models.inheritance.InterfaceInheritance;

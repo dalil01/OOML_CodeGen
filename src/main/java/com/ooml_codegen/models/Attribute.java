@@ -1,7 +1,8 @@
 package com.ooml_codegen.models;
 
 import com.ooml_codegen.models.comment.Comment;
-import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
+import com.ooml_codegen.models.modifiers.BehaviorModifier;
+import com.ooml_codegen.models.modifiers.access.AttributeAccessModifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,9 @@ public class Attribute {
 		return this.behaviorModifierList;
 	}
 
-	public boolean addBehaviorModifier(BehaviorModifier behaviorModifier) {
+	public void addBehaviorModifier(BehaviorModifier behaviorModifier) {
 		this.generationOrder.add(behaviorModifier);
-		return this.behaviorModifierList.add(behaviorModifier);
+		this.behaviorModifierList.add(behaviorModifier);
 	}
 
 	public String getName() {
