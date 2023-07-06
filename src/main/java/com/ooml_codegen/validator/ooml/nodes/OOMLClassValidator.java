@@ -222,7 +222,7 @@ public class OOMLClassValidator extends OOMLValidator {
 					}
 
 					this.insertTokens(unConsumedTokenList);
-					unConsumedTokenList.clear();
+					unConsumedTokenList = new ArrayList<>();
 
 					this.insertToken(nextToken);
 

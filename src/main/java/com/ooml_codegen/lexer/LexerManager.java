@@ -2,10 +2,7 @@ package com.ooml_codegen.lexer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public abstract class LexerManager {
@@ -16,7 +13,7 @@ public abstract class LexerManager {
 
 	protected Token currentToken;
 
-	private final List<Token> unConsumedTokenList = new ArrayList<>();
+	private final LinkedList<Token> unConsumedTokenList = new LinkedList<>();
 
 	protected LexerManager(Lexer lexer) {
 		this.stack = new ArrayDeque<>();
@@ -36,7 +33,7 @@ public abstract class LexerManager {
 			}
 
 			this.currentToken = token;
-			this.unConsumedTokenList.remove(0);
+			this.unConsumedTokenList.removeFirst();
 
 			return this.currentToken;
 		}
