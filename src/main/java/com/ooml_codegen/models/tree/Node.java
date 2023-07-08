@@ -1,15 +1,12 @@
 package com.ooml_codegen.models.tree;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public abstract class Node {
 
 	private final LinkedList<Node> children = new LinkedList<>();
-	private final LinkedList<Node> nextNodes = new LinkedList<>();
-	private final Map<Class<? extends Node>, Integer> nbTimeByChild = new HashMap<>();
+	private final Map<Class<? extends Node>, Integer> nTimeByChildClass = new HashMap<>();
 
 	protected abstract Map<Class<? extends Node>, NbTime> getNbTimeBySupportedChild();
 
@@ -22,17 +19,18 @@ public abstract class Node {
 		Class<? extends Node> nodeClass = node.getClass();
 
 		NbTime nbTime = this.getNbTimeBySupportedChild().get(nodeClass);
-		if (nbTime == NbTime.ONE && this.nbTimeByChild.containsKey(nodeClass)) {
+		if (nbTime == NbTime.ONE && this.nTimeByChildClass.containsKey(nodeClass)) {
 			throw new UnsupportedOperationException("This node cannot be added more than once.");
 		}
 
-		if (this.hasChildren()) {
-			Node lastChild = this.children.getLast();
-			lastChild.addNext(node);
+		this.children.add(node);
+
+		Integer nTime = this.nTimeByChildClass.get(nodeClass);
+		if (nTime == null) {
+			nTime = 1;
 		}
 
-		this.children.add(node);
-		this.nbTimeByChild.put(nodeClass, 1);
+		this.nTimeByChildClass.put(nodeClass, nTime + 1);
 	}
 
 	public boolean hasChildren() {
@@ -43,53 +41,52 @@ public abstract class Node {
 		return this.children.contains(node);
 	}
 
-	public Node getNextChild() {
-		if (this.hasChildren()) {
-			return this.children.removeFirst();
+	public Integer findNTimeChildClass(Class<? extends Node> nodeClass) {
+		Integer nTime = this.nTimeByChildClass.get(nodeClass);
+		if (nTime == null) {
+			return 0;
 		}
 
-		return null;
-	}
-
-	public boolean hasRequiredChildren() {
-		// TODO
-		return false;
-	}
-
-	public void addNext(Node node) {
-		if (this.hasNext()) {
-			Node lastNext = this.nextNodes.getLast();
-			lastNext.addNext(node);
-		}
-
-		this.nextNodes.add(node);
-	}
-
-	public boolean hasNext() {
-		return !this.nextNodes.isEmpty();
-	}
-
-	public Node getNext() {
-		if (this.hasNext()) {
-			return this.nextNodes.removeFirst();
-		}
-
-		return null;
+		return nTime;
 	}
 
 	public void traverse(Consumer<Node> action) {
-		// TODO
+		this.children.forEach((node) -> {
+			action.accept(node);
+
+			if (!(node instanceof Leaf)) {
+				node.traverse(action);
+			}
+		});
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder s = new StringBuilder();
+		return this.getClass().getSimpleName();
+	}
 
-		this.traverse(node -> {
-			// TODO
-		});
+	public void printTree() {
+		System.out.println("°");
+		printTreeHelper("", true, new HashSet<>());
+	}
 
-		return s.toString();
+	private void printTreeHelper(String prefix, boolean isTail, Set<Node> visitedNodes) {
+		String arrow = isTail ? "└── " : "├── ";
+		System.out.println(prefix + arrow + this);
+
+		visitedNodes.add(this);
+
+		for (int i = 0; i < this.children.size(); i++) {
+			Node child = this.children.get(i);
+			String childPrefix = prefix + (isTail ? "    " : "│   ");
+
+			if (!visitedNodes.contains(child)) {
+				boolean isChildTail = (i == this.children.size() - 1);
+				child.printTreeHelper(childPrefix, isChildTail, visitedNodes);
+			} else {
+				System.out.println(childPrefix + "├── " + child + " (Already Visited)");
+			}
+		}
 	}
 
 	private boolean isSupportedChild(Node node) {

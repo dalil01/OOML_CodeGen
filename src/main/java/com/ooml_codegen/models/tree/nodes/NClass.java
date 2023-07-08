@@ -14,16 +14,14 @@ public class NClass extends Node implements ICodeGenNode {
 	@Override
 	protected Map<Class<? extends Node>, NbTime> getNbTimeBySupportedChild() {
 		return Map.of(
-			LComment.class, NbTime.ZERO_OR_MULTI,
-			LPackage.class, NbTime.ONE,
-			LName.class, NbTime.ONE,
-			/*
-			LAccessModifierDefault.class, NbTime.ONE,
-			LAccessModifierPublic.class,
-			LAccessModifierPrivate.class,
-
-			 */
-			LNonAccessModifier.class, NbTime.ZERO_OR_MULTI
+				LComment.class, NbTime.ZERO_OR_MULTI,
+				LPackage.class, NbTime.ONE,
+				LName.class, NbTime.ONE,
+				LAccessModifier.class, NbTime.ONE,
+				NAttribut.class, NbTime.ZERO_OR_ONE,
+				NConstructor.class, NbTime.ONE_OR_MULTI,
+				NMethod.class, NbTime.ONE_OR_MULTI,
+				NClass.class, NbTime.ZERO_OR_MULTI
 		);
 	}
 
@@ -35,6 +33,29 @@ public class NClass extends Node implements ICodeGenNode {
 	@Override
 	public String getFileName() {
 		return null;
+	}
+
+	public static void main(String[] args) {
+		NClass nClass = new NClass();
+
+		NAttribut attribut = new NAttribut();
+		attribut.addChild(new LCommentSingleLine("ok"));
+
+		nClass.addChild(attribut);
+
+		NConstructor con = new NConstructor();
+		con.addChild(new NParameter());
+
+		nClass.addChild(con);
+
+
+		NConstructor con2 = new NConstructor();
+		con2.addChild(new NParameter());
+
+		nClass.addChild(con2);
+
+
+		nClass.printTree();
 	}
 
 }

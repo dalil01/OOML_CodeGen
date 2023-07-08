@@ -2,9 +2,9 @@ package com.ooml_codegen.models.tree.nodes.leafs;
 
 import com.ooml_codegen.models.tree.Leaf;
 
-public abstract class LComment extends Leaf {
+public class LValue extends Leaf {
 
-	public LComment(String value) {
+	public LValue(String value) {
 		super(value);
 	}
 

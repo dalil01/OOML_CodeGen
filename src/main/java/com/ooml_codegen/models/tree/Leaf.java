@@ -30,11 +30,6 @@ public abstract class Leaf extends Node {
 		return false;
 	}
 
-	@Override
-	public Node getNextChild() {
-		return null;
-	}
-
 	public String getValue() {
 		return Arrays.toString(this.value);
 	}
