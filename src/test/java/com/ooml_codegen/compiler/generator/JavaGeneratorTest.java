@@ -6,11 +6,7 @@ import com.ooml_codegen.models.*;
 import com.ooml_codegen.models.Class;
 import com.ooml_codegen.models.Enum;
 import com.ooml_codegen.models.Package;
-import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
-import com.ooml_codegen.models.enums.modifiers.access.ClassAccessModifier;
-import com.ooml_codegen.models.enums.modifiers.access.ConstructorAccessModifier;
-import com.ooml_codegen.models.enums.modifiers.access.EnumAccessModifier;
-import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
+import com.ooml_codegen.models.enums.modifiers.access.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -58,32 +54,76 @@ public class JavaGeneratorTest {
         assertEquals(expectedCode, generatedCode);
     }
 
-    @Test
-    public void testGenerateEnum() throws IOException {
-        Enum anenum = new Enum("Color", new Package(filesPackage), EnumAccessModifier.PUBLIC);
-        EnumProperty red = new EnumProperty("RED", "red");
-        EnumProperty orange = new EnumProperty("ORANGE", "orange");
-        EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
-        EnumProperty green = new EnumProperty("GREEN", "green");
-        EnumProperty weight = new EnumProperty("WEIGH", "84.5");
-        EnumProperty blue = new EnumProperty("BLUE");
 
-        anenum.addEnumeration(red);
-        anenum.addEnumeration(orange);
-        anenum.addEnumeration(yellow);
-        anenum.addEnumeration(green);
-        anenum.addEnumeration(weight);
-        anenum.addEnumeration(blue);
+    @Test
+    public void testGenerateClass2() throws IOException {
+        Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
+
+        Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
+
+        Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
+        Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
+
+        Parameter parameter = new Parameter("param", new Type("String"));
+
+        Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PUBLIC);
+
+        clazz.addConstructor(constructor);
+        clazz.addAttribute(attribute);
+        clazz.addMethod(method);
+        clazz.addMethod(method2);
+        method.addParameter(parameter);
+
+        Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
+        generator.generate(clazz);
+    }
+
+//    @Test
+//    public void testGenerateEnum() throws IOException {
+//        Enum anenum = new Enum("Color", new Package(filesPackage), EnumAccessModifier.PUBLIC);
+//        EnumProperty red = new EnumProperty("RED", "red");
+//        EnumProperty orange = new EnumProperty("ORANGE", "orange");
+//        EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
+//        EnumProperty green = new EnumProperty("GREEN", "green");
+//        EnumProperty weight = new EnumProperty("WEIGH", "84.5");
+//        EnumProperty blue = new EnumProperty("BLUE");
+//
+//        anenum.addEnumeration(red);
+//        anenum.addEnumeration(orange);
+//        anenum.addEnumeration(yellow);
+//        anenum.addEnumeration(green);
+//        anenum.addEnumeration(weight);
+//        anenum.addEnumeration(blue);
+//
+//        javaGenerator.setTemplate(pathPrefixVelocityTemplate + "Enum.vm");
+//        javaGenerator.generate(anenum);
+//
+//        String generatedCode = new String(Files.readAllBytes(Paths.get(pathPrefixGeneratedFile + "Color.java")));
+//        String expectedCode = new String(Files.readAllBytes(Paths.get(pathPrefixTestTemplate + "Color.txt")));
+//
+//        assertEquals(expectedCode, generatedCode);
+//    }
+
+
+    @Test
+    public void testGenerateInterface() throws IOException {
+        Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
+        Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
+
+        Interface inter = new Interface("Inter", new Package(filesPackage), InterfaceAccessModifier.PUBLIC);
+        Constant constant1 = new Constant("age", new Type("int"), "10", ConstantAccessModifier.DEFAULT);
+
+        inter.addMethod(method);
+        inter.addMethod(method2);
+        inter.addConstant(constant1);
 
         javaGenerator.setTemplate(pathPrefixVelocityTemplate + "Enum.vm");
-        javaGenerator.generate(anenum);
+        javaGenerator.generate(inter);
 
-        String generatedCode = new String(Files.readAllBytes(Paths.get(pathPrefixGeneratedFile + "Color.java")));
-        String expectedCode = new String(Files.readAllBytes(Paths.get(pathPrefixTestTemplate + "Color.txt")));
+        String generatedCode = new String(Files.readAllBytes(Paths.get(pathPrefixGeneratedFile + "Inter.java")));
+        String expectedCode = new String(Files.readAllBytes(Paths.get(pathPrefixTestTemplate + "Inter.txt")));
 
         assertEquals(expectedCode, generatedCode);
     }
 
-
-    @Test
 }

@@ -9,6 +9,7 @@ public enum GenerationContext {
 	METHODS("methods"),
 	CONSTRUCTORS("constructors"),
 	ATTRIBUTES("attributes"),
+	PARAMETERS("params"),
 
 	ENUMS_ACCESS_MODIFIER("enumAccessModifier"),
 	ENUMS_NAME("enumName"),

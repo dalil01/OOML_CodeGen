@@ -1,5 +1,7 @@
 package com.ooml_codegen.models;
 
+import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
+
 public class Parameter {
 
 	private final String name;
@@ -16,6 +18,12 @@ public class Parameter {
 
 	public Type getType() {
 		return this.type;
+	}
+
+	public String toStringJava() {
+		StringBuilder s = new StringBuilder();
+		s.append(this.type.toString()).append(" ").append(this.name);
+		return s.toString();
 	}
 
 }

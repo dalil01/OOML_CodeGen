@@ -1,0 +1,11 @@
+package com.ooml_codegen.compiler.generator.files;
+
+public interface Inter {
+
+    int age = 10;
+
+    public String getMethod();
+
+    public String getMethod2();
+
+}

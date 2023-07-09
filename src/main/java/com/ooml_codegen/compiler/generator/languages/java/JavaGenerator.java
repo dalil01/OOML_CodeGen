@@ -68,54 +68,28 @@ public class JavaGenerator extends Generator {
         return false;
     }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
+        Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
 
-        String filesPackage = "com.ooml_codegen.compiler.generator.files";
+        Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("int"), "5");
 
         Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
         Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
 
-        // class
-		Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
-		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
-		Class clazz = new Class("User", new Package(filesPackage), ClassAccessModifier.PUBLIC);
+        Parameter parameter = new Parameter("param", new Type("String"));
+        Parameter parameter2 = new Parameter("param2", new Type("int"));
 
-		clazz.addConstructor(constructor);
-//		clazz.addAttribute(attribute);
-//		clazz.addMethod(method);
-//		clazz.addMethod(method2);
+        Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PUBLIC);
 
-        // enum
-        Enum anenum = new Enum("Color", new Package(filesPackage), EnumAccessModifier.PUBLIC);
-        EnumProperty red = new EnumProperty("RED", "red");
-        EnumProperty orange = new EnumProperty("ORANGE", "orange");
-        EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
-        EnumProperty green = new EnumProperty("GREEN", "green");
-        EnumProperty weight = new EnumProperty("WEIGH", "84.5");
-        EnumProperty blue = new EnumProperty("BLUE");
+        clazz.addConstructor(constructor);
+        clazz.addAttribute(attribute);
+        clazz.addMethod(method);
+        clazz.addMethod(method2);
+        method.addParameter(parameter);
+        method.addParameter(parameter2);
 
-        anenum.addEnumeration(red);
-        anenum.addEnumeration(orange);
-        anenum.addEnumeration(yellow);
-        anenum.addEnumeration(green);
-        anenum.addEnumeration(weight);
-        anenum.addEnumeration(blue);
-
-        // interface
-        Interface inter = new Interface("Inter", new Package(filesPackage), InterfaceAccessModifier.PUBLIC);
-        Constant constant1 = new Constant("age", new Type("int"), "10", ConstantAccessModifier.DEFAULT);
-
-        inter.addMethod(method);
-        inter.addMethod(method2);
-        inter.addConstant(constant1);
-
-
-        // generate
         Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
         generator.generate(clazz);
-        generator.generate(anenum);
-        generator.generate(inter);
-
-	}
+    }
 
 }

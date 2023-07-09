@@ -43,9 +43,21 @@ public class Method {
 		if (this.accessModifier != MethodAccessModifier.DEFAULT) {
 			s.append(this.accessModifier.getValueForJava()).append(" ");
 		}
-		s.append(this.returnType.getName()).append(" ").append(this.name);
+		s.append(this.returnType.getName()).append(" ").append(this.name).append("(");
+
+		// Iterate over the parameters and generate a comma-separated string
+		for (int i = 0; i < parameters.size(); i++) {
+			Parameter parameter = parameters.get(i);
+			s.append(parameter.toStringJava());
+			if (i < parameters.size() - 1) {
+				s.append(", ");
+			}
+		}
+
+		s.append(")");
 
 		return s.toString();
 	}
+
 
 }
