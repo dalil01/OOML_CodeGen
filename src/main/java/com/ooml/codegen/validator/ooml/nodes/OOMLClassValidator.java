@@ -2,25 +2,24 @@ package com.ooml.codegen.validator.ooml.nodes;
 
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
-import com.ooml.codegen.lexer.TokenType;
+import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.models.nodes.NClass;
 import com.ooml.codegen.models.nodes.leafs.LInheritanceClass;
 import com.ooml.codegen.models.nodes.leafs.LInheritanceInterface;
 import com.ooml.codegen.models.nodes.leafs.*;
 import com.ooml.codegen.utils.UContextStack;
+import com.ooml.codegen.utils.UContextStack.ContextType;
 import com.ooml.codegen.utils.ULogger;
-import com.ooml.codegen.utils.enums.ContextType;
 import com.ooml.codegen.validator.ooml.OOMLValidator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class OOMLClassValidator extends OOMLValidator {
 
 	private final NClass nClass = new NClass();
 
-	private final com.ooml.codegen.utils.UContextStack UContextStack = new UContextStack();
+	private final UContextStack UContextStack = new UContextStack();
 
 	public OOMLClassValidator(LexerManager lexerManager) {
 		super(lexerManager);

@@ -1,5 +1,7 @@
 package com.ooml.codegen.lexer;
 
+import com.ooml.codegen.lexer.Token.TokenType;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.function.BiConsumer;

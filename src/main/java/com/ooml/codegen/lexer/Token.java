@@ -1,10 +1,37 @@
 package com.ooml.codegen.lexer;
 
-import com.ooml.codegen.utils.UString;
-
 import java.nio.file.Path;
 
 public class Token {
+
+	public enum TokenType {
+
+		SINGLE_LINE_COMMENT,
+		MULTI_LINE_COMMENT,
+		IMPORT,
+		PACKAGE,
+		CLASS,
+		ENUM,
+		INTERFACE,
+		CLASS_INHERITANCE,
+		INTERFACE_INHERITANCE,
+		COLON,
+		SEMI_COLON,
+		EQUAL,
+		SIGN,
+		QUOTED_WORD,
+		WORD,
+		COMMA,
+		OPENING_PARENTHESIS,
+		CLOSING_PARENTHESIS,
+		OPENING_BRACKET,
+		CLOSING_BRACKET,
+		OPENING_CURLY_BRACKET,
+		CLOSING_CURLY_BRACKET,
+		ACCESS_MODIFIER_BLOCK,
+		EOF
+
+	}
 
 	private final TokenType type;
 

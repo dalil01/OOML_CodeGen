@@ -5,11 +5,10 @@ import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.ooml.OOMLLexerManager;
 import com.ooml.codegen.utils.UContextStack;
 import com.ooml.codegen.utils.ULogger;
-import com.ooml.codegen.utils.enums.ContextType;
-import com.ooml.codegen.lexer.TokenType;
 import com.ooml.codegen.models.nodes.NClass;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.validator.ooml.nodes.OOMLClassValidator;
+import com.ooml.codegen.lexer.Token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class OOMLParser extends Parser {
 			switch (token.getType()) {
 				case OPENING_CURLY_BRACKET -> {
 					if (this.inPackageBlockContext) {
-						this.packageUContextStack.push(ContextType.PACKAGE);
+						this.packageUContextStack.push(UContextStack.ContextType.PACKAGE);
 					} else {
 						// TODO
 						ULogger.error("error unexpected token {");

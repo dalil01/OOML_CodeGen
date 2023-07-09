@@ -5,13 +5,68 @@ import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
-import com.ooml.codegen.utils.enums.ColorCode;
+import com.ooml.codegen.utils.ULogger.ColorCode;
+
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class ULoggerTest {
 
     private final String error = "Error";
+
+    public static class ColorCodeTest {
+
+        @Test
+        void resetToStringTest() {
+            Assertions.assertEquals("\033[0m", ULogger.ColorCode.RESET.toString());
+        }
+
+        @Test
+        void greenStringTest() {
+            Assertions.assertEquals("\u001B[32m", ULogger.ColorCode.GREEN.toString());
+        }
+
+        @Test
+        void yellowStringTest() {
+            Assertions.assertEquals("\u001B[33m", ULogger.ColorCode.YELLOW.toString());
+        }
+
+        @Test
+        void redStringTest() {
+            Assertions.assertEquals("\u001B[31m", ULogger.ColorCode.RED.toString());
+        }
+
+    }
+
+    public static class ErrorTypeTest {
+
+        @Test
+        void resetToStringTest() {
+            Assertions.assertEquals("TRACE", ULogger.ErrorType.TRACE.toString());
+        }
+
+        @Test
+        void debugToStringTest() {
+            Assertions.assertEquals("DEBUG", ULogger.ErrorType.DEBUG.toString());
+        }
+
+        @Test
+        void infoToStringTest() {
+            Assertions.assertEquals("INFO", ULogger.ErrorType.INFO.toString());
+        }
+
+        @Test
+        void warnToStringTest() {
+            Assertions.assertEquals("WARN", ULogger.ErrorType.WARN.toString());
+        }
+
+        @Test
+        void errorToStringTest() {
+            Assertions.assertEquals("ERROR", ULogger.ErrorType.ERROR.toString());
+        }
+
+    }
 
     private int checkTime(LocalDateTime before, String content){
         try {

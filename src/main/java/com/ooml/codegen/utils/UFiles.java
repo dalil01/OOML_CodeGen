@@ -7,10 +7,10 @@ import java.util.Stack;
 
 public class UFiles {
 
-	public static List<File> findOOMLFilesPath(String mainPath, File original) {
+	public static List<File> findOOMLFilesPath(String relativePath, File original) {
 		List<File> list = new ArrayList<>();
 
-		File file = new File(mainPath);
+		File file = new File(relativePath);
 		if (!file.isAbsolute()) {
 			file = original.toPath().resolveSibling(file.toPath()).normalize().toFile();
 		}

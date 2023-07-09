@@ -1,11 +1,11 @@
 package com.ooml.codegen.validator.ooml;
 
 import com.ooml.codegen.lexer.Token;
+import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.models.nodes.leafs.LComment;
 import com.ooml.codegen.models.nodes.leafs.LCommentMultiLine;
 import com.ooml.codegen.models.nodes.leafs.LCommentSingleLine;
 import com.ooml.codegen.lexer.LexerManager;
-import com.ooml.codegen.lexer.TokenType;
 import com.ooml.codegen.validator.Validator;
 import com.ooml.codegen.validator.ooml.nodes.OOMLAttributeValidator;
 

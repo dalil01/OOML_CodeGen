@@ -1,9 +1,12 @@
 package com.ooml.codegen.lexer;
 
+import com.ooml.codegen.lexer.Token.TokenType;
+
 import org.junit.jupiter.api.*;
 
 import java.nio.file.Path;
 import java.util.Optional;
+
 
 public class TokenTest {
 
@@ -13,7 +16,7 @@ public class TokenTest {
 		Token token = new Token(type, Path.of(""), 0, 0);
 
 		Assertions.assertEquals(type, token.getType());
-		Assertions.assertEquals(Optional.empty(), token.getValue());
+		Assertions.assertEquals("", token.getValue());
 		Assertions.assertEquals("", token.getValue());
 	}
 
@@ -25,7 +28,7 @@ public class TokenTest {
 		Token token = new Token(type, value, path, 5, 6);
 
 		Assertions.assertEquals(type, token.getType());
-		Assertions.assertEquals(Optional.of(value), token.getValue());
+		Assertions.assertEquals(value, token.getValue());
 		Assertions.assertEquals(value, token.getValue());
 		Assertions.assertEquals(path, token.getFilePath());
 		Assertions.assertEquals(5, token.getLineN());
@@ -50,7 +53,7 @@ public class TokenTest {
 		Path path = Path.of("/test/test.ooml");
 		Token token = new Token(type, value, path, 5, 6);
 
-		Assertions.assertEquals(Optional.of(value), token.getValue());
+		Assertions.assertEquals(value, token.getValue());
 	}
 
 	@Test
@@ -73,7 +76,7 @@ public class TokenTest {
 		String expectedString = "Token{" +
 				"type=" + type +
 				", value=" + value +
-				", file=" + path.toString() +
+				", file=" + path +
 				", line=5, char=6" +
 				'}';
 

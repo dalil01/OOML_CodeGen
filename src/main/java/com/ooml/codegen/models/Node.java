@@ -11,10 +11,10 @@ public abstract class Node {
 
 	private final LinkedList<Node> children = new LinkedList<>();
 
+	protected enum NbTime { ZERO_OR_ONE, ONE, ZERO_OR_MULTI, ONE_OR_MULTI }
+
 	private final Map<Class<? extends Node>, NbTime> nbTimeBySupportedChild = new HashMap<>();
 	private final Map<Class<? extends Node>, Integer> nTimeByChildClass = new HashMap<>();
-
-	protected enum NbTime { ZERO_OR_ONE, ONE, ZERO_OR_MULTI, ONE_OR_MULTI }
 
 	protected Node() {
 		this.nbTimeBySupportedChild.put(LCommentSingleLine.class, NbTime.ZERO_OR_MULTI);

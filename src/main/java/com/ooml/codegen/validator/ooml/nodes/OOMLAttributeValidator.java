@@ -1,12 +1,11 @@
 package com.ooml.codegen.validator.ooml.nodes;
 
 import com.ooml.codegen.lexer.Token;
+import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.models.nodes.leafs.*;
 import com.ooml.codegen.utils.ULogger;
-import com.ooml.codegen.utils.enums.ContextType;
 import com.ooml.codegen.validator.ooml.OOMLValidator;
 import com.ooml.codegen.lexer.LexerManager;
-import com.ooml.codegen.lexer.TokenType;
 import com.ooml.codegen.models.nodes.NAttribut;
 import com.ooml.codegen.utils.UContextStack;
 
@@ -138,7 +137,7 @@ public class OOMLAttributeValidator extends OOMLValidator {
 				s.append(nextToken.getValue());
 
 				if (nextToken.getType() == TokenType.OPENING_PARENTHESIS) {
-					internContext.push(ContextType.PARENTHESIS);
+					internContext.push(UContextStack.ContextType.PARENTHESIS);
 				} else if (nextToken.getType() == TokenType.CLOSING_PARENTHESIS) {
 					internContext.pop();
 				}

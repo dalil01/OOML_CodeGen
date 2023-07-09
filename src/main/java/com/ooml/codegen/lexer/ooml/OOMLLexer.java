@@ -2,14 +2,13 @@ package com.ooml.codegen.lexer.ooml;
 
 import com.ooml.codegen.lexer.Lexer;
 import com.ooml.codegen.lexer.Token;
-import com.ooml.codegen.lexer.TokenType;
+import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.utils.ULogger;
 
 import java.io.*;
 import java.util.Optional;
 
 public class OOMLLexer extends Lexer {
-
 
 	public OOMLLexer(File file) throws FileNotFoundException {
 		super(file);

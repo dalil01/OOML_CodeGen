@@ -9,14 +9,14 @@ import java.util.List;
 
 public class UFilesTest {
 
-	private final static Path pathPrefix = Path.of(Path.of(System.getProperty("user.dir")).normalize() + "/src/test/java/com/ooml_codegen/utils/ooml/original.ooml");
+	private final static Path pathPrefix =  Path.of(Path.of(System.getProperty("user.dir")).normalize() + "/src/test/java/com/ooml/codegen/utils/files/");
 
 	@Test
 	public void findOOMLFilesPathTest() {
 		List<File> emptyDir = UFiles.findOOMLFilesPath("empty", pathPrefix.toFile());
 		Assertions.assertTrue(emptyDir.isEmpty());
 
-		List<File> invalidOOMLFile = UFiles.findOOMLFilesPath("empty/empty.txt", pathPrefix.toFile());
+		List<File> invalidOOMLFile = UFiles.findOOMLFilesPath("files/empty/empty.txt", pathPrefix.toFile());
 		Assertions.assertTrue(invalidOOMLFile.isEmpty());
 
 		String mainOOMLPath = "main.ooml";

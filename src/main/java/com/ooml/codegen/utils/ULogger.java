@@ -2,10 +2,48 @@ package com.ooml.codegen.utils;
 
 import java.time.LocalDateTime;
 
-import com.ooml.codegen.utils.enums.ColorCode;
-import com.ooml.codegen.utils.enums.ErrorType;
-
 public class ULogger {
+
+    public enum ErrorType {
+
+        TRACE("TRACE"),
+        DEBUG("DEBUG"),
+        INFO("INFO"),
+        WARN("WARN"),
+        ERROR("ERROR");
+
+        private final String type;
+
+        ErrorType(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public String toString() {
+            return this.type;
+        }
+
+    }
+
+    public enum ColorCode {
+
+        RESET("\033[0m"),
+        GREEN("\u001B[32m"),
+        YELLOW("\u001B[33m"),
+        RED("\u001B[31m");
+
+        private final String code;
+
+        ColorCode(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String toString() {
+            return code;
+        }
+
+    }
 
     public static void trace(String message) {
         printMessage(ErrorType.TRACE, message);
