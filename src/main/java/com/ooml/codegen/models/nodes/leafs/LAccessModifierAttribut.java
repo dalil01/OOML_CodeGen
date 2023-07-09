@@ -6,7 +6,7 @@ public class LAccessModifierAttribut extends LAccessModifier {
 
 	public LAccessModifierAttribut(String sign) {
 		super(sign);
-		this.modifier = this.findModifierFromOOMLSign(sign);
+		this.modifier = this.findModifierFromSignValue();
 	}
 
 	@Override

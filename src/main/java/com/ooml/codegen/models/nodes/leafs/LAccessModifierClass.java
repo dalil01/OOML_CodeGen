@@ -8,7 +8,7 @@ public class LAccessModifierClass extends LAccessModifier {
 
 	public LAccessModifierClass(String sign) {
 		super(sign);
-		this.modifier = this.findModifierFromOOMLSign(sign);
+		this.modifier = this.findModifierFromSignValue();
 	}
 
 	@Override
@@ -17,13 +17,13 @@ public class LAccessModifierClass extends LAccessModifier {
 	}
 
 	@Override
-	public LAccessModifier findModifierFromOOMLSign(String sign) {
-		LAccessModifier accessModifier = super.findModifierFromOOMLSign(sign);
+	public LAccessModifier findModifierFromSignValue() {
+		LAccessModifier accessModifier = super.findModifierFromSignValue();
 
 		if (accessModifier instanceof Protected) {
 			// TODO error
 			ULogger.error("invalid accessModifier");
-			throw new IllegalStateException("Unexpected value: " + sign);
+			throw new IllegalStateException("Unexpected value: " + this.getValue());
 		}
 
 		return accessModifier;

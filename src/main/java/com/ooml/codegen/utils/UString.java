@@ -32,4 +32,8 @@ public class UString {
 		return concatenatedString.toString();
 	}
 
+	public static String replaceNewlines(String input) {
+		return input.replaceAll("[\\r\\n\\t\\p{C}]", " ").trim();
+	}
+
 }

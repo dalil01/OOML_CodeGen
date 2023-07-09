@@ -113,7 +113,6 @@ public class OOMLParser extends Parser {
 		NClass nClass = validator.getValidatedClass();
 
 		nClass.printTree();
-		// TODO : manage package
 
 		return nClass;
 	}

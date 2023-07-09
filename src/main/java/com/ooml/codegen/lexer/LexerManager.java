@@ -25,7 +25,7 @@ public abstract class LexerManager {
 		return this.currentToken == null ? this.nextToken() : this.currentToken;
 	}
 
-	public Token nextToken() throws FileNotFoundException{
+	public Token nextToken() throws FileNotFoundException {
 		for (Token token : this.unConsumedTokenList) {
 			if (token.getType() == TokenType.IMPORT) {
 				this.manageImport(token);

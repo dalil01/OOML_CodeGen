@@ -2,6 +2,7 @@ package com.ooml.codegen.models;
 
 import com.ooml.codegen.models.nodes.leafs.LCommentMultiLine;
 import com.ooml.codegen.models.nodes.leafs.LCommentSingleLine;
+import com.ooml.codegen.utils.UString;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -13,7 +14,9 @@ public abstract class Node {
 	private final Map<Class<? extends Node>, NbTime> nbTimeBySupportedChild = new HashMap<>();
 	private final Map<Class<? extends Node>, Integer> nTimeByChildClass = new HashMap<>();
 
-	public Node() {
+	protected enum NbTime { ZERO_OR_ONE, ONE, ZERO_OR_MULTI, ONE_OR_MULTI }
+
+	protected Node() {
 		this.nbTimeBySupportedChild.put(LCommentSingleLine.class, NbTime.ZERO_OR_MULTI);
 		this.nbTimeBySupportedChild.put(LCommentMultiLine.class, NbTime.ZERO_OR_MULTI);
 		this.autoSetNbTimeBySupportedChild(this.nbTimeBySupportedChild);
@@ -102,27 +105,33 @@ public abstract class Node {
 
 	public void printTree() {
 		System.out.println("°");
-		printTreeHelper("", true, new HashSet<>());
+		printTreeHelper(this, "", true, new HashSet<>());
 		System.out.println();
 	}
 
-	private void printTreeHelper(String prefix, boolean isTail, Set<Node> visitedNodes) {
+	private void printTreeHelper(Node node, String prefix, boolean isTail, Set<Node> visitedNodes) {
 		String arrow = isTail ? "└── " : "├── ";
-		String nodeStr = this.toString();
 
-		if (visitedNodes.contains(this)) {
+		String nodeStr = "";
+		if (node instanceof Leaf) {
+			nodeStr = node.getClass().getSimpleName() + " (" + UString.replaceNewlines(((Leaf) node).getValue()) + ")";
+		} else {
+			nodeStr = node.toString();
+		}
+
+		if (visitedNodes.contains(node)) {
 			nodeStr += " (Already Visited)";
 		} else {
-			visitedNodes.add(this);
+			visitedNodes.add(node);
 		}
 
 		System.out.println(prefix + arrow + nodeStr);
 
-		for (int i = 0; i < this.children.size(); i++) {
-			Node child = this.children.get(i);
-			boolean isChildTail = (i == this.children.size() - 1);
+		for (int i = 0; i < node.getChildren().size(); i++) {
+			Node child = node.getChildren().get(i);
+			boolean isChildTail = (i == node.getChildren().size() - 1);
 			String childPrefix = prefix + (isTail ? "    " : "│   ");
-			child.printTreeHelper(childPrefix, isChildTail, visitedNodes);
+			child.printTreeHelper(child, childPrefix, isChildTail, visitedNodes);
 		}
 	}
 

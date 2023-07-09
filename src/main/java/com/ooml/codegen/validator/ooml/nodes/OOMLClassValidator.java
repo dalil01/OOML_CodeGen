@@ -13,6 +13,7 @@ import com.ooml.codegen.utils.enums.ContextType;
 import com.ooml.codegen.validator.ooml.OOMLValidator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class OOMLClassValidator extends OOMLValidator {

@@ -6,21 +6,21 @@ import com.ooml.codegen.models.Leaf;
 abstract class LAccessModifier extends Leaf {
 
 	public LAccessModifier(String value) {
-		super(value);
+		super(value.replace(":", ""));
 	}
 
 	public abstract String getValueForJava();
 
-	public LAccessModifier findModifierFromOOMLSign(String sign) {
-		return switch (sign) {
+	public LAccessModifier findModifierFromSignValue() {
+		return switch (this.getValue()) {
 			case "" -> new Default();
-			case "+", "+:" -> new Public();
-			case "-", "-:" -> new Private();
-			case "#", "#:" -> new Protected();
+			case "+" -> new Public();
+			case "-" -> new Private();
+			case "#" -> new Protected();
 			default -> {
 				// TODO error
 				ULogger.error("invalid accessModifier");
-				throw new IllegalStateException("Unexpected value: " + sign);
+				throw new IllegalStateException("Unexpected value: " + this.getValue());
 			}
 		};
 	}

@@ -6,10 +6,10 @@ import java.util.Map;
 
 public abstract class Leaf extends Node {
 
-	private final char[] value;
+	private final String value;
 
-	public Leaf(String value) {
-		this.value = value.toCharArray();
+	protected Leaf(String value) {
+		this.value = value;
 	}
 
 	protected void autoSetNbTimeBySupportedChild(Map<Class<? extends Node>, NbTime> map) {
@@ -32,12 +32,12 @@ public abstract class Leaf extends Node {
 	}
 
 	public String getValue() {
-		return UString.concatChars(this.value);
+		return this.value;
 	}
 
 	@Override
 	public String toString() {
-		return super.toString();
+		return super.toString() + " (" + this.getValue() + ")";
 	}
 
 }

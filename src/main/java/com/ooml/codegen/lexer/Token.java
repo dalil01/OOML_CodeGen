@@ -1,5 +1,7 @@
 package com.ooml.codegen.lexer;
 
+import com.ooml.codegen.utils.UString;
+
 import java.nio.file.Path;
 
 public class Token {
@@ -36,15 +38,15 @@ public class Token {
 		return this.value;
 	}
 
-	public Path getFilePath(){
+	public Path getFilePath() {
 		return this.filePath;
 	}
 
-	public int getCharN(){
+	public int getCharN() {
 		return this.charN;
 	}
 
-	public int getLineN(){
+	public int getLineN() {
 		return this.lineN;
 	}
 

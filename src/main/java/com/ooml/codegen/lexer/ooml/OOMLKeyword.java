@@ -4,8 +4,7 @@ public enum OOMLKeyword {
 
 	CLASS("class"),
 	ENUM("enum"),
-	INTERFACE("interface")
-	;
+	INTERFACE("interface");
 
 	private final String value;
 
