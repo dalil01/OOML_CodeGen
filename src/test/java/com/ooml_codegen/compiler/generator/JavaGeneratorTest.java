@@ -62,6 +62,8 @@ public class JavaGeneratorTest {
 
         assertEquals(expectedCode, generatedCode);
     }
+
+
     @Test
     public void testGenerateEnum() throws IOException {
         Enum anenum = new Enum("Color", new Package(filesPackage), EnumAccessModifier.PUBLIC);

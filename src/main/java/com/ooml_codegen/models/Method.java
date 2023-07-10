@@ -45,7 +45,6 @@ public class Method {
 		}
 		s.append(this.returnType.getName()).append(" ").append(this.name).append("(");
 
-		// Iterate over the parameters and generate a comma-separated string
 		for (int i = 0; i < parameters.size(); i++) {
 			Parameter parameter = parameters.get(i);
 			s.append(parameter.toStringJava());
