@@ -9,14 +9,14 @@ import java.util.List;
 
 public class UFilesTest {
 
-	private final static Path pathPrefix =  Path.of(Path.of(System.getProperty("user.dir")).normalize() + "/src/test/java/com/ooml/codegen/utils/files/");
+	private final static Path pathPrefix =  Path.of(Path.of(System.getProperty("user.dir")).normalize() + "/src/test/java/com/ooml/codegen/utils/files/blablbla.ooml");
 
 	@Test
 	public void findOOMLFilesPathTest() {
 		List<File> emptyDir = UFiles.findOOMLFilesPath("empty", pathPrefix.toFile());
 		Assertions.assertTrue(emptyDir.isEmpty());
 
-		List<File> invalidOOMLFile = UFiles.findOOMLFilesPath("files/empty/empty.txt", pathPrefix.toFile());
+		List<File> invalidOOMLFile = UFiles.findOOMLFilesPath("empty/empty.txt", pathPrefix.toFile());
 		Assertions.assertTrue(invalidOOMLFile.isEmpty());
 
 		String mainOOMLPath = "main.ooml";
@@ -24,11 +24,11 @@ public class UFilesTest {
 		Assertions.assertEquals(1, foundMainOOML.size());
 		Assertions.assertEquals(pathPrefix.resolveSibling("main.ooml").toString(), foundMainOOML.get(0).toPath().normalize().toString());
 
-		List<File> OOMLFilesInDir = UFiles.findOOMLFilesPath("files", pathPrefix.toFile());
+		List<File> OOMLFilesInDir = UFiles.findOOMLFilesPath("files", pathPrefix.toFile().getParentFile());
 		Assertions.assertEquals(4, OOMLFilesInDir.size());
 		List<String> FilesInDirString = OOMLFilesInDir.stream().map((file) -> file.toPath().normalize().toString()).toList();
-		Assertions.assertTrue(FilesInDirString.contains(pathPrefix.resolveSibling("files/main.ooml").toString()));
-		Path srcPath = pathPrefix.resolveSibling("files/src/");
+		Assertions.assertTrue(FilesInDirString.contains(pathPrefix.resolveSibling("main.ooml").toString()));
+		Path srcPath = pathPrefix.resolveSibling("all");
 		Assertions.assertTrue(FilesInDirString.contains(srcPath.resolve( "controllers.ooml").toString()));
 		Assertions.assertTrue(FilesInDirString.contains(srcPath.resolve("models.ooml").toString()));
 		Assertions.assertTrue(FilesInDirString.contains(srcPath.resolve("services.ooml").toString()));
