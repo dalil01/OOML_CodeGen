@@ -1,7 +1,0 @@
-+ public + :+
-- private - :-
-# protected # :#
-+"+"+ #:
----
-###
-@import +:class-: User -id: int # address: Address

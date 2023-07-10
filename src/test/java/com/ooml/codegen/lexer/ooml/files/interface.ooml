@@ -1,0 +1,7 @@
+interface IGeneration:
+
++ interface IServer {
+
+}
+
+- interface I

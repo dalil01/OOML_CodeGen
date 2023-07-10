@@ -7,7 +7,7 @@ sidebar_position: 3
 ```java
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.modifiers.access.AttributeAccessModifier;
+import com.ooml_codegen.models.modifiers.access.AttributeAccessModifier;
 
 public class Attribute {
 

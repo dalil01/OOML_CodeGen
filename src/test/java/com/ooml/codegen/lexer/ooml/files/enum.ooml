@@ -1,0 +1,7 @@
+enum DAY:
+
++ enum Type {
+
+}
+
+- enum AccessModifier

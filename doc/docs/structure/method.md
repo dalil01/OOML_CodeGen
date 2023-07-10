@@ -7,7 +7,7 @@ sidebar_position: 7
 ```java
 package com.ooml_codegen.models;
 
-import com.ooml_codegen.models.enums.modifiers.access.MethodAccessModifier;
+import com.ooml_codegen.models.modifiers.access.MethodAccessModifier;
 
 import java.util.ArrayList;
 import java.util.List;
