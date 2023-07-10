@@ -29,7 +29,7 @@ class $className {
 
 #if($methods && !$methods.isEmpty())
 #foreach($method in $methods)
-    $method.toStringJava()( #if($method.hasParameters()) #foreach($param in $method.getParameters())$param.toStringJava()#if($foreach.hasNext), #end#end)#end) {
+    $method.toStringJava() #if($method.hasParameters()) #foreach($param in $method.getParameters())$param.toStringJava()#if($foreach.hasNext), #end#end)#end {
         return attribute;
     }
 #end

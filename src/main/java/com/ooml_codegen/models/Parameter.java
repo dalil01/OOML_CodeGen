@@ -22,8 +22,7 @@ public class Parameter {
 
 	public String toStringJava() {
 		StringBuilder s = new StringBuilder();
-		s.append(this.type.toString()).append(" ").append(this.name);
+		s.append(this.type.getName()).append(" ").append(this.name);
 		return s.toString();
 	}
-
 }

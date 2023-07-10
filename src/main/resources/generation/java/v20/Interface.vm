@@ -21,7 +21,7 @@ interface $interfaceName {
 
 #if($methods && !$methods.isEmpty())
 #foreach($method in $methods)
-    $method.toStringJava()();
+    $method.toStringJava();
 
 #end
 #end

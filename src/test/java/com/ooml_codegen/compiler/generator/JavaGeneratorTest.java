@@ -33,49 +33,34 @@ public class JavaGeneratorTest {
         this.javaGenerator = new JavaGenerator();
     }
 
+
     @Test
     public void testGenerateClass() throws IOException {
-        Class clazz = new Class("User", new Package(filesPackage), ClassAccessModifier.PUBLIC);
         Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
 
-        clazz.addConstructor(constructor);
+        Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("int"), "5");
 
-		Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("int"), "5");
-        Method method = new Method("methodTest", MethodAccessModifier.PUBLIC, new Type("int"));
-        clazz.addAttribute(attribute);
-        clazz.addMethod(method);
-
-        javaGenerator.setTemplate(pathPrefixVelocityTemplate + "Class.vm");
-        javaGenerator.generate(clazz);
-
-        String generatedCode =  new String(Files.readAllBytes(Paths.get(pathPrefixGeneratedFile + "User.java")));
-        String expectedCode = new String(Files.readAllBytes(Paths.get(pathPrefixTestTemplate + "User.txt")));
-
-        assertEquals(expectedCode, generatedCode);
-    }
-
-
-    @Test
-    public void testGenerateClass2() throws IOException {
-        Constructor constructor = new Constructor("User", ConstructorAccessModifier.PUBLIC);
-
-        Attribute attribute = new Attribute("attribute", AttributeAccessModifier.PUBLIC, new Type("String"), "value");
-
-        Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("String"));
-        Method method2 = new Method("getMethod2", MethodAccessModifier.PUBLIC, new Type("String"));
+        Method method = new Method("getMethod", MethodAccessModifier.PUBLIC, new Type("int"));
 
         Parameter parameter = new Parameter("param", new Type("String"));
+        Parameter parameter2 = new Parameter("param2", new Type("int"));
 
-        Class clazz = new Class("User", new Package("com.ooml.models"), ClassAccessModifier.PUBLIC);
+
+        Class clazz = new Class("User", new Package(filesPackage), ClassAccessModifier.PUBLIC);
 
         clazz.addConstructor(constructor);
         clazz.addAttribute(attribute);
         clazz.addMethod(method);
-        clazz.addMethod(method2);
         method.addParameter(parameter);
+        method.addParameter(parameter2);
 
         Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
         generator.generate(clazz);
+
+        String generatedCode = new String(Files.readAllBytes(Paths.get(pathPrefixGeneratedFile + "User.java")));
+        String expectedCode = new String(Files.readAllBytes(Paths.get(pathPrefixTestTemplate + "User.txt")));
+
+        assertEquals(expectedCode, generatedCode);
     }
     @Test
     public void testGenerateEnum() throws IOException {
