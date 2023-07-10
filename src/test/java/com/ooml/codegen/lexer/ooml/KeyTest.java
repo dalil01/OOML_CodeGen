@@ -1,7 +1,5 @@
-package com.ooml.codegen.lexer.ooml.enums;
+package com.ooml.codegen.lexer.ooml;
 
-import com.ooml.codegen.lexer.ooml.OOMLKey;
-import com.ooml.codegen.lexer.ooml.OOMLSymbols;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

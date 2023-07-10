@@ -4,4 +4,4 @@
 +"+"+ #:
 ---
 ###
-@import +:class-: User -id: int # address: Address
+@import +:class -: User -id: int # address: Address

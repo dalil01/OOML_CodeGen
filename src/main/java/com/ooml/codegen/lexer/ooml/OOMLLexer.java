@@ -116,8 +116,9 @@ public class OOMLLexer extends Lexer {
 					// check for next character to find access modifier block
 				} else if (this.cStream.getCurrentChar() == OOMLSymbols.COLON.getValue()) {
 					// matched "-:"
+					String colon = String.valueOf(this.cStream.getCurrentChar());
 					this.cStream.next();
-					return new Token(TokenType.ACCESS_MODIFIER_BLOCK, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);
+					return new Token(TokenType.ACCESS_MODIFIER_BLOCK, OOMLSymbols.MINUS + colon, this.getFile().toPath(), this.lineN, this.lineN);
 				}
 
 				return new Token(TokenType.SIGN, OOMLSymbols.MINUS.toString(), this.getFile().toPath(), this.lineN, this.lineN);

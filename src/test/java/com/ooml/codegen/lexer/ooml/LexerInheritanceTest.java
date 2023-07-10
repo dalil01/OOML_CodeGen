@@ -1,4 +1,4 @@
-package com.ooml.codegen.lexer.ooml.all;
+package com.ooml.codegen.lexer.ooml;
 
 import com.ooml.codegen.lexer.ooml.LexerTest;
 import com.ooml.codegen.lexer.Token.TokenType;

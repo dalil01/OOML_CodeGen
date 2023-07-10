@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 public abstract class LexerTest {
 
-	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml_codegen/compiler/lexer/ooml/all/files/";
+	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml/codegen/lexer/ooml/files/";
 
 	protected String filePath;
 	protected OOMLLexer lexer;

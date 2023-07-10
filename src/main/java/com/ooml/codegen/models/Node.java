@@ -84,10 +84,10 @@ public abstract class Node {
 
 	public boolean hasDuplicates() {
 		Set<Node> visitedNodes = new HashSet<>();
-		return hasDuplicatesHelper(this, visitedNodes);
+		return hasDuplicates(this, visitedNodes);
 	}
 
-	private boolean hasDuplicatesHelper(Node node, Set<Node> visitedNodes) {
+	private boolean hasDuplicates(Node node, Set<Node> visitedNodes) {
 		if (visitedNodes.contains(node)) {
 			return true;
 		}
@@ -95,7 +95,7 @@ public abstract class Node {
 		visitedNodes.add(node);
 
 		for (Node child : node.getChildren()) {
-			if (hasDuplicatesHelper(child, visitedNodes)) {
+			if (hasDuplicates(child, visitedNodes)) {
 				return true;
 			}
 		}
@@ -105,14 +105,14 @@ public abstract class Node {
 
 	public void printTree() {
 		System.out.println("°");
-		printTreeHelper(this, "", true, new HashSet<>());
+		printTree(this, "", true, new HashSet<>());
 		System.out.println();
 	}
 
-	private void printTreeHelper(Node node, String prefix, boolean isTail, Set<Node> visitedNodes) {
+	private void printTree(Node node, String prefix, boolean isTail, Set<Node> visitedNodes) {
 		String arrow = isTail ? "└── " : "├── ";
 
-		String nodeStr = "";
+		String nodeStr;
 		if (node instanceof Leaf) {
 			nodeStr = node.getClass().getSimpleName() + " (" + UString.replaceNewlines(((Leaf) node).getValue()) + ")";
 		} else {
@@ -131,7 +131,7 @@ public abstract class Node {
 			Node child = node.getChildren().get(i);
 			boolean isChildTail = (i == node.getChildren().size() - 1);
 			String childPrefix = prefix + (isTail ? "    " : "│   ");
-			child.printTreeHelper(child, childPrefix, isChildTail, visitedNodes);
+			child.printTree(child, childPrefix, isChildTail, visitedNodes);
 		}
 	}
 

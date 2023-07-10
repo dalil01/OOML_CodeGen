@@ -1,6 +1,5 @@
-package com.ooml.codegen.lexer.ooml.all;
+package com.ooml.codegen.lexer.ooml;
 
-import com.ooml.codegen.lexer.ooml.LexerTest;
 import com.ooml.codegen.lexer.Token.TokenType;
 
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +16,7 @@ public class LexerAccessModifierTest extends LexerTest {
 	@Test
 	public void blockTest() {
 		this.lexer.forEach((i, token) -> {
-			System.out.println(token);
+			System.out.println(i + " " + token);
 
 			if (List.of(1, 3, 5, 6, 8, 10, 11, 13, 15, 16, 18, 20, 21, 22, 23, 24, 25, 31, 35).contains(i)) {
 				Assertions.assertEquals(TokenType.SIGN, token.getType());
@@ -30,13 +29,13 @@ public class LexerAccessModifierTest extends LexerTest {
 			}
 
 			if (i == 19) {
-				Assertions.assertEquals("#", token.getValue());
+				Assertions.assertEquals("#:", token.getValue());
 			}
 			else if (i == 27) {
-				Assertions.assertEquals("+", token.getValue());
+				Assertions.assertEquals("+:", token.getValue());
 			}
 			else if (i == 29) {
-				Assertions.assertEquals("-", token.getValue());
+				Assertions.assertEquals("-:", token.getValue());
 			}
 		});
 	}

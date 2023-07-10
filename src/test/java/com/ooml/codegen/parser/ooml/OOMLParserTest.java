@@ -8,7 +8,8 @@ import java.io.File;
 
 public class OOMLParserTest {
 
-	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml/codegen/parser/ooml/files/";
+	private final static String pathPrefix = System.getProperty("user.dir") + "/src/test/java/com/ooml/codegen" +
+			"/parser/ooml/files/";
 
 	@Test
 	public void parseTest() throws Exception {
