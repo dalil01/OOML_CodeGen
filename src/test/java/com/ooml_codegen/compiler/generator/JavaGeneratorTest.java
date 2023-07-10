@@ -77,32 +77,31 @@ public class JavaGeneratorTest {
         Generator generator = GeneratorFactory.create(GeneratorType.JAVA);
         generator.generate(clazz);
     }
+    @Test
+    public void testGenerateEnum() throws IOException {
+        Enum anenum = new Enum("Color", new Package(filesPackage), EnumAccessModifier.PUBLIC);
+        EnumProperty red = new EnumProperty("RED", "red");
+        EnumProperty orange = new EnumProperty("ORANGE", "orange");
+        EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
+        EnumProperty green = new EnumProperty("GREEN", "green");
+        EnumProperty weight = new EnumProperty("WEIGH", "84.5");
+        EnumProperty blue = new EnumProperty("BLUE");
 
-//    @Test
-//    public void testGenerateEnum() throws IOException {
-//        Enum anenum = new Enum("Color", new Package(filesPackage), EnumAccessModifier.PUBLIC);
-//        EnumProperty red = new EnumProperty("RED", "red");
-//        EnumProperty orange = new EnumProperty("ORANGE", "orange");
-//        EnumProperty yellow = new EnumProperty("YELLOW", "yellow");
-//        EnumProperty green = new EnumProperty("GREEN", "green");
-//        EnumProperty weight = new EnumProperty("WEIGH", "84.5");
-//        EnumProperty blue = new EnumProperty("BLUE");
-//
-//        anenum.addEnumeration(red);
-//        anenum.addEnumeration(orange);
-//        anenum.addEnumeration(yellow);
-//        anenum.addEnumeration(green);
-//        anenum.addEnumeration(weight);
-//        anenum.addEnumeration(blue);
-//
-//        javaGenerator.setTemplate(pathPrefixVelocityTemplate + "Enum.vm");
-//        javaGenerator.generate(anenum);
-//
-//        String generatedCode = new String(Files.readAllBytes(Paths.get(pathPrefixGeneratedFile + "Color.java")));
-//        String expectedCode = new String(Files.readAllBytes(Paths.get(pathPrefixTestTemplate + "Color.txt")));
-//
-//        assertEquals(expectedCode, generatedCode);
-//    }
+        anenum.addEnumeration(red);
+        anenum.addEnumeration(orange);
+        anenum.addEnumeration(yellow);
+        anenum.addEnumeration(green);
+        anenum.addEnumeration(weight);
+        anenum.addEnumeration(blue);
+
+        javaGenerator.setTemplate(pathPrefixVelocityTemplate + "Enum.vm");
+        javaGenerator.generate(anenum);
+
+        String generatedCode = new String(Files.readAllBytes(Paths.get(pathPrefixGeneratedFile + "Color.java")));
+        String expectedCode = new String(Files.readAllBytes(Paths.get(pathPrefixTestTemplate + "Color.txt")));
+
+        assertEquals(expectedCode, generatedCode);
+    }
 
 
     @Test
