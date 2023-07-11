@@ -33,8 +33,7 @@ public class OOMLParser extends Parser {
 		Stream.Builder<ICodeGenNode> streamBuilder = Stream.builder();
 
 		Token token = this.lexerManager.nextToken();
-		while (token.getType() != TokenType.EOF){
-
+		while (token.getType() != TokenType.EOF) {
 			switch (token.getType()) {
 				case OPENING_CURLY_BRACKET -> {
 					if (this.inPackageBlockContext) {
@@ -96,11 +95,7 @@ public class OOMLParser extends Parser {
 
 	private void handleUnConsumedTokens() {
 		this.unConsumedTokenList.addAll(0, this.packageTokenList);
-
-		for (Token token : this.unConsumedTokenList) {
-			this.lexerManager.insertToken(token);
-		}
-
+		this.lexerManager.insertTokens(this.unConsumedTokenList);
 		this.unConsumedTokenList.clear();
 	}
 

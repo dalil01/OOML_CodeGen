@@ -32,7 +32,7 @@
  		*/
 
 		// Constructors
-		- User()
+		 ()
 		//+ User(firstname: string, lastname: string)
 
 		/*

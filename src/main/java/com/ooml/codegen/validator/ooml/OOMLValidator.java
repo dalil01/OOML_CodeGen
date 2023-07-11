@@ -23,9 +23,19 @@ public abstract class OOMLValidator extends Validator {
 	}
 
 	public Token nextToken() throws Exception {
+		return this.nextTokenHelper(true);
+	}
+
+	public Token nextToken(boolean consumeComment) throws Exception {
+		return this.nextTokenHelper(consumeComment);
+	}
+
+	private Token nextTokenHelper(boolean consumeComment) throws Exception {
 		this.currentToken = this.lexerManager.nextToken();
 
-		this.consumeComment();
+		if (consumeComment) {
+			this.consumeComment();
+		}
 
 		return this.currentToken;
 	}
@@ -54,9 +64,7 @@ public abstract class OOMLValidator extends Validator {
 				this.addComment(new LCommentMultiLine(value));
 			}
 
-			this.nextToken();
-			type = this.currentToken.getType();
-
+			type = this.nextToken().getType();
 			if (type == TokenType.EOF) {
 				break;
 			}

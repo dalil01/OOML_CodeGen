@@ -210,10 +210,14 @@ public class OOMLClassValidator extends OOMLValidator {
 						this.insertToken(currentAccessModifierBlock);
 					}
 
+					unConsumedTokenList.add(nextToken);
+
 					this.insertTokens(unConsumedTokenList);
+
+					System.out.println(unConsumedTokenList);
+
 					unConsumedTokenList = new ArrayList<>();
 
-					this.insertToken(nextToken);
 
 					OOMLAttributeValidator attributeValidator = this.newAttributValidator();
 					attributeValidator.validate();
@@ -227,7 +231,7 @@ public class OOMLClassValidator extends OOMLValidator {
 					unConsumedTokenList.add(nextToken);
 
 					while (nextToken.getType() != TokenType.CLOSING_PARENTHESIS) {
-						nextToken = this.nextToken();
+						nextToken = this.nextToken(false);
 
 						unConsumedTokenList.add(nextToken);
 
@@ -241,7 +245,6 @@ public class OOMLClassValidator extends OOMLValidator {
 
 					this.insertTokens(unConsumedTokenList);
 					unConsumedTokenList = new ArrayList<>();
-					this.insertToken(nextToken);
 
 					if (nextToken.getType() != TokenType.COLON) {
 						OOMLConstructorValidator constructorValidator = this.newConstructorValidator();
@@ -249,6 +252,8 @@ public class OOMLClassValidator extends OOMLValidator {
 
 						this.nClass.addChild(constructorValidator.getValidatedNode());
 					} else {
+						this.insertToken(nextToken);
+
 						OOMLMethodValidator methodValidator = this.newMethodValidator();
 						methodValidator.validate();
 
@@ -296,7 +301,7 @@ public class OOMLClassValidator extends OOMLValidator {
 				}
 			}
 
-			nextToken = this.nextToken();
+			nextToken = this.nextToken(false);
 		}
 	}
 
