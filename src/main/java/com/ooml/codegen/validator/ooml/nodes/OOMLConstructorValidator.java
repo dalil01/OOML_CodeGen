@@ -36,7 +36,7 @@ public class OOMLConstructorValidator extends OOMLValidator {
 	}
 
 	private void validateAccessModifier() throws Exception {
-		Token nextToken = this.nextToken();
+		Token nextToken = this.nextToken(false);
 		if (nextToken.getType() == Token.TokenType.SIGN || nextToken.getType() == Token.TokenType.ACCESS_MODIFIER_BLOCK) {
 			this.nConstructor.addChild(new LAccessModifierConstructor(nextToken.getValue()));
 		} else {
@@ -61,6 +61,8 @@ public class OOMLConstructorValidator extends OOMLValidator {
 			ULogger.error("unexpected token ");
 			throw new Exception();
 		}
+
+		System.out.println(nextToken);
 	}
 
 	@Override

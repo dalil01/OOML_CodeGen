@@ -241,7 +241,7 @@ public class OOMLClassValidator extends OOMLValidator {
 						}
 					}
 
-					nextToken = this.nextToken();
+					nextToken = this.nextToken(false);
 
 					this.insertTokens(unConsumedTokenList);
 					unConsumedTokenList = new ArrayList<>();
@@ -259,6 +259,7 @@ public class OOMLClassValidator extends OOMLValidator {
 
 						this.nClass.addChild(methodValidator.getValidatedNode());
 					}
+
 				}
 				case CLOSING_CURLY_BRACKET -> {
 					if (this.UContextStack.empty()) {
