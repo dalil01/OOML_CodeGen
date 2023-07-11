@@ -28,14 +28,14 @@ public abstract class LexerManager {
 	}
 
 	public Token nextToken() throws FileNotFoundException {
-		for (Token token : this.unConsumedTokenList) {
+		if (!this.unConsumedTokenList.isEmpty()) {
+			Token token = this.unConsumedTokenList.removeLast();
 			if (token.getType() == TokenType.IMPORT) {
 				this.manageImport(token);
 				return this.nextToken();
 			}
 
 			this.currentToken = token;
-			this.unConsumedTokenList.removeFirst();
 
 			return this.currentToken;
 		}
@@ -66,7 +66,21 @@ public abstract class LexerManager {
 	}
 
 	public void insertTokens(List<Token> tokens) {
-		this.unConsumedTokenList.addAll(tokens);
+		this.insertTokensHelper(tokens, true);
+	}
+
+	public void insertTokens(List<Token> tokens, boolean reverse) {
+		this.insertTokensHelper(tokens, reverse);
+	}
+
+	public void insertTokensHelper(List<Token> tokens, boolean reverse) {
+		if (reverse) {
+			Collections.reverse(tokens);
+		}
+
+		for (Token token : tokens) {
+			this.insertToken(token);
+		}
 	}
 
 	public void forEach(BiConsumer<Integer, Token> action) throws FileNotFoundException {
