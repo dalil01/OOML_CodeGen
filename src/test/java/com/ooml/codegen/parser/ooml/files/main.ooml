@@ -13,33 +13,32 @@
 
 ~ src.app :
 
-	 + abstract static class /* */ User -> AbstractUser, Abs ~> ICustomer {
-		// Attributs */
+	 + class   User /*-> AbstractUser, Abs ~> ICustomer */ {
+		/*
+		// Attributs
 		- id: int = (new Arraylist());
 		#:
 			firstname: string;
 			lastname: String;
 		- roles: Roles
 		- username: string = "user[id]"
-		/*
+
 		+ firstname: string
 		static lastname: String;
 		# roles: Roles
 		+ a: int
 		# c: string d: int e: Person
 		- id2: int
+ 		*/
 
 		// Constructors
 		- User()
-		+ User(firstname: string, lastname: string)
+		//+ User(firstname: string, lastname: string)
 
+		/*
 		// Methods
 		+ addNewUser(user: User): void
 		static removeUser(id: int, id2: int): boolean
 		*/
 
 	 }
-
-+ class Person:
-
-+ class Animal:

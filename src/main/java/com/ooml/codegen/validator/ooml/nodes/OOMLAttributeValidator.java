@@ -20,7 +20,8 @@ public class OOMLAttributeValidator extends OOMLValidator {
 		super(lexerManager);
 	}
 
-	public NAttribut getValidatedAttribute() {
+	@Override
+	public NAttribut getValidatedNode() {
 		return this.nAttribut;
 	}
 

@@ -8,6 +8,8 @@ import com.ooml.codegen.models.nodes.leafs.LCommentSingleLine;
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.validator.Validator;
 import com.ooml.codegen.validator.ooml.nodes.OOMLAttributeValidator;
+import com.ooml.codegen.validator.ooml.nodes.OOMLConstructorValidator;
+import com.ooml.codegen.validator.ooml.nodes.OOMLMethodValidator;
 
 public abstract class OOMLValidator extends Validator {
 
@@ -32,6 +34,14 @@ public abstract class OOMLValidator extends Validator {
 
 	protected OOMLAttributeValidator newAttributValidator() {
 		return new OOMLAttributeValidator(this.lexerManager);
+	}
+
+	protected OOMLConstructorValidator newConstructorValidator() {
+		return new OOMLConstructorValidator(this.lexerManager);
+	}
+
+	protected OOMLMethodValidator newMethodValidator() {
+		return new OOMLMethodValidator(this.lexerManager);
 	}
 
 	private void consumeComment() throws Exception {

@@ -25,7 +25,8 @@ public class OOMLClassValidator extends OOMLValidator {
 		super(lexerManager);
 	}
 
-	public NClass getValidatedClass() {
+	@Override
+	public NClass getValidatedNode() {
 		this.nClass.check();
 		return this.nClass;
 	}
@@ -214,16 +215,45 @@ public class OOMLClassValidator extends OOMLValidator {
 
 					this.insertToken(nextToken);
 
-					OOMLAttributeValidator OOMLAttributeValidator = this.newAttributValidator();
-					OOMLAttributeValidator.validate();
+					OOMLAttributeValidator attributeValidator = this.newAttributValidator();
+					attributeValidator.validate();
 
-					this.nClass.addChild(OOMLAttributeValidator.getValidatedAttribute());
+					this.nClass.addChild(attributeValidator.getValidatedNode());
 				}
 				case ACCESS_MODIFIER_BLOCK -> {
 					currentAccessModifierBlock = nextToken;
 				}
 				case OPENING_PARENTHESIS -> {
-					// TODO manage constructor or method
+					unConsumedTokenList.add(nextToken);
+
+					while (nextToken.getType() != TokenType.CLOSING_PARENTHESIS) {
+						nextToken = this.nextToken();
+
+						unConsumedTokenList.add(nextToken);
+
+						if (nextToken.getType() == TokenType.EOF) {
+							ULogger.error("unexpected token " + nextToken.getValue());
+							throw new Exception();
+						}
+					}
+
+					nextToken = this.nextToken();
+
+					this.insertTokens(unConsumedTokenList);
+					unConsumedTokenList = new ArrayList<>();
+					this.insertToken(nextToken);
+
+					if (nextToken.getType() != TokenType.COLON) {
+						OOMLConstructorValidator constructorValidator = this.newConstructorValidator();
+						constructorValidator.validate();
+
+						this.nClass.addChild(constructorValidator.getValidatedNode());
+					} else {
+						OOMLMethodValidator methodValidator = this.newMethodValidator();
+						methodValidator.validate();
+
+						this.nClass.addChild(methodValidator.getValidatedNode());
+					}
 				}
 				case CLOSING_CURLY_BRACKET -> {
 					if (this.UContextStack.empty()) {
