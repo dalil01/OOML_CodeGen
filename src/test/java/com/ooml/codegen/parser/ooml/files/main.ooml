@@ -29,17 +29,22 @@
 		+ a: int
 		# c: string d: int e: Person
 		- id2: int
- 		*/
+
 
 		// Constructors
 
 		//()
 		//+ User(firstname: string, lastname: string)
+		*/
 
-		/*
+        /*
 		// Methods
 		+ addNewUser(user: User): void
-		static removeUser(id: int, id2: int): boolean
-		*/
+        */
+
+		+:
+		 static removeUser1(id: int, id2: int): boolean
+		 static removeUser2(id: int, id2: int): boolean
+		 final static removeUser3(id: int, id2: int): boolean
 
 	 }

@@ -31,8 +31,6 @@ public class OOMLParameterValidator extends OOMLValidator {
 				throw new Exception();
 			}
 
-
-
 			nextToken = this.nextToken();
 		}
 
