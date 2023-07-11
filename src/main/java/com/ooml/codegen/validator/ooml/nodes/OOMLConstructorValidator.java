@@ -75,7 +75,7 @@ public class OOMLConstructorValidator extends OOMLValidator {
 		// TODO parameters
 
 		nextToken = this.nextToken();
-		if (nextToken.getType() != TokenType.OPENING_PARENTHESIS) {
+		if (nextToken.getType() != TokenType.CLOSING_PARENTHESIS) {
 			// TODO
 			ULogger.error("unexpected token ");
 			throw new Exception();

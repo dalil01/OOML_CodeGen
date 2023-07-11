@@ -71,8 +71,8 @@ public class OOMLAttributeValidator extends OOMLValidator {
 		}
 
 		if (beforeColonTokenList.size() == 1) {
-			this.insertToken(beforeColonTokenList.get(0));
 			this.insertToken(nextToken);
+			this.insertToken(beforeColonTokenList.get(0));
 			return;
 		}
 
@@ -88,7 +88,6 @@ public class OOMLAttributeValidator extends OOMLValidator {
 
 	private void validateName() throws Exception {
 		Token nextToken = this.nextToken();
-
 		if (nextToken.getType() == TokenType.COLON) {
 			// TODO
 			ULogger.error("Name not found");
