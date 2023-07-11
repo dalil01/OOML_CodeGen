@@ -109,7 +109,7 @@ public class OOMLParser extends Parser {
 
 		OOMLClassValidator validator = new OOMLClassValidator(this.lexerManager);
 		validator.validate();
-		NClass nClass = validator.getValidatedClass();
+		NClass nClass = validator.getValidatedNode();
 
 		return nClass;
 	}

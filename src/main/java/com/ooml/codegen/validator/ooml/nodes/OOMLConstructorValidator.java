@@ -41,7 +41,7 @@ public class OOMLConstructorValidator extends OOMLValidator {
 
 	private void validateName() throws Exception {
 		Token nextToken = this.nextToken();
-
+		System.out.println(nextToken);
 
 	}
 

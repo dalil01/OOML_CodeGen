@@ -2,7 +2,6 @@ package com.ooml.codegen.validator.ooml.nodes;
 
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
-import com.ooml.codegen.models.nodes.NConstructor;
 import com.ooml.codegen.models.nodes.NMethod;
 import com.ooml.codegen.models.nodes.leafs.LComment;
 import com.ooml.codegen.validator.ooml.OOMLValidator;
