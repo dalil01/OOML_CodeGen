@@ -1,9 +1,12 @@
 package com.ooml.codegen.validator.ooml.nodes;
 
 import com.ooml.codegen.lexer.LexerManager;
+import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.models.nodes.NInterface;
 import com.ooml.codegen.models.nodes.leafs.LComment;
 import com.ooml.codegen.validator.ooml.OOMLValidator;
+
+import java.util.List;
 
 public class OOMLInterfaceValidator extends OOMLValidator {
 
@@ -22,9 +25,8 @@ public class OOMLInterfaceValidator extends OOMLValidator {
 	public void validate() throws Exception {
 	}
 
-	@Override
-	protected void addComment(LComment comment) {
-		this.nInterface.addChild(comment);
+	public void addChildren(List<Token> tokenList) throws Exception {
+
 	}
 
 }

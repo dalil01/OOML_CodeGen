@@ -77,6 +77,10 @@ public class Token {
 		return this.lineN;
 	}
 
+	public boolean isComment() {
+		return this.type == TokenType.SINGLE_LINE_COMMENT || this.type == TokenType.MULTI_LINE_COMMENT;
+	}
+
 	@Override
 	public String toString() {
 		return "Token{" +

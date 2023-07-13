@@ -78,7 +78,7 @@ public abstract class Node {
 		});
 	}
 
-	public void check() {
+	public void check() throws Exception {
 		// TODO : NbTime
 	}
 

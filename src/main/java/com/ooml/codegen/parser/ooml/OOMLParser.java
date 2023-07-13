@@ -4,9 +4,9 @@ import com.ooml.codegen.generator.ICodeGenNode;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.ooml.OOMLLexerManager;
 import com.ooml.codegen.utils.UContextStack;
-import com.ooml.codegen.utils.ULogger;
 import com.ooml.codegen.models.nodes.NClass;
 import com.ooml.codegen.parser.Parser;
+import com.ooml.codegen.utils.ULogger;
 import com.ooml.codegen.validator.ooml.nodes.OOMLClassValidator;
 import com.ooml.codegen.lexer.Token.TokenType;
 
@@ -20,9 +20,6 @@ public class OOMLParser extends Parser {
 	private final List<Token> packageTokenList = new ArrayList<>();
 
 	private final UContextStack packageUContextStack = new UContextStack();
-	private boolean inPackageBlockContext = false;
-
-	private final List<Token> unConsumedTokenList = new ArrayList<>();
 
 	public OOMLParser(OOMLLexerManager lexer) {
 		super(lexer);
@@ -32,81 +29,68 @@ public class OOMLParser extends Parser {
 	public Stream<ICodeGenNode> parse() throws Exception {
 		Stream.Builder<ICodeGenNode> streamBuilder = Stream.builder();
 
-		Token token = this.lexerManager.nextToken();
-		while (token.getType() != TokenType.EOF) {
-			switch (token.getType()) {
-				case OPENING_CURLY_BRACKET -> {
-					if (this.inPackageBlockContext) {
-						this.packageUContextStack.push(UContextStack.ContextType.PACKAGE);
-					} else {
-						// TODO
-						ULogger.error("error unexpected token {");
-						return null;
-					}
-				}
+		TokenType nextTokenType = this.lexerManager.nextTokenType();
+		while (nextTokenType != TokenType.EOF) {
+
+			switch (nextTokenType) {
 				case CLOSING_CURLY_BRACKET -> {
 					if (this.packageUContextStack.empty()) {
 						// TODO
 						ULogger.error("error unexpected token }");
 						return null;
 					}
+
 					this.packageUContextStack.pop();
-					this.inPackageBlockContext = this.packageUContextStack.empty();
+					this.packageTokenList.clear();
 				}
 				case PACKAGE -> {
-					this.lexerManager.insertToken(token);
 					this.handlePackageTokens();
 				}
 				case CLASS -> {
-					this.unConsumedTokenList.add(token);
-					streamBuilder.add(this.parseClass());
+					this.lexerManager.restore();
+					this.parseClass();
+					//streamBuilder.add();
 				}
-				default -> this.unConsumedTokenList.add(token);
 			}
 
-			token = this.lexerManager.nextToken();
+			nextTokenType = this.lexerManager.nextTokenType();
 		}
 
 		return streamBuilder.build();
 	}
 
 	private void handlePackageTokens() throws Exception {
-		this.packageTokenList.addAll(this.unConsumedTokenList);
-		this.unConsumedTokenList.clear();
+		this.packageTokenList.addAll(this.lexerManager.consumeTokens());
 
-		this.packageTokenList.add(this.lexerManager.nextToken());
-
-		Token packageNameToken = this.lexerManager.nextToken();
-		if (packageNameToken.getType() != TokenType.WORD && packageNameToken.getType() != TokenType.QUOTED_WORD) {
+		TokenType nextTokenType = this.lexerManager.nextTokenType(true);
+		if (nextTokenType != TokenType.WORD && nextTokenType != TokenType.QUOTED_WORD) {
 			// TODO : error
 			ULogger.error("error package name");
 			return;
 		}
 
-		this.packageTokenList.add(packageNameToken);
+		this.packageTokenList.addAll(this.lexerManager.consumeTokens());
 
-		Token nextToken = this.lexerManager.nextToken();
-		if (nextToken.getType() != TokenType.COLON) {
-			this.unConsumedTokenList.add(nextToken);
+		nextTokenType = this.lexerManager.nextTokenType(true);
+		if (nextTokenType == TokenType.OPENING_CURLY_BRACKET) {
+			this.packageUContextStack.push(UContextStack.ContextType.PACKAGE);
+		} else if (nextTokenType != TokenType.COLON) {
+			// TODO : error
+			ULogger.error("Missing : or {");
 		}
 
-		this.inPackageBlockContext = true;
+		this.lexerManager.consumeTokens();
 	}
 
-	private void handleUnConsumedTokens() {
-		this.unConsumedTokenList.addAll(0, this.packageTokenList);
-		this.lexerManager.insertTokens(this.unConsumedTokenList);
-		this.unConsumedTokenList.clear();
-	}
+	private Stream<ICodeGenNode> parseClass() throws Exception {
+		this.lexerManager.insertTokensBefore(packageTokenList);
 
-	private ICodeGenNode parseClass() throws Exception {
-		this.handleUnConsumedTokens();
+		OOMLClassParser parser = new OOMLClassParser(this.lexerManager);
 
-		OOMLClassValidator validator = new OOMLClassValidator(this.lexerManager);
-		validator.validate();
-		NClass nClass = validator.getValidatedNode();
 
-		return nClass;
+		parser.parse();
+
+		return null;
 	}
 
 }

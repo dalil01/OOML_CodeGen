@@ -11,9 +11,9 @@
 
 }*/
 
-~ src.app :
+~ /* blabla */ src.app /* */:
 
-	 + class   User /*-> AbstractUser, Abs ~> ICustomer */ {
+	/* aa */ + abstract class /* */ User -> /* */ AbstractUser, /* */ Abs ~> ICustomer {
 		/*
 		// Attributs
 		- id: int = (new Arraylist());
@@ -31,9 +31,10 @@
 		- id2: int
  		*/
 
+/*
 		// Constructors
 
-		//()
+		()
 		//+ User(firstname: string, lastname: string)
 
 		/*

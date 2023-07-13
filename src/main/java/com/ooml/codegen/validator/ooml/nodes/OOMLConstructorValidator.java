@@ -11,7 +11,6 @@ import com.ooml.codegen.models.nodes.leafs.LName;
 import com.ooml.codegen.utils.ULogger;
 import com.ooml.codegen.validator.ooml.OOMLValidator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OOMLConstructorValidator extends OOMLValidator {
@@ -29,16 +28,23 @@ public class OOMLConstructorValidator extends OOMLValidator {
 
 	@Override
 	public void validate() throws Exception {
+		/*
 		this.validateAccessModifier();
 		this.validateName();
 		this.validateParameters();
 
+		 */
+
+		/*
 		Token nextToken = this.nextToken();
 		if (nextToken.getType() != Token.TokenType.SEMI_COLON) {
-			this.insertToken(nextToken);
+			//this.insertToken(nextToken);
 		}
+
+		 */
 	}
 
+	/*
 	private void validateAccessModifier() throws Exception {
 		Token nextToken = this.nextToken(false);
 		if (nextToken.getType() == Token.TokenType.SIGN || nextToken.getType() == Token.TokenType.ACCESS_MODIFIER_BLOCK) {
@@ -49,13 +55,12 @@ public class OOMLConstructorValidator extends OOMLValidator {
 	}
 
 	private void validateName() throws Exception {
-		Token nextToken = this.nextToken();
+		Token nextToken = this.nextToken(false);
 
 		Leaf lName = new LName("");
 
 		if (nextToken.getType() != TokenType.OPENING_PARENTHESIS) {
 			lName.setValue(nextToken.getValue());
-			this.nConstructor.addChild(lName);
 		} else {
 			this.insertToken(nextToken);
 		}
@@ -72,9 +77,22 @@ public class OOMLConstructorValidator extends OOMLValidator {
 			throw new Exception();
 		}
 
-		// TODO parameters
-
 		nextToken = this.nextToken();
+		while (nextToken.getType() != TokenType.CLOSING_PARENTHESIS) {
+			if (nextToken.getType() == TokenType.EOF) {
+				// TODO
+				ULogger.error("Missing token ");
+				throw new Exception();
+			}
+
+			OOMLParameterValidator parameterValidator = this.newParameterValidator();
+			parameterValidator.validate();
+
+			this.nConstructor.addChild(parameterValidator.getValidatedNode());
+
+			nextToken = this.nextToken();
+		}
+
 		if (nextToken.getType() != TokenType.CLOSING_PARENTHESIS) {
 			// TODO
 			ULogger.error("unexpected token ");
@@ -82,9 +100,10 @@ public class OOMLConstructorValidator extends OOMLValidator {
 		}
 	}
 
-	@Override
-	protected void addComment(LComment comment) {
-		this.nConstructor.addChild(comment);
+	 */
+
+	public void addChildren(List<Token> tokenList) throws Exception {
+
 	}
 
 }

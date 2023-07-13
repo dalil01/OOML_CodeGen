@@ -3,16 +3,12 @@ package com.ooml.codegen.validator.ooml.nodes;
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
+import com.ooml.codegen.models.Node;
 import com.ooml.codegen.models.nodes.NClass;
-import com.ooml.codegen.models.nodes.leafs.LInheritanceClass;
-import com.ooml.codegen.models.nodes.leafs.LInheritanceInterface;
 import com.ooml.codegen.models.nodes.leafs.*;
 import com.ooml.codegen.utils.UContextStack;
-import com.ooml.codegen.utils.UContextStack.ContextType;
-import com.ooml.codegen.utils.ULogger;
 import com.ooml.codegen.validator.ooml.OOMLValidator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OOMLClassValidator extends OOMLValidator {
@@ -27,156 +23,25 @@ public class OOMLClassValidator extends OOMLValidator {
 
 	@Override
 	public NClass getValidatedNode() {
-		this.nClass.check();
 		return this.nClass;
 	}
 
 	@Override
 	public void validate() throws Exception {
-		this.validatePackage();
+
+		/*
 		this.validateAccessModifier();
 		this.validateNonAccessModifiers();
 		this.validateClassDeclaration();
 		this.validateClassInheritance();
 		this.validateInterfaceInheritance();
 		this.validateClassBody();
+
+		 */
 	}
 
-	private void validatePackage() throws Exception {
-		Token nextToken = this.nextToken();
-		if (nextToken.getType() == TokenType.PACKAGE) {
-			// We are sure to have the package name in the following token.
-			nextToken = this.nextToken();
-			this.nClass.addChild(new LPackage(nextToken.getValue()));
-		} else {
-			this.insertToken(nextToken);
-		}
-	}
+		/*
 
-	private void validateAccessModifier() throws Exception {
-		Token nextToken = this.nextToken();
-
-		if (nextToken.getType() != TokenType.SIGN) {
-			this.insertToken(nextToken);
-			return;
-		}
-
-		this.nClass.addChild(new LAccessModifierClass(nextToken.getValue()));
-	}
-
-	private void validateNonAccessModifiers() throws Exception {
-		Token nextToken = this.nextToken();
-
-		while (nextToken.getType() != TokenType.CLASS) {
-			if (nextToken.getType() == TokenType.EOF) {
-				return;
-			}
-
-			this.nClass.addChild(new LNonAccessModifier(nextToken.getValue()));
-
-			nextToken = this.nextToken();
-		}
-
-		this.insertToken(nextToken);
-	}
-
-	private void validateClassDeclaration() throws Exception {
-		Token nextToken = this.nextToken();
-
-		if (nextToken.getType() != TokenType.CLASS) {
-			ULogger.error("Missing currentToken class");
-			throw new Exception();
-		}
-
-		this.nClass.addChild(new LDeclaration(nextToken.getValue()));
-
-		nextToken = this.nextToken();
-		if (nextToken.getType() == TokenType.EOF) {
-			// TODO
-			ULogger.error("Missing classname");
-			throw new Exception();
-		}
-
-		this.nClass.addChild(new LName(nextToken.getValue()));
-	}
-
-	private void validateClassInheritance() throws Exception {
-		Token nextToken = this.nextToken();
-		if (nextToken.getType() == TokenType.CLASS_INHERITANCE) {
-			List<Token> tokenList = new ArrayList<>();
-
-			while (nextToken.getType() != TokenType.EOF) {
-				nextToken = this.nextToken();
-
-				if (nextToken.getType() == TokenType.INTERFACE_INHERITANCE
-						|| nextToken.getType() == TokenType.OPENING_CURLY_BRACKET
-						|| nextToken.getType() == TokenType.COLON
-				) {
-					this.insertToken(nextToken);
-					break;
-				}
-
-				tokenList.add(nextToken);
-			}
-
-			this.validateInheritances(TokenType.CLASS_INHERITANCE, tokenList);
-		} else {
-			this.insertToken(nextToken);
-		}
-	}
-
-	private void validateInterfaceInheritance() throws Exception {
-		Token nextToken = this.nextToken();
-		if (nextToken.getType() == TokenType.INTERFACE_INHERITANCE) {
-			List<Token> tokenList = new ArrayList<>();
-
-			while (nextToken.getType() != TokenType.EOF) {
-				nextToken = this.nextToken();
-
-				if (nextToken.getType() == TokenType.OPENING_CURLY_BRACKET
-						|| nextToken.getType() == TokenType.COLON
-				) {
-					this.insertToken(nextToken);
-					break;
-				}
-
-				tokenList.add(nextToken);
-			}
-
-			this.validateInheritances(TokenType.INTERFACE_INHERITANCE, tokenList);
-		} else {
-			this.insertToken(nextToken);
-		}
-	}
-
-	private void validateInheritances(TokenType inheritanceType, List<Token> tokenList) throws Exception {
-		for (int i = 0; i < tokenList.size(); i++) {
-			Token token = tokenList.get(i);
-
-			if (i % 2 == 0) {
-				if (inheritanceType == TokenType.CLASS_INHERITANCE) {
-					this.nClass.addChild(new LInheritanceClass(token.getValue()));
-				} else if (inheritanceType == TokenType.INTERFACE_INHERITANCE) {
-					this.nClass.addChild(new LInheritanceInterface(token.getValue()));
-				}
-			} else {
-				if (token.getType() != TokenType.COMMA) {
-					// TODO error
-					ULogger.error("missing unexpected token " + token.getValue());
-					throw new Exception();
-				}
-			}
-		}
-
-		if (tokenList.size() % 2 == 0) {
-			Token lastToken = tokenList.get(tokenList.size() - 1);
-			if (lastToken.getType() == TokenType.COLON) {
-				// TODO error
-				ULogger.error("Unexpected token " + lastToken.getValue());
-				throw new Exception();
-			}
-		}
-	}
 
 	private void validateClassBody() throws Exception {
 		Token nextToken = this.nextToken();
@@ -231,7 +96,7 @@ public class OOMLClassValidator extends OOMLValidator {
 					unConsumedTokenList.add(nextToken);
 
 					while (nextToken.getType() != TokenType.CLOSING_PARENTHESIS) {
-						nextToken = this.nextToken(false);
+						nextToken = this.nextToken();
 
 						unConsumedTokenList.add(nextToken);
 
@@ -241,10 +106,11 @@ public class OOMLClassValidator extends OOMLValidator {
 						}
 					}
 
-					nextToken = this.nextToken(false);
+					nextToken = this.nextToken();
 
 					this.insertTokens(unConsumedTokenList);
 					unConsumedTokenList = new ArrayList<>();
+					this.insertToken(nextToken);
 
 					if (nextToken.getType() != TokenType.COLON) {
 						OOMLConstructorValidator constructorValidator = this.newConstructorValidator();
@@ -252,8 +118,6 @@ public class OOMLClassValidator extends OOMLValidator {
 
 						this.nClass.addChild(constructorValidator.getValidatedNode());
 					} else {
-						this.insertToken(nextToken);
-
 						OOMLMethodValidator methodValidator = this.newMethodValidator();
 						methodValidator.validate();
 
@@ -296,19 +160,70 @@ public class OOMLClassValidator extends OOMLValidator {
 					// TODO Manage intern class, enum, interface
 				}
 				default -> {
+					System.out.println(nextToken);
 					// TODO
-					ULogger.error("unexpected token ");
+					ULogger.error("unexpected token " + nextToken);
 					throw new Exception();
 				}
 			}
 
-			nextToken = this.nextToken(false);
+			nextToken = this.nextToken();
+		}
+	}
+
+	 */
+
+	public void addChild(List<Token> tokenList, Class<? extends Node> clazz) {
+		for (int i = 0; i < tokenList.size(); i++) {
+			Token token = tokenList.get(i);
+
+			TokenType type = token.getType();
+			String value = token.getValue();
+
+			if (token.isComment()) {
+				if (type == TokenType.SINGLE_LINE_COMMENT) {
+					this.nClass.addChild(new LCommentSingleLine(value));
+				} else {
+					this.nClass.addChild(new LCommentMultiLine(value));
+				}
+
+				continue;
+			}
+
+			/*
+			if (clazz.equals(LPackage.class)) {
+				this.nClass.addChild(new LPackage(tokenList.get(i + 1).getValue()));
+				i++;
+			} else if (clazz.equals(LAccessModifierClass.class)) {
+				//this.nClass.addChild(new LAccessModifierClass());
+			}
+
+			 */
 		}
 	}
 
 	@Override
-	protected void addComment(LComment comment) {
-		this.nClass.addChild(comment);
+	public void addChildren(List<Token> tokenList) {
+		for (int i = 0; i < tokenList.size(); i++) {
+			Token token = tokenList.get(i);
+
+			TokenType type = token.getType();
+			String value = token.getValue();
+
+			switch (type) {
+				case SINGLE_LINE_COMMENT -> this.nClass.addChild(new LCommentSingleLine(value));
+				case MULTI_LINE_COMMENT -> this.nClass.addChild(new LCommentMultiLine(value));
+				case PACKAGE -> {
+					//this.nClass.addChild(new LPackage(tokenList.get(i + 1).getValue()));
+					i++;
+				}
+				case SIGN -> {
+					this.nClass.addChild(new LAccessModifierClass(token.getValue()));
+				}
+				default -> {
+				}
+			}
+		}
 	}
 
 }

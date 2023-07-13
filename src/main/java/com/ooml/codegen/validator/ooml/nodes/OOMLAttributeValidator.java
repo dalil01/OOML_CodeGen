@@ -27,7 +27,8 @@ public class OOMLAttributeValidator extends OOMLValidator {
 
 	@Override
 	public void validate() throws Exception {
-		this.validateAccessModifier();
+
+		/*this.validateAccessModifier();
 		this.validateNonAccessModifiers();
 		this.validateName();
 		this.validateType();
@@ -37,8 +38,11 @@ public class OOMLAttributeValidator extends OOMLValidator {
 		if (nextToken.getType() != TokenType.SEMI_COLON) {
 			this.insertToken(nextToken);
 		}
+
+		 */
 	}
 
+	/*
 	private void validateAccessModifier() throws Exception {
 		Token nextToken = this.nextToken();
 		if (nextToken.getType() == TokenType.SIGN || nextToken.getType() == TokenType.ACCESS_MODIFIER_BLOCK) {
@@ -157,9 +161,10 @@ public class OOMLAttributeValidator extends OOMLValidator {
 		}
 	}
 
-	@Override
-	protected void addComment(LComment comment) {
-		this.nAttribut.addChild(comment);
+	 */
+
+	public void addChildren(List<Token> tokenList) throws Exception {
+
 	}
 
 }
