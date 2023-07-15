@@ -14,9 +14,11 @@
 ~ /* blabla */ src.app /* */:
 
 	/* aa */ + abstract class /* */ User -> /* */ AbstractUser, /* */ Abs ~> ICustomer {
-		/*
+
 		// Attributs
-		- id: int = (new Arraylist());
+		- /*  */ static /* */ id /* */: int = <new Arraylist( 0 )>;
+
+		/*
 		#:
 			firstname: string;
 			lastname: String;

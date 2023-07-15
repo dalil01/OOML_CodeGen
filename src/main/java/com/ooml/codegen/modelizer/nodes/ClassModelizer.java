@@ -56,5 +56,4 @@ public class ClassModelizer extends Modelizer {
 	}
 
 
-
 }

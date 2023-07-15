@@ -1,7 +1,6 @@
 package com.ooml.codegen.parser.ooml;
 
 import com.ooml.codegen.lexer.ooml.OOMLLexerManager;
-import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import org.junit.jupiter.api.Test;
 
@@ -17,9 +16,7 @@ public class OOMLParserTest {
 		OOMLLexerManager lexer = new OOMLLexerManager(new File(pathPrefix + "main.ooml"));
 		Parser parser = new OOMLParser(lexer);
 
-		parser.parse().forEach(node -> {
-			((Node) node).printTree();
-		});
+		parser.parse();
 	}
 
 }

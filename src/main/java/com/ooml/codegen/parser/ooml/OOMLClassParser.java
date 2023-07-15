@@ -5,6 +5,7 @@ import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.modelizer.nodes.ClassModelizer;
+import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.UContextStack;
 import com.ooml.codegen.utils.ULogger;
@@ -21,7 +22,7 @@ public class OOMLClassParser extends Parser {
 	}
 
 	@Override
-	public Stream<ICodeGenNode> parse() throws Exception {
+	public Node parse() throws Exception {
 		this.parsePackage();
 		this.parseAccessModifier();
 		this.parseNonAccessModifiers();
@@ -32,7 +33,7 @@ public class OOMLClassParser extends Parser {
 
 		this.classModelizer.getModel().printTree();
 
-		return null;
+		return this.classModelizer.getModel();
 	}
 
 	private void parsePackage() throws Exception {
@@ -180,6 +181,36 @@ public class OOMLClassParser extends Parser {
 
 		nextTokenType = this.lexerManager.nextTokenType(true);
 		while (nextTokenType != TokenType.EOF) {
+			switch (nextTokenType) {
+				case COLON -> {
+					this.lexerManager.restore();
+
+					OOMLAttributeParser attributeParser = new OOMLAttributeParser(this.lexerManager);
+					Node attribute = attributeParser.parse();
+
+					this.classModelizer.getModel().addChild(attribute);
+				}
+				case CLOSING_CURLY_BRACKET -> {
+					if (contextStack.empty()) {
+						// TODO
+						ULogger.error("unexpected token }");
+						throw new Exception();
+					}
+
+					contextStack.pop();
+					if (contextStack.empty()) {
+						return;
+					}
+				}
+				case PACKAGE -> {
+					if (contextStack.empty()) {
+						return;
+					}
+
+					ULogger.error("unexpected token ");
+					throw new Exception();
+				}
+			}
 
 			nextTokenType = this.lexerManager.nextTokenType(true);
 		}

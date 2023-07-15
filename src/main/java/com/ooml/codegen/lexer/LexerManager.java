@@ -22,12 +22,28 @@ public abstract class LexerManager {
 		this.initialFile = lexer.getFile();
 	}
 
+	public Token nextToken() throws FileNotFoundException {
+		return this.nextTokenHelper(false);
+	}
+
+	public Token nextToken(boolean skipComment) throws FileNotFoundException {
+		return this.nextTokenHelper(skipComment);
+	}
+
 	public TokenType nextTokenType() throws FileNotFoundException {
 		return this.nextTokenHelper(false).getType();
 	}
 
 	public TokenType nextTokenType(boolean skipComment) throws FileNotFoundException {
 		return this.nextTokenHelper(skipComment).getType();
+	}
+
+	public String nextTokenValue() throws FileNotFoundException {
+		return this.nextTokenHelper(false).getValue();
+	}
+
+	public String nextTokenValue(boolean skipComment) throws FileNotFoundException {
+		return this.nextTokenHelper(skipComment).getValue();
 	}
 
 	public List<Token> consumeTokens() {
@@ -61,10 +77,6 @@ public abstract class LexerManager {
 	}
 
 	protected abstract void manageImport(Token token) throws FileNotFoundException;
-
-	private Token nextToken() throws FileNotFoundException {
-		return this.nextTokenHelper(false);
-	}
 
 	private Token nextTokenHelper(boolean skipComment) throws FileNotFoundException {
 		Token nextToken;

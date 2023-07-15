@@ -10,7 +10,8 @@ public class UContextStack extends Stack<UContextStack.ContextType> {
 		CLASS,
 		ENUM,
 		INTERFACE,
-		PARENTHESIS
+		PARENTHESIS,
+		TAG
 
 	}
 

@@ -3,6 +3,7 @@ package com.ooml.codegen.parser.ooml;
 import com.ooml.codegen.generator.ICodeGenNode;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.ooml.OOMLLexerManager;
+import com.ooml.codegen.models.Node;
 import com.ooml.codegen.utils.UContextStack;
 import com.ooml.codegen.models.nodes.NClass;
 import com.ooml.codegen.parser.Parser;
@@ -26,7 +27,7 @@ public class OOMLParser extends Parser {
 	}
 
 	@Override
-	public Stream<ICodeGenNode> parse() throws Exception {
+	public Node parse() throws Exception {
 		Stream.Builder<ICodeGenNode> streamBuilder = Stream.builder();
 
 		TokenType nextTokenType = this.lexerManager.nextTokenType();
@@ -56,7 +57,7 @@ public class OOMLParser extends Parser {
 			nextTokenType = this.lexerManager.nextTokenType();
 		}
 
-		return streamBuilder.build();
+		return null;
 	}
 
 	private void handlePackageTokens() throws Exception {

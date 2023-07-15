@@ -37,7 +37,7 @@ public abstract class Modelizer {
 		this.model.addChild(node);
 	}
 
-	protected void addComment(Token token) {
+	public void addComment(Token token) {
 		if (token.getType() == Token.TokenType.SINGLE_LINE_COMMENT) {
 			this.model.addChild(new LCommentSingleLine(token.getValue()));
 		} else {

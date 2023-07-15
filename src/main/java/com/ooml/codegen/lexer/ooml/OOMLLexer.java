@@ -3,6 +3,8 @@ package com.ooml.codegen.lexer.ooml;
 import com.ooml.codegen.lexer.Lexer;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
+import com.ooml.codegen.utils.UContextStack;
+import com.ooml.codegen.utils.UContextStack.ContextType;
 import com.ooml.codegen.utils.ULogger;
 
 import java.io.*;
@@ -125,6 +127,10 @@ public class OOMLLexer extends Lexer {
 			}
 			case DOUBLE_QUOTE, SINGLE_QUOTE, BACK_QUOTE -> {
 				return this.generateQuotedWord();
+			}
+			case LESS_THAN -> {
+				this.cStream.next();
+				return this.generateTagWord();
 			}
 			case OPENING_BRACKET -> {
 				this.cStream.next();
@@ -312,6 +318,39 @@ public class OOMLLexer extends Lexer {
 		}
 
 		return new Token(TokenType.QUOTED_WORD, quote + s.toString() + quote, this.getFile().toPath(), this.lineN, this.lineN);
+	}
+
+	private Token generateTagWord() {
+		StringBuilder s = new StringBuilder();
+
+		UContextStack contextStack = new UContextStack();
+		contextStack.add(ContextType.TAG);
+
+		while (!this.cStream.isEOF()) {
+			char currentChar = this.cStream.getCurrentChar();
+
+			if (currentChar == OOMLSymbols.LESS_THAN.getValue()) {
+				contextStack.push(ContextType.TAG);
+			} else if (currentChar == OOMLSymbols.GREATER_THAN.getValue()) {
+				contextStack.pop();
+				if (contextStack.isEmpty()) {
+					break;
+				}
+			}
+
+			s.append(currentChar);
+
+			this.cStream.next();
+		}
+
+		if (this.cStream.isEOF()) {
+			// TODO
+			ULogger.warn("Missing >");
+		} else {
+			this.cStream.next();
+		}
+
+		return new Token(TokenType.TAG_WORD, s.toString(), this.getFile().toPath(), this.lineN, this.lineN);
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
