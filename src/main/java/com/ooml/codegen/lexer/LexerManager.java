@@ -14,7 +14,7 @@ public abstract class LexerManager {
 	protected final File initialFile;
 
 	private final List<Token> unConsumedTokenList = new ArrayList<>();
-	private final LinkedList<Token> nextTokens = new LinkedList<>();
+	private LinkedList<Token> nextTokens = new LinkedList<>();
 
 	protected LexerManager(Lexer lexer) {
 		this.stack = new ArrayDeque<>();
@@ -53,8 +53,7 @@ public abstract class LexerManager {
 	}
 
 	public void restore() {
-		this.nextTokens.addAll(this.unConsumedTokenList);
-		this.unConsumedTokenList.clear();
+		this.nextTokens.addAll(0, this.consumeTokens());
 	}
 
 	public void insertTokenBefore(Token token) {

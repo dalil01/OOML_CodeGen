@@ -86,6 +86,10 @@ public class Token {
 		return this.type == TokenType.OPENING_PARENTHESIS || this.type == TokenType.CLOSING_PARENTHESIS;
 	}
 
+	public boolean isAccessModifier() {
+		return this.type == TokenType.SIGN || this.type == TokenType.ACCESS_MODIFIER_BLOCK;
+	}
+
 	@Override
 	public String toString() {
 		return "Token{" +

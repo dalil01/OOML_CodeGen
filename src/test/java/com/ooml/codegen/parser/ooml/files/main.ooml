@@ -15,13 +15,15 @@
 
 	/* aa */ + abstract class /* */ User -> /* */ AbstractUser, /* */ Abs ~> ICustomer {
 
-		// Attributs
-		- /*  */ static /* */ id /* */: int = <new Arraylist( 0 )>;
+	// TODO : Manage multi line comment with UContext.
 
-		/*
+	// Attributs
+	//	 - /*  */ static /* */ id /* */: int = <new Arraylist( 0 )>;
+
+	/*
 		#:
-			firstname: string;
-			lastname: String;
+		firstname: string;
+		lastname: String;
 		- roles: Roles
 		- username: string = "user[id]"
 
@@ -29,15 +31,17 @@
 		static lastname: String;
 		# roles: Roles
 		+ a: int
-		# c: string d: int e: Person
-		- id2: int
- 		*/
+		-: c: string = '1' d: int e: Person
+		# id2: int
+	*/
 
-/*
+
+
 		// Constructors
 
 		()
-		//+ User(firstname: string, lastname: string)
+		+ User(final /* */ firstname: string, lastname: string);
+		//  + User(final /* */ firstname: string, lastname: string = "");
 
 		/*
 		// Methods

@@ -1,6 +1,5 @@
 package com.ooml.codegen.parser.ooml;
 
-import com.ooml.codegen.generator.ICodeGenNode;
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
@@ -11,7 +10,6 @@ import com.ooml.codegen.utils.UContextStack;
 import com.ooml.codegen.utils.ULogger;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public class OOMLClassParser extends Parser {
 
@@ -130,7 +128,6 @@ public class OOMLClassParser extends Parser {
 	private void parseInterfaceInheritance() throws Exception {
 		TokenType nextTokenType = this.lexerManager.nextTokenType(true);
 		if (nextTokenType == TokenType.INTERFACE_INHERITANCE) {
-
 			int i = 1;
 			while (nextTokenType != TokenType.EOF) {
 				nextTokenType = this.lexerManager.nextTokenType(true);
@@ -179,16 +176,43 @@ public class OOMLClassParser extends Parser {
 
 		this.lexerManager.consumeTokens();
 
-		nextTokenType = this.lexerManager.nextTokenType(true);
-		while (nextTokenType != TokenType.EOF) {
-			switch (nextTokenType) {
+		Token accessModifierBlock = null;
+
+		Token nextToken = this.lexerManager.nextToken(true);
+		while (nextToken.getType() != TokenType.EOF) {
+			switch (nextToken.getType()) {
+				case ACCESS_MODIFIER_BLOCK -> {
+					accessModifierBlock = nextToken;
+				}
+				case SIGN -> {
+					accessModifierBlock = null;
+				}
 				case COLON -> {
 					this.lexerManager.restore();
 
-					OOMLAttributeParser attributeParser = new OOMLAttributeParser(this.lexerManager);
-					Node attribute = attributeParser.parse();
+					if (this.lexerManager.nextToken(true).isAccessModifier()) {
+						this.lexerManager.restore();
+					} else if (accessModifierBlock != null) {
+						this.lexerManager.restore();
+						this.lexerManager.insertTokenBefore(accessModifierBlock);
+					}
 
-					this.classModelizer.getModel().addChild(attribute);
+					this.classModelizer.getModel().addChild((new OOMLAttributeParser(this.lexerManager)).parse());
+				}
+				case OPENING_PARENTHESIS -> {
+					while (nextToken.getType() != TokenType.CLOSING_PARENTHESIS) {
+						nextToken = this.lexerManager.nextToken(true);
+						if (nextToken.getType() == TokenType.EOF) {
+							ULogger.error("unexpected token " + nextToken.getValue());
+							throw new Exception();
+						}
+					}
+
+					nextToken = this.lexerManager.nextToken(true);
+					this.lexerManager.restore();
+
+					Parser parser = (nextToken.getType() != TokenType.COLON) ? new OOMLConstructorParser(this.lexerManager) : new OOMLMethodParser(this.lexerManager);
+					this.classModelizer.getModel().addChild(parser.parse());
 				}
 				case CLOSING_CURLY_BRACKET -> {
 					if (contextStack.empty()) {
@@ -212,7 +236,7 @@ public class OOMLClassParser extends Parser {
 				}
 			}
 
-			nextTokenType = this.lexerManager.nextTokenType(true);
+			nextToken = this.lexerManager.nextToken(true);
 		}
 	}
 

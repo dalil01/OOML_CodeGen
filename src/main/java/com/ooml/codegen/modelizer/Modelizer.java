@@ -45,4 +45,12 @@ public abstract class Modelizer {
 		}
 	}
 
+	public void addComments(List<Token> tokenList) {
+		for (Token token : tokenList) {
+			if (token.isComment()) {
+				this.addComment(token);
+			}
+		}
+	}
+
 }

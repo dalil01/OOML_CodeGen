@@ -5,10 +5,8 @@ import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.ooml.OOMLLexerManager;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.utils.UContextStack;
-import com.ooml.codegen.models.nodes.NClass;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
-import com.ooml.codegen.validator.ooml.nodes.OOMLClassValidator;
 import com.ooml.codegen.lexer.Token.TokenType;
 
 import java.util.ArrayList;
@@ -83,15 +81,9 @@ public class OOMLParser extends Parser {
 		this.lexerManager.consumeTokens();
 	}
 
-	private Stream<ICodeGenNode> parseClass() throws Exception {
+	private Node parseClass() throws Exception {
 		this.lexerManager.insertTokensBefore(packageTokenList);
-
-		OOMLClassParser parser = new OOMLClassParser(this.lexerManager);
-
-
-		parser.parse();
-
-		return null;
+		return new OOMLClassParser(this.lexerManager).parse();
 	}
 
 }

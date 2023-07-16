@@ -12,6 +12,7 @@ public class NParameter extends Node {
 		map.put(LNonAccessModifier.class, NbTime.ZERO_OR_MULTI);
 		map.put(LName.class, NbTime.ONE);
 		map.put(LType.class, NbTime.ONE);
+		map.put(LValue.class, NbTime.ONE);
 	}
 
 }

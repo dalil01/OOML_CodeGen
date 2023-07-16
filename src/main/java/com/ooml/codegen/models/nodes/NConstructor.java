@@ -9,7 +9,7 @@ public class NConstructor extends Node {
 
 	@Override
 	protected void autoSetNbTimeBySupportedChild(Map<Class<? extends Node>, NbTime> map) {
-		map.put(LName.class, NbTime.ONE);
+		map.put(LName.class, NbTime.ZERO_OR_ONE);
 		map.put(LAccessModifierConstructor.class, NbTime.ZERO_OR_MULTI);
 		map.put(NParameter.class, NbTime.ZERO_OR_MULTI);
 	}
