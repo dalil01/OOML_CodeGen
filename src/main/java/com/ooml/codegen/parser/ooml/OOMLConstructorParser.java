@@ -63,15 +63,8 @@ public class OOMLConstructorParser extends Parser {
 		while (nextTokenType != TokenType.CLOSING_PARENTHESIS) {
 			this.lexerManager.restore();
 			this.constructorModelizer.getModel().addChild((new OOMLParameterParser(this.lexerManager).parse()));
-
 			nextTokenType = this.lexerManager.nextTokenType(true);
-			if (nextTokenType != TokenType.CLOSING_PARENTHESIS) {
-				if (nextTokenType != TokenType.COMMA) {
-					// TODO
-					ULogger.error("Missing comma ");
-					throw new Exception();
-				}
-
+			if (nextTokenType == TokenType.COMMA) {
 				this.constructorModelizer.addComments(this.lexerManager.consumeTokens());
 				nextTokenType = this.lexerManager.nextTokenType(true);
 			}

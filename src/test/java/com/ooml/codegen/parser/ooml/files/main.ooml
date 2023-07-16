@@ -40,7 +40,7 @@
 		// Constructors
 
 		()
-		+ User(final /* */ firstname: string, lastname: string);
+		+ User(final /* */ firstname: string, lastname: string id: string = "myID");
 		//  + User(final /* */ firstname: string, lastname: string = "");
 
 		/*
