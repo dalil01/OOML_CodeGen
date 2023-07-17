@@ -46,7 +46,7 @@
 
 		// Methods
 		+ addNewUser(): void
-		+ addNewUser(user: User): void
+		+ addNewUser(user: User): void;
 		static removeUser(id: int, id2: int): boolean
 
 	 }
