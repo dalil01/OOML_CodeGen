@@ -83,7 +83,11 @@ public class OOMLParser extends Parser {
 
 	private Node parseClass() throws Exception {
 		this.lexerManager.insertTokensBefore(packageTokenList);
-		return new OOMLClassParser(this.lexerManager).parse();
+		Node clazz = new OOMLClassParser(this.lexerManager).parse();
+
+		clazz.printTree();
+
+		return clazz;
 	}
 
 }

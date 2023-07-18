@@ -9,6 +9,7 @@ import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.UContextStack;
 import com.ooml.codegen.utils.ULogger;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class OOMLClassParser extends Parser {
@@ -28,8 +29,6 @@ public class OOMLClassParser extends Parser {
 		this.parseClassInheritance();
 		this.parseInterfaceInheritance();
 		this.parseClassBody();
-
-		this.classModelizer.getModel().printTree();
 
 		return this.classModelizer.getModel();
 	}
@@ -181,25 +180,15 @@ public class OOMLClassParser extends Parser {
 		Token nextToken = this.lexerManager.nextToken(true);
 		while (nextToken.getType() != TokenType.EOF) {
 			switch (nextToken.getType()) {
-				case ACCESS_MODIFIER_BLOCK -> {
-					accessModifierBlock = nextToken;
-				}
-				case SIGN -> {
-					accessModifierBlock = null;
-				}
+				case ACCESS_MODIFIER_BLOCK -> accessModifierBlock = nextToken;
+				case SIGN -> accessModifierBlock = null;
 				case COLON -> {
-					this.lexerManager.restore();
-
-					if (this.lexerManager.nextToken(true).isAccessModifier()) {
-						this.lexerManager.restore();
-					} else if (accessModifierBlock != null) {
-						this.lexerManager.restore();
-						this.lexerManager.insertTokenBefore(accessModifierBlock);
-					}
-
+					this.handleAccessModifierBlock(accessModifierBlock);
 					this.classModelizer.getModel().addChild((new OOMLAttributeParser(this.lexerManager)).parse());
 				}
 				case OPENING_PARENTHESIS -> {
+					this.handleAccessModifierBlock(accessModifierBlock);
+
 					while (nextToken.getType() != TokenType.CLOSING_PARENTHESIS) {
 						nextToken = this.lexerManager.nextToken(true);
 						if (nextToken.getType() == TokenType.EOF) {
@@ -213,6 +202,10 @@ public class OOMLClassParser extends Parser {
 
 					Parser parser = (nextToken.getType() != TokenType.COLON) ? new OOMLConstructorParser(this.lexerManager) : new OOMLMethodParser(this.lexerManager);
 					this.classModelizer.getModel().addChild(parser.parse());
+				}
+				case CLASS -> {
+					this.lexerManager.restore();
+					this.classModelizer.getModel().addChild((new OOMLClassParser(this.lexerManager)).parse());
 				}
 				case CLOSING_CURLY_BRACKET -> {
 					if (contextStack.empty()) {
@@ -237,6 +230,17 @@ public class OOMLClassParser extends Parser {
 			}
 
 			nextToken = this.lexerManager.nextToken(true);
+		}
+	}
+
+	private void handleAccessModifierBlock(Token accessModifierBlock) throws FileNotFoundException {
+		this.lexerManager.restore();
+
+		if (this.lexerManager.nextToken(true).isAccessModifier()) {
+			this.lexerManager.restore();
+		} else if (accessModifierBlock != null) {
+			this.lexerManager.restore();
+			this.lexerManager.insertTokenBefore(accessModifierBlock);
 		}
 	}
 

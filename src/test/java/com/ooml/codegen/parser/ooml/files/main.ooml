@@ -35,18 +35,23 @@
 		# id2: int
 	*/
 
-
-
 		// Constructors
 
-		//()
+		()
 		//+ User(final /* */ firstname: string, lastname: string id: string);
 		//# User(final /* */ firstname: string, lastname: string);
 
 
 		// Methods
 		+ addNewUser(): void
-		+ addNewUser(user: User): void;
+		# addNewUser(user: User): void;
 		static removeUser(id: int, id2: int): boolean
 
+		// Intern class
+		- class User {
+  			- id: int;
+  			();
+  			+ getId(): int;
+		}
 	 }
+
