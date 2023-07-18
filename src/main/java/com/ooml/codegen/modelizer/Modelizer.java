@@ -12,13 +12,11 @@ import java.util.function.BiConsumer;
 class Modelizer implements
 		IPackageModelizer,
 		IClassModelizer,
-		IClassInheritanceModelizer,
-		IInterfaceInheritanceModelizer,
+		IInheritanceClassModelizer, IInheritanceInterfaceModelizer,
 		IAttributModelizer,
 		IConstructorModelizer,
 		IParameterModelizer,
-		IMethodModelizer
-{
+		IMethodModelizer {
 
 	private final Node model;
 
@@ -125,7 +123,7 @@ class Modelizer implements
 	}
 
 	@Override
-	public void addClassInheritance(IClassInheritanceModelizer modelizer) throws Exception {
+	public void addClassInheritance(IInheritanceClassModelizer modelizer) throws Exception {
 		this.addChild(modelizer.getModel());
 	}
 
@@ -139,7 +137,7 @@ class Modelizer implements
 	}
 
 	@Override
-	public void addInterfaceInheritance(IInterfaceInheritanceModelizer modelizer) throws Exception {
+	public void addInterfaceInheritance(IInheritanceInterfaceModelizer modelizer) throws Exception {
 		this.addChild(modelizer.getModel());
 	}
 

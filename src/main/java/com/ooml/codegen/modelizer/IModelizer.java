@@ -8,7 +8,9 @@ import java.util.List;
 public interface IModelizer {
 
 	Node getModel() throws Exception;
+
 	void addComment(Token token);
+
 	void addComments(List<Token> tokenList);
 
 }

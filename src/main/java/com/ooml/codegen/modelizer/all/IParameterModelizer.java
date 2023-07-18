@@ -11,7 +11,7 @@ public interface IParameterModelizer extends IModelizer {
 
 	void addName(List<Token> tokenList);
 
-	void addType(List<Token> tokenList);;
+	void addType(List<Token> tokenList);
 
 	void addValue(List<Token> tokenList);
 

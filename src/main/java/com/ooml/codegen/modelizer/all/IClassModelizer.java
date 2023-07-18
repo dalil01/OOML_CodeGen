@@ -17,8 +17,8 @@ public interface IClassModelizer extends IModelizer {
 
 	void addName(List<Token> tokenList);
 
-	void addClassInheritance(IClassInheritanceModelizer modelizer) throws Exception;
+	void addClassInheritance(IInheritanceClassModelizer modelizer) throws Exception;
 
-	void addInterfaceInheritance(IInterfaceInheritanceModelizer modelizer) throws Exception;
+	void addInterfaceInheritance(IInheritanceInterfaceModelizer modelizer) throws Exception;
 
 }

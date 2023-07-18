@@ -1,40 +1,45 @@
 package com.ooml.codegen.modelizer;
 
 import com.ooml.codegen.modelizer.all.*;
+import com.ooml.codegen.models.Node;
 import com.ooml.codegen.models.nodes.*;
 
 public class ModelizerFactory {
 
 	public static IPackageModelizer createPackage() {
-		return new Modelizer(new NPackage());
+		return newModelizer(new NPackage());
 	}
 
 	public static IClassModelizer createClass() {
-		return new Modelizer(new NClass());
+		return newModelizer(new NClass());
 	}
 
-	public static IClassInheritanceModelizer createClassInheritance() {
-		return new Modelizer(new NInheritance.NInheritanceClass());
+	public static IInheritanceClassModelizer createClassInheritance() {
+		return newModelizer(new NInheritance.NInheritanceClass());
 	}
 
-	public static IInterfaceInheritanceModelizer createInterfaceInheritance() {
-		return new Modelizer(new NInheritance.NInheritanceInterface());
+	public static IInheritanceInterfaceModelizer createInterfaceInheritance() {
+		return newModelizer(new NInheritance.NInheritanceInterface());
 	}
 
 	public static IAttributModelizer createAttribut() {
-		return new Modelizer(new NAttribut());
+		return newModelizer(new NAttribut());
 	}
 
 	public static IConstructorModelizer createConstructor() {
-		return new Modelizer(new NConstructor());
+		return newModelizer(new NConstructor());
 	}
 
 	public static IParameterModelizer createParameter() {
-		return new Modelizer(new NParameter());
+		return newModelizer(new NParameter());
 	}
 
 	public static IMethodModelizer createMethod() {
-		return new Modelizer(new NMethod());
+		return newModelizer(new NMethod());
+	}
+
+	private static Modelizer newModelizer(Node node) {
+		return new Modelizer(node);
 	}
 
 }
