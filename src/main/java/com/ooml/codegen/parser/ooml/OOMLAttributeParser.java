@@ -4,7 +4,7 @@ import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.modelizer.ModelizerFactory;
-import com.ooml.codegen.modelizer.all.IAttributMlz;
+import com.ooml.codegen.modelizer.all.IAttributModelizer;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class OOMLAttributeParser extends Parser {
 
-	private final IAttributMlz attributModelizer = ModelizerFactory.createAttribut();
+	private final IAttributModelizer attributModelizer = ModelizerFactory.createAttribut();
 
 	public OOMLAttributeParser(LexerManager lexerManager) {
 		super(lexerManager);

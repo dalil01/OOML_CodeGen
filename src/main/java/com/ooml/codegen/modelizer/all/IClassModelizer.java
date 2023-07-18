@@ -5,9 +5,9 @@ import com.ooml.codegen.modelizer.IModelizer;
 
 import java.util.List;
 
-public interface IClassMlz extends IModelizer {
+public interface IClassModelizer extends IModelizer {
 
-	void addPackage(IPackageMlz modelizer) throws Exception;
+	void addPackage(IPackageModelizer modelizer) throws Exception;
 
 	void addClassAccessModifier(List<Token> tokenList);
 
@@ -17,8 +17,8 @@ public interface IClassMlz extends IModelizer {
 
 	void addName(List<Token> tokenList);
 
-	void addClassInheritance(IClassInheritanceMlz modelizer) throws Exception;
+	void addClassInheritance(IClassInheritanceModelizer modelizer) throws Exception;
 
-	void addInterfaceInheritance(IInterfaceInheritanceMlz modelizer) throws Exception;
+	void addInterfaceInheritance(IInterfaceInheritanceModelizer modelizer) throws Exception;
 
 }

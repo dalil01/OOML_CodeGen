@@ -5,14 +5,16 @@ import com.ooml.codegen.modelizer.IModelizer;
 
 import java.util.List;
 
-public interface IMethodMlz extends IModelizer {
+public interface IAttributModelizer extends IModelizer {
 
-	void addMethodAccessModifier(List<Token> tokenList);
+	void addAttributAccessModifier(List<Token> tokenList);
 
 	void addNonAccessModifiers(List<Token> tokenList);
 
 	void addName(List<Token> tokenList);
 
 	void addType(List<Token> tokenList);
+
+	void addValue(List<Token> tokenList);
 
 }

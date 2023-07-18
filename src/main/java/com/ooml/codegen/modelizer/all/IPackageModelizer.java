@@ -4,7 +4,7 @@ import com.ooml.codegen.lexer.Token;
 
 import java.util.List;
 
-public interface IPackageMlz extends IClassMlz {
+public interface IPackageModelizer extends IClassModelizer {
 
 	void addPackage(List<Token> tokenList);
 

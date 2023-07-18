@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 class Modelizer implements
-		IPackageMlz,
-		IClassMlz,
-		IClassInheritanceMlz,
-		IInterfaceInheritanceMlz,
-		IAttributMlz,
-		IConstructorMlz,
-		IParameterMlz,
-		IMethodMlz
+		IPackageModelizer,
+		IClassModelizer,
+		IClassInheritanceModelizer,
+		IInterfaceInheritanceModelizer,
+		IAttributModelizer,
+		IConstructorModelizer,
+		IParameterModelizer,
+		IMethodModelizer
 {
 
 	private final Node model;
@@ -62,7 +62,7 @@ class Modelizer implements
 	}
 
 	@Override
-	public void addPackage(IPackageMlz modelizer) throws Exception {
+	public void addPackage(IPackageModelizer modelizer) throws Exception {
 		this.addChild(modelizer.getModel());
 	}
 
@@ -125,7 +125,7 @@ class Modelizer implements
 	}
 
 	@Override
-	public void addClassInheritance(IClassInheritanceMlz modelizer) throws Exception {
+	public void addClassInheritance(IClassInheritanceModelizer modelizer) throws Exception {
 		this.addChild(modelizer.getModel());
 	}
 
@@ -139,7 +139,7 @@ class Modelizer implements
 	}
 
 	@Override
-	public void addInterfaceInheritance(IInterfaceInheritanceMlz modelizer) throws Exception {
+	public void addInterfaceInheritance(IInterfaceInheritanceModelizer modelizer) throws Exception {
 		this.addChild(modelizer.getModel());
 	}
 

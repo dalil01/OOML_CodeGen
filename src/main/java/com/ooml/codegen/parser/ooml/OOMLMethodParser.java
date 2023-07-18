@@ -4,7 +4,7 @@ import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.modelizer.ModelizerFactory;
-import com.ooml.codegen.modelizer.all.IMethodMlz;
+import com.ooml.codegen.modelizer.all.IMethodModelizer;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class OOMLMethodParser extends Parser {
 
-	private final IMethodMlz methodModelizer = ModelizerFactory.createMethod();
+	private final IMethodModelizer methodModelizer = ModelizerFactory.createMethod();
 
 	public OOMLMethodParser(LexerManager lexerManager) {
 		super(lexerManager);

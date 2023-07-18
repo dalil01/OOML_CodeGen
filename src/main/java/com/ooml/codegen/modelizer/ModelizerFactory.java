@@ -5,35 +5,35 @@ import com.ooml.codegen.models.nodes.*;
 
 public class ModelizerFactory {
 
-	public static IPackageMlz createPackage() {
+	public static IPackageModelizer createPackage() {
 		return new Modelizer(new NPackage());
 	}
 
-	public static IClassMlz createClass() {
+	public static IClassModelizer createClass() {
 		return new Modelizer(new NClass());
 	}
 
-	public static IClassInheritanceMlz createClassInheritance() {
+	public static IClassInheritanceModelizer createClassInheritance() {
 		return new Modelizer(new NInheritance.NInheritanceClass());
 	}
 
-	public static IInterfaceInheritanceMlz createInterfaceInheritance() {
+	public static IInterfaceInheritanceModelizer createInterfaceInheritance() {
 		return new Modelizer(new NInheritance.NInheritanceInterface());
 	}
 
-	public static IAttributMlz createAttribut() {
+	public static IAttributModelizer createAttribut() {
 		return new Modelizer(new NAttribut());
 	}
 
-	public static IConstructorMlz createConstructor() {
+	public static IConstructorModelizer createConstructor() {
 		return new Modelizer(new NConstructor());
 	}
 
-	public static IParameterMlz createParameter() {
+	public static IParameterModelizer createParameter() {
 		return new Modelizer(new NParameter());
 	}
 
-	public static IMethodMlz createMethod() {
+	public static IMethodModelizer createMethod() {
 		return new Modelizer(new NMethod());
 	}
 

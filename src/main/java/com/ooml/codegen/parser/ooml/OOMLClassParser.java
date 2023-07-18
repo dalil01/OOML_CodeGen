@@ -4,10 +4,10 @@ import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.modelizer.ModelizerFactory;
-import com.ooml.codegen.modelizer.all.IClassInheritanceMlz;
-import com.ooml.codegen.modelizer.all.IClassMlz;
-import com.ooml.codegen.modelizer.all.IInterfaceInheritanceMlz;
-import com.ooml.codegen.modelizer.all.IPackageMlz;
+import com.ooml.codegen.modelizer.all.IClassInheritanceModelizer;
+import com.ooml.codegen.modelizer.all.IClassModelizer;
+import com.ooml.codegen.modelizer.all.IInterfaceInheritanceModelizer;
+import com.ooml.codegen.modelizer.all.IPackageModelizer;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.UContextStack;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class OOMLClassParser extends Parser {
 
-	private final IClassMlz classModelizer = ModelizerFactory.createClass();
+	private final IClassModelizer classModelizer = ModelizerFactory.createClass();
 
 	public OOMLClassParser(LexerManager lexerManager) {
 		super(lexerManager);
@@ -43,7 +43,7 @@ public class OOMLClassParser extends Parser {
 			// We are sure to have the package name in the following token.
 			this.lexerManager.nextTokenType(true);
 
-			IPackageMlz packageModelizer = ModelizerFactory.createPackage();
+			IPackageModelizer packageModelizer = ModelizerFactory.createPackage();
 			packageModelizer.addPackage(this.lexerManager.consumeTokens());
 
 			this.classModelizer.addPackage(packageModelizer);
@@ -125,7 +125,7 @@ public class OOMLClassParser extends Parser {
 			Token lastToken = tokenList.remove(tokenList.size() - 1);
 			this.lexerManager.insertTokenBefore(lastToken);
 
-			IClassInheritanceMlz classInheritanceMlz = ModelizerFactory.createClassInheritance();
+			IClassInheritanceModelizer classInheritanceMlz = ModelizerFactory.createClassInheritance();
 			classInheritanceMlz.addClassInheritance(tokenList);
 
 			this.classModelizer.addClassInheritance(classInheritanceMlz);
@@ -164,7 +164,7 @@ public class OOMLClassParser extends Parser {
 			Token lastToken = tokenList.remove(tokenList.size() - 1);
 			this.lexerManager.insertTokenBefore(lastToken);
 
-			IInterfaceInheritanceMlz interfaceInheritanceMlz = ModelizerFactory.createInterfaceInheritance();
+			IInterfaceInheritanceModelizer interfaceInheritanceMlz = ModelizerFactory.createInterfaceInheritance();
 			interfaceInheritanceMlz.addInterfaceInheritance(tokenList);
 
 			this.classModelizer.addInterfaceInheritance(interfaceInheritanceMlz);

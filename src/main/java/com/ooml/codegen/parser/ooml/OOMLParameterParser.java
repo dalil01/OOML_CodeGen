@@ -4,7 +4,7 @@ import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.modelizer.ModelizerFactory;
-import com.ooml.codegen.modelizer.all.IParameterMlz;
+import com.ooml.codegen.modelizer.all.IParameterModelizer;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class OOMLParameterParser extends Parser {
 
-	private final IParameterMlz parameterModelizer = ModelizerFactory.createParameter();
+	private final IParameterModelizer parameterModelizer = ModelizerFactory.createParameter();
 
 	public OOMLParameterParser(LexerManager lexerManager) {
 		super(lexerManager);

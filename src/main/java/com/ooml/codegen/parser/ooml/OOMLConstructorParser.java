@@ -4,14 +4,14 @@ import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
 import com.ooml.codegen.modelizer.ModelizerFactory;
-import com.ooml.codegen.modelizer.all.IConstructorMlz;
+import com.ooml.codegen.modelizer.all.IConstructorModelizer;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
 
 public class OOMLConstructorParser extends Parser {
 
-	private final IConstructorMlz constructorModelizer = ModelizerFactory.createConstructor();
+	private final IConstructorModelizer constructorModelizer = ModelizerFactory.createConstructor();
 
 	public OOMLConstructorParser(LexerManager lexerManager) {
 		super(lexerManager);

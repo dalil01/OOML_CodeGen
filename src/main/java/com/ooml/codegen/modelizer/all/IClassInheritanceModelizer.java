@@ -5,7 +5,7 @@ import com.ooml.codegen.modelizer.IModelizer;
 
 import java.util.List;
 
-public interface IClassInheritanceMlz extends IModelizer {
+public interface IClassInheritanceModelizer extends IModelizer {
 
 	void addClassInheritance(List<Token> tokenList);
 
