@@ -3,7 +3,8 @@ package com.ooml.codegen.parser.ooml;
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
-import com.ooml.codegen.modelizer.nodes.AttributModelizer;
+import com.ooml.codegen.modelizer.ModelizerFactory;
+import com.ooml.codegen.modelizer.all.IAttributMlz;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class OOMLAttributeParser extends Parser {
 
-	private final AttributModelizer attributModelizer = new AttributModelizer();
+	private final IAttributMlz attributModelizer = ModelizerFactory.createAttribut();
 
 	public OOMLAttributeParser(LexerManager lexerManager) {
 		super(lexerManager);
@@ -36,7 +37,7 @@ public class OOMLAttributeParser extends Parser {
 	private void parseAccessModifier() throws Exception {
 		TokenType nextTokenType = this.lexerManager.nextTokenType(true);
 		if (nextTokenType == TokenType.SIGN || nextTokenType == TokenType.ACCESS_MODIFIER_BLOCK) {
-			this.attributModelizer.addAccessModifier(this.lexerManager.consumeTokens());
+			this.attributModelizer.addAttributAccessModifier(this.lexerManager.consumeTokens());
 		} else {
 			this.lexerManager.restore();
 		}
@@ -111,7 +112,7 @@ public class OOMLAttributeParser extends Parser {
 			}
 		}
 
-		this.attributModelizer.addDefaultValue(tokenList);
+		this.attributModelizer.addValue(tokenList);
 	}
 
 	private void parseEnd() throws Exception {

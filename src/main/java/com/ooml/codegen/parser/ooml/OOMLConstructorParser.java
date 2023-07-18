@@ -3,14 +3,15 @@ package com.ooml.codegen.parser.ooml;
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
-import com.ooml.codegen.modelizer.nodes.ConstructorModelizer;
+import com.ooml.codegen.modelizer.ModelizerFactory;
+import com.ooml.codegen.modelizer.all.IConstructorMlz;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
 
 public class OOMLConstructorParser extends Parser {
 
-	private final ConstructorModelizer constructorModelizer = new ConstructorModelizer();
+	private final IConstructorMlz constructorModelizer = ModelizerFactory.createConstructor();
 
 	public OOMLConstructorParser(LexerManager lexerManager) {
 		super(lexerManager);
@@ -29,7 +30,7 @@ public class OOMLConstructorParser extends Parser {
 	private void parseAccessModifier() throws Exception {
 		TokenType nextTokenType = this.lexerManager.nextTokenType(true);
 		if (nextTokenType == TokenType.SIGN || nextTokenType == TokenType.ACCESS_MODIFIER_BLOCK) {
-			this.constructorModelizer.addAccessModifier(this.lexerManager.consumeTokens());
+			this.constructorModelizer.addConstructorAccessModifier(this.lexerManager.consumeTokens());
 		} else {
 			this.lexerManager.restore();
 		}

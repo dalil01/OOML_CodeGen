@@ -3,7 +3,11 @@ package com.ooml.codegen.parser.ooml;
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
-import com.ooml.codegen.modelizer.nodes.ClassModelizer;
+import com.ooml.codegen.modelizer.ModelizerFactory;
+import com.ooml.codegen.modelizer.all.IClassInheritanceMlz;
+import com.ooml.codegen.modelizer.all.IClassMlz;
+import com.ooml.codegen.modelizer.all.IInterfaceInheritanceMlz;
+import com.ooml.codegen.modelizer.all.IPackageMlz;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.UContextStack;
@@ -14,7 +18,7 @@ import java.util.List;
 
 public class OOMLClassParser extends Parser {
 
-	private final ClassModelizer classModelizer = new ClassModelizer();
+	private final IClassMlz classModelizer = ModelizerFactory.createClass();
 
 	public OOMLClassParser(LexerManager lexerManager) {
 		super(lexerManager);
@@ -38,7 +42,11 @@ public class OOMLClassParser extends Parser {
 		if (nextTokenType == Token.TokenType.PACKAGE) {
 			// We are sure to have the package name in the following token.
 			this.lexerManager.nextTokenType(true);
-			this.classModelizer.addPackage(this.lexerManager.consumeTokens());
+
+			IPackageMlz packageModelizer = ModelizerFactory.createPackage();
+			packageModelizer.addPackage(this.lexerManager.consumeTokens());
+
+			this.classModelizer.addPackage(packageModelizer);
 		} else {
 			this.lexerManager.restore();
 		}
@@ -46,20 +54,19 @@ public class OOMLClassParser extends Parser {
 
 	private void parseAccessModifier() throws Exception {
 		TokenType nextTokenType = this.lexerManager.nextTokenType(true);
-
 		if (nextTokenType != Token.TokenType.SIGN) {
 			this.lexerManager.restore();
 			return;
 		}
 
-		this.classModelizer.addAccessModifier(this.lexerManager.consumeTokens());
+		this.classModelizer.addClassAccessModifier(this.lexerManager.consumeTokens());
 	}
 
 	private void parseNonAccessModifiers() throws Exception {
 		TokenType nextTokenType = this.lexerManager.nextTokenType(true);
 
 		while (nextTokenType != TokenType.CLASS) {
-			this.classModelizer.addNonAccessModifier(this.lexerManager.consumeTokens());
+			this.classModelizer.addNonAccessModifiers(this.lexerManager.consumeTokens());
 			nextTokenType = this.lexerManager.nextTokenType(true);
 		}
 
@@ -118,7 +125,10 @@ public class OOMLClassParser extends Parser {
 			Token lastToken = tokenList.remove(tokenList.size() - 1);
 			this.lexerManager.insertTokenBefore(lastToken);
 
-			this.classModelizer.addClassInheritance(tokenList);
+			IClassInheritanceMlz classInheritanceMlz = ModelizerFactory.createClassInheritance();
+			classInheritanceMlz.addClassInheritance(tokenList);
+
+			this.classModelizer.addClassInheritance(classInheritanceMlz);
 		}
 
 		this.lexerManager.restore();
@@ -154,7 +164,10 @@ public class OOMLClassParser extends Parser {
 			Token lastToken = tokenList.remove(tokenList.size() - 1);
 			this.lexerManager.insertTokenBefore(lastToken);
 
-			this.classModelizer.addInterfaceInheritance(tokenList);
+			IInterfaceInheritanceMlz interfaceInheritanceMlz = ModelizerFactory.createInterfaceInheritance();
+			interfaceInheritanceMlz.addInterfaceInheritance(tokenList);
+
+			this.classModelizer.addInterfaceInheritance(interfaceInheritanceMlz);
 		}
 
 		this.lexerManager.restore();
@@ -206,6 +219,12 @@ public class OOMLClassParser extends Parser {
 				case CLASS -> {
 					this.lexerManager.restore();
 					this.classModelizer.getModel().addChild((new OOMLClassParser(this.lexerManager)).parse());
+				}
+				case ENUM -> {
+					// TODO
+				}
+				case INTERFACE -> {
+					// TODO
 				}
 				case CLOSING_CURLY_BRACKET -> {
 					if (contextStack.empty()) {

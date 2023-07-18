@@ -3,7 +3,8 @@ package com.ooml.codegen.parser.ooml;
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
-import com.ooml.codegen.modelizer.nodes.ParameterModelizer;
+import com.ooml.codegen.modelizer.ModelizerFactory;
+import com.ooml.codegen.modelizer.all.IParameterMlz;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class OOMLParameterParser extends Parser {
 
-	private final ParameterModelizer parameterModelizer = new ParameterModelizer();
+	private final IParameterMlz parameterModelizer = ModelizerFactory.createParameter();
 
 	public OOMLParameterParser(LexerManager lexerManager) {
 		super(lexerManager);
@@ -60,7 +61,7 @@ public class OOMLParameterParser extends Parser {
 		Collections.reverse(nameTokens);
 		this.lexerManager.insertTokensBefore(nameTokens);
 
-		this.parameterModelizer.addNonAccessModifier(beforeColonTokens);
+		this.parameterModelizer.addNonAccessModifiers(beforeColonTokens);
 	}
 
 	private void parseName() throws Exception {
@@ -103,7 +104,7 @@ public class OOMLParameterParser extends Parser {
 			}
 		}
 
-		this.parameterModelizer.addDefaultValue(tokenList);
+		this.parameterModelizer.addValue(tokenList);
 	}
 
 }

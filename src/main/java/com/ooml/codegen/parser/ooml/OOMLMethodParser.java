@@ -3,19 +3,19 @@ package com.ooml.codegen.parser.ooml;
 import com.ooml.codegen.lexer.LexerManager;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.Token.TokenType;
-import com.ooml.codegen.modelizer.nodes.MethodModelizer;
+import com.ooml.codegen.modelizer.ModelizerFactory;
+import com.ooml.codegen.modelizer.all.IMethodMlz;
 import com.ooml.codegen.models.Node;
 import com.ooml.codegen.parser.Parser;
 import com.ooml.codegen.utils.ULogger;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class OOMLMethodParser extends Parser {
 
-	MethodModelizer methodModelizer = new MethodModelizer();
+	private final IMethodMlz methodModelizer = ModelizerFactory.createMethod();
 
 	public OOMLMethodParser(LexerManager lexerManager) {
 		super(lexerManager);
@@ -36,7 +36,7 @@ public class OOMLMethodParser extends Parser {
 	private void parseAccessModifier() throws Exception {
 		Token.TokenType nextTokenType = this.lexerManager.nextTokenType(true);
 		if (nextTokenType == Token.TokenType.SIGN || nextTokenType == Token.TokenType.ACCESS_MODIFIER_BLOCK) {
-			this.methodModelizer.addAccessModifier(this.lexerManager.consumeTokens());
+			this.methodModelizer.addMethodAccessModifier(this.lexerManager.consumeTokens());
 		} else {
 			this.lexerManager.restore();
 		}
