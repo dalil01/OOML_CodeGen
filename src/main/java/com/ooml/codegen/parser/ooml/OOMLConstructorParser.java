@@ -47,6 +47,7 @@ public class OOMLConstructorParser extends Parser {
 
 	private void parseParameters() throws Exception {
 		TokenType nextTokenType = this.lexerManager.nextTokenType(true);
+		System.out.println(nextTokenType);
 		if (nextTokenType != TokenType.OPENING_PARENTHESIS) {
 			// TODO
 			ULogger.error("unexpected token ");

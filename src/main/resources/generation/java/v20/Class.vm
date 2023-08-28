@@ -1,6 +1,8 @@
-#if($package)
-package $package;
+$beforePackageComments
+#if($packageName)
+package $packageName;
 #end
+
 #if($imports && !$imports.isEmpty())
 
 #foreach($import in $imports)

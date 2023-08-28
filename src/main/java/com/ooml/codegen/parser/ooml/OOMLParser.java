@@ -1,6 +1,5 @@
 package com.ooml.codegen.parser.ooml;
 
-import com.ooml.codegen.generator.ICodeGenNode;
 import com.ooml.codegen.lexer.Token;
 import com.ooml.codegen.lexer.ooml.OOMLLexerManager;
 import com.ooml.codegen.models.Node;
@@ -26,7 +25,7 @@ public class OOMLParser extends Parser {
 
 	@Override
 	public Node parse() throws Exception {
-		Stream.Builder<ICodeGenNode> streamBuilder = Stream.builder();
+		//Stream.Builder<ICodeGenNode> streamBuilder = Stream.builder();
 
 		TokenType nextTokenType = this.lexerManager.nextTokenType();
 		while (nextTokenType != TokenType.EOF) {
@@ -47,7 +46,7 @@ public class OOMLParser extends Parser {
 				}
 				case CLASS -> {
 					this.lexerManager.restore();
-					this.parseClass();
+					return this.parseClass();
 					//streamBuilder.add();
 				}
 			}
@@ -78,14 +77,12 @@ public class OOMLParser extends Parser {
 			ULogger.error("Missing : or {");
 		}
 
-		this.lexerManager.consumeTokens();
+		this.packageTokenList.addAll(this.lexerManager.consumeTokens());
 	}
 
 	private Node parseClass() throws Exception {
 		this.lexerManager.insertTokensBefore(packageTokenList);
 		Node clazz = new OOMLClassParser(this.lexerManager).parse();
-
-		clazz.printTree();
 
 		return clazz;
 	}

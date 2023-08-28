@@ -1,53 +1,76 @@
 package com.ooml.codegen.generator;
 
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import com.ooml.codegen.models.Node;
+import com.ooml.codegen.models.nodes.NAttribut;
+import com.ooml.codegen.models.nodes.NInheritance;
+import com.ooml.codegen.models.nodes.NPackage;
+import com.ooml.codegen.models.nodes.leafs.*;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
-public abstract class Generator {
+public abstract class Generator implements IGenerator {
 
-	private final VelocityEngine engine;
-	private Template template;
-	private VelocityContext context;
+	private static StringBuilder s = new StringBuilder();
 
-	protected Generator() {
-		this.engine = new VelocityEngine();
-		this.engine.setProperty("resource.loader", "classpath");
-		this.engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-		this.engine.init();
+	protected final Node node;
+
+	protected Generator(Node node) {
+		this.node = node;
 	}
 
-	public abstract void generate(ICodeGenNode obj);
+	protected void traverse(Node node, Class<?>[] orders, BiConsumer<Integer, Node> action) {
 
-	protected void setTemplate(String filePath) {
-		this.template = this.engine.getTemplate("generation/" + filePath);
-		this.context = new VelocityContext();
+
+		AtomicInteger i = new AtomicInteger();
+		node.getChildren().forEach(childNode -> {
+			if (childNode.isOnNewLine()) {
+				Generator.append("\n");
+			}
+
+			if (childNode instanceof LComment) {
+				this.generateComment((LComment) childNode);
+			} else {
+				action.accept(i.get(), childNode);
+			}
+
+			if (childNode.hasNext()) {
+				Generator.append(" ");
+			}
+
+			i.getAndIncrement();
+		});
 	}
 
-	protected void addContextToTemplate(String key, Object value) {
-		if (this.template == null) {
-			System.out.println("No template found. Please set template before.");
-			return;
-		}
+	public static void main(String[] args) {
 
-		this.context.put(key, value);
 	}
 
-	protected void generateFile(String filePath) {
-		if (this.context == null) {
-			System.out.println("No context found.");
-			return;
-		}
-
-		try (FileWriter writer = new FileWriter(filePath)) {
-			this.template.merge(this.context, writer);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	protected static void append(String str) {
+		Generator.s.append(str);
 	}
+
+	public void printGenerated() {
+		System.out.println(s);
+	}
+
+	protected abstract void generateComment(LComment lComment);
+
+	protected abstract void generatePackage(NPackage nPackage);
+
+	protected abstract void generateAccessModifier(LAccessModifier lAccessModifier);
+
+	protected abstract void generateNonAccessModifier(LNonAccessModifier lNonAccessModifier);
+
+	protected abstract void generateDeclaration(LDeclaration lDeclaration);
+
+	protected abstract void generateName(LName lName);
+
+	protected abstract void generateInheritance(NInheritance nInheritance);
+
+	protected abstract void generateValue(LValue lValue);
+
+	protected abstract void generateAttribute(NAttribut nAttribut);
 
 }

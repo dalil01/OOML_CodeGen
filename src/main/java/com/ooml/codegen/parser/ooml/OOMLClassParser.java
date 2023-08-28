@@ -40,8 +40,9 @@ public class OOMLClassParser extends Parser {
 	private void parsePackage() throws Exception {
 		Token.TokenType nextTokenType = this.lexerManager.nextTokenType(true);
 		if (nextTokenType == Token.TokenType.PACKAGE) {
-			// We are sure to have the package name in the following token.
-			this.lexerManager.nextTokenType(true);
+			while (nextTokenType != TokenType.COLON && nextTokenType != TokenType.OPENING_CURLY_BRACKET) {
+				nextTokenType = this.lexerManager.nextTokenType(true);
+			}
 
 			IPackageModelizer packageModelizer = ModelizerFactory.createPackage();
 			packageModelizer.addPackage(this.lexerManager.consumeTokens());

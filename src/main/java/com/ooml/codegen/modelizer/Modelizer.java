@@ -7,6 +7,7 @@ import com.ooml.codegen.models.Node;
 import com.ooml.codegen.models.nodes.leafs.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
 class Modelizer implements
@@ -20,6 +21,9 @@ class Modelizer implements
 
 	private final Node model;
 
+	private static int lastTokenLine = 1;
+	private static boolean onNewLine;
+
 	protected Modelizer(Node model) {
 		this.model = model;
 	}
@@ -32,11 +36,17 @@ class Modelizer implements
 
 	@Override
 	public void addComment(Token token) {
+		LComment comment;
+
 		if (token.getType() == Token.TokenType.SINGLE_LINE_COMMENT) {
-			this.model.addChild(new LCommentSingleLine(token.getValue()));
+			comment = new LCommentSingleLine(token.getValue());
 		} else {
-			this.model.addChild(new LCommentMultiLine(token.getValue()));
+			comment = new LCommentMultiLine(token.getValue());
 		}
+
+		comment.setOnNewLine(onNewLine);
+
+		this.model.addChild(comment);
 	}
 
 	@Override
@@ -52,9 +62,13 @@ class Modelizer implements
 	public void addPackage(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
 			if (type == Token.TokenType.PACKAGE) {
-				this.addChild(new LDeclaration(value));
+				LDeclaration lDeclaration = new LDeclaration(value);
+				lDeclaration.setOnNewLine(onNewLine);
+				this.addChild(lDeclaration);
 			} else if (type == Token.TokenType.WORD || type == Token.TokenType.QUOTED_WORD) {
-				this.addChild(new LName(value));
+				LName lName = new LName(value);
+				lName.setOnNewLine(onNewLine);
+				this.addChild(lName);
 			}
 		});
 	}
@@ -67,57 +81,72 @@ class Modelizer implements
 	@Override
 	public void addClassAccessModifier(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LAccessModifierClass(value));
+			LAccessModifierClass lAccessModifierClass = new LAccessModifierClass(value);
+			lAccessModifierClass.setOnNewLine(onNewLine);
+			this.addChild(lAccessModifierClass);
 		});
 	}
 
 	@Override
 	public void addAttributAccessModifier(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LAccessModifierAttribut(value));
+			LAccessModifierAttribut lAccessModifierAttribut = new LAccessModifierAttribut(value);
+			this.addChild(lAccessModifierAttribut);
 		});
 	}
 
 	@Override
 	public void addConstructorAccessModifier(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LAccessModifierConstructor(value));
+			LAccessModifierConstructor lAccessModifierConstructor = new LAccessModifierConstructor(value);
+			lAccessModifierConstructor.setOnNewLine(onNewLine);
+			this.addChild(lAccessModifierConstructor);
 		});
 	}
 
 	@Override
 	public void addMethodAccessModifier(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LAccessModifierMethod(value));
+			LAccessModifierMethod lAccessModifierMethod = new LAccessModifierMethod(value);
+			lAccessModifierMethod.setOnNewLine(onNewLine);
+			this.addChild(lAccessModifierMethod);
 		});
 	}
 
 	@Override
 	public void addNonAccessModifiers(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LNonAccessModifier(value));
+			LNonAccessModifier lNonAccessModifier = new LNonAccessModifier(value);
+			lNonAccessModifier.setOnNewLine(onNewLine);
+			this.addChild(lNonAccessModifier);
 		});
 	}
 
 	@Override
 	public void addDeclaration(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LDeclaration(value));
+			LDeclaration lDeclaration = new LDeclaration(value);
+			lDeclaration.setOnNewLine(onNewLine);
+			this.addChild(lDeclaration);
 		});
 	}
 
 	@Override
 	public void addName(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LName(value));
+			LName lName = new LName(value);
+			lName.setOnNewLine(onNewLine);
+			this.addChild(lName);
 		});
 	}
 
 	@Override
 	public void addClassInheritance(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			if (type != TokenType.INTERFACE_INHERITANCE && type != TokenType.COMMA) {
-				this.addChild(new LValue(value));
+			if (type != TokenType.CLASS_INHERITANCE && type != TokenType.INTERFACE_INHERITANCE && type != TokenType.COMMA) {
+				LValue lValue = new LValue(value);
+				lValue.setOnNewLine(onNewLine);
+				this.addChild(lValue);
 			}
 		});
 	}
@@ -130,8 +159,10 @@ class Modelizer implements
 	@Override
 	public void addInterfaceInheritance(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			if (type != TokenType.CLASS_INHERITANCE && type != TokenType.COMMA) {
-				this.addChild(new LValue(value));
+			if (type != TokenType.INTERFACE_INHERITANCE && type != TokenType.CLASS_INHERITANCE && type != TokenType.COMMA) {
+				LValue lValue = new LValue(value);
+				lValue.setOnNewLine(onNewLine);
+				this.addChild(lValue);
 			}
 		});
 	}
@@ -144,25 +175,33 @@ class Modelizer implements
 	@Override
 	public void addType(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LType(value));
+			LType lType = new LType(value);
+			lType.setOnNewLine(onNewLine);
+			this.addChild(lType);
 		});
 	}
 
 	@Override
 	public void addValue(List<Token> tokenList) {
 		this.foreachAndConsumeComments(tokenList, (type, value) -> {
-			this.addChild(new LValue(value));
+			LValue lValue = new LValue(value);
+			lValue.setOnNewLine(onNewLine);
+			this.addChild(lValue);
 		});
 	}
 
 	private void foreachAndConsumeComments(List<Token> tokenList, BiConsumer<TokenType, String> action) {
 		for (Token token : tokenList) {
+			onNewLine = token.getLineN() > lastTokenLine;
+
 			if (token.isComment()) {
 				this.addComment(token);
+				lastTokenLine = token.getLineN();
 				continue;
 			}
 
 			action.accept(token.getType(), token.getValue());
+			lastTokenLine = token.getLineN();
 		}
 	}
 

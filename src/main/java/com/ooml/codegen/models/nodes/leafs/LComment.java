@@ -8,4 +8,8 @@ public abstract class LComment extends Leaf {
 		super(value);
 	}
 
+	public boolean isMultiLine() {
+		return this instanceof LCommentMultiLine;
+	}
+
 }

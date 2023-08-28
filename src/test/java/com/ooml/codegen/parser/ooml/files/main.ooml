@@ -13,12 +13,12 @@
 
 ~ /* blabla */ src.app /* */:
 
-	/* aa */ + abstract class /* */ User -> /* */ AbstractUser, /* */ Abs ~> ICustomer {
+	/* aa */ + abstract class /* */ User -> /* */ AbstractUser, /* */ Abs ~> ICustomer /**/ {
 
 	// TODO : Manage multi line comment with UContext.
 
 	// Attributs
-	//	 - /*  */ static /* */ id /* */: int = <new Arraylist( 0 )>;
+	- /*  */ static /* */ id /* */: int = <new Arraylist( 0 )>;
 
 	/*
 		#:
@@ -38,7 +38,8 @@
 		// Constructors
 
 		()
-		//+ User(final /* */ firstname: string, lastname: string id: string);
+		+ (final /* */ firstname: string)
+		// User(firstname: string);
 		//# User(final /* */ firstname: string, lastname: string);
 
 

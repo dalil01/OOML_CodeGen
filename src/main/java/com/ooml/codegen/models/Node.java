@@ -1,5 +1,6 @@
 package com.ooml.codegen.models;
 
+import com.ooml.codegen.models.nodes.leafs.LComment;
 import com.ooml.codegen.models.nodes.leafs.LCommentMultiLine;
 import com.ooml.codegen.models.nodes.leafs.LCommentSingleLine;
 import com.ooml.codegen.utils.UString;
@@ -9,12 +10,17 @@ import java.util.function.Consumer;
 
 public abstract class Node {
 
+	private Node previous;
+	private Node next;
+
 	private final LinkedList<Node> children = new LinkedList<>();
 
 	protected enum NbTime { ZERO_OR_ONE, ONE, ZERO_OR_MULTI, ONE_OR_MULTI }
 
 	private final Map<Class<? extends Node>, NbTime> nbTimeBySupportedChild = new HashMap<>();
 	private final Map<Class<? extends Node>, Integer> nTimeByChildClass = new HashMap<>();
+
+	private boolean onNewLine = false;
 
 	protected Node() {
 		this.nbTimeBySupportedChild.put(LCommentSingleLine.class, NbTime.ZERO_OR_MULTI);
@@ -37,6 +43,12 @@ public abstract class Node {
 			throw new UnsupportedOperationException("This node cannot be added more than once.");
 		}
 
+		if (this.children.size() > 0) {
+			Node lastChild = this.children.getLast();
+			node.setPrevious(lastChild);
+			lastChild.setNext(node);
+		}
+
 		this.children.add(node);
 
 		Integer nTime = this.nTimeByChildClass.get(nodeClass);
@@ -45,6 +57,38 @@ public abstract class Node {
 		}
 
 		this.nTimeByChildClass.put(nodeClass, nTime + 1);
+	}
+
+	public boolean hasPrevious() {
+		return this.previous != null;
+	}
+
+	public Node getPrevious() {
+		return this.previous;
+	}
+
+	public void setPrevious(Node previous) {
+		this.previous = previous;
+	}
+
+	public boolean previousIsComment() {
+		return this.previous != null && this.previous instanceof LComment;
+	}
+
+	public boolean hasNext() {
+		return this.next != null;
+	}
+
+	public Node getNext() {
+		return this.next;
+	}
+
+	public void setNext(Node next) {
+		this.next = next;
+	}
+
+	public boolean nextIsComment() {
+		return this.next != null && this.next instanceof LComment;
 	}
 
 	public boolean hasChildren() {
@@ -57,6 +101,14 @@ public abstract class Node {
 
 	public boolean hasChild(Node node) {
 		return this.children.contains(node);
+	}
+
+	public boolean isOnNewLine() {
+		return this.onNewLine;
+	}
+
+	public void setOnNewLine(boolean value) {
+		this.onNewLine = value;
 	}
 
 	public Integer findNTimeChildClass(Class<? extends Node> nodeClass) {
@@ -76,6 +128,10 @@ public abstract class Node {
 				node.traverse(action);
 			}
 		});
+	}
+
+	public void n1Traverse(Consumer<Node> action) {
+		this.children.forEach(action);
 	}
 
 	public void check() throws Exception {
@@ -114,7 +170,7 @@ public abstract class Node {
 
 		String nodeStr;
 		if (node instanceof Leaf) {
-			nodeStr = node.getClass().getSimpleName() + " (" + UString.replaceNewlines(((Leaf) node).getValue()) + ")";
+			nodeStr = node.getClass().getSimpleName() + " (" + UString.replaceNewlines(((Leaf) node).getValue()) + ")" + ((node.isOnNewLine()) ? " +1 " : "");
 		} else {
 			nodeStr = node.toString();
 		}
