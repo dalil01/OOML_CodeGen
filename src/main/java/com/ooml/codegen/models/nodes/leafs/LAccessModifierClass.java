@@ -4,16 +4,8 @@ import com.ooml.codegen.utils.ULogger;
 
 public class LAccessModifierClass extends LAccessModifier {
 
-	private final LAccessModifier modifier;
-
 	public LAccessModifierClass(String sign) {
 		super(sign);
-		this.modifier = this.findModifierFromSignValue();
-	}
-
-	@Override
-	public String getValueForJava() {
-		return this.modifier.getValueForJava();
 	}
 
 	@Override

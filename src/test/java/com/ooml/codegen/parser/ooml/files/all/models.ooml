@@ -11,7 +11,10 @@
 	}
 
 	~ enums {
-		+ enum Role: ADMIN, CUSTOMER;
+		+ enum Role:
+		ADMIN = "dd", CUSTOMER;
+
+
 	}
 
 	+ abstract class User -> IUSerInfo {

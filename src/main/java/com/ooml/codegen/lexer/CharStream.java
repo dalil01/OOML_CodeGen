@@ -10,7 +10,6 @@ public class CharStream {
 	private int lineN = 0;
 	private boolean reachedEOF = false;
 
-
 	/**
 	 * CharStream Constructor, opens file and loads a character in internal buffer if file is not empty.
 	 * Updates EOF status if file is empty.
@@ -55,7 +54,9 @@ public class CharStream {
 
 			return false;
 		}
+
 		this.charN++;
+
 		this.currentChar = (char) readChar;
 		if (this.currentChar == '\n') {
 			this.lineN++;

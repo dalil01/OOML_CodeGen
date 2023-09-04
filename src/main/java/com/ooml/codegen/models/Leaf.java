@@ -1,12 +1,10 @@
 package com.ooml.codegen.models;
 
-import com.ooml.codegen.utils.UString;
-
 import java.util.Map;
 
 public abstract class Leaf extends Node {
 
-	private final String value;
+	private String value;
 
 	protected Leaf(String value) {
 		this.value = value;
@@ -33,6 +31,10 @@ public abstract class Leaf extends Node {
 
 	public String getValue() {
 		return this.value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	@Override

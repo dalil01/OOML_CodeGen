@@ -1,9 +1,7 @@
 package com.ooml.codegen.parser;
 
-import com.ooml.codegen.generator.ICodeGenNode;
 import com.ooml.codegen.lexer.LexerManager;
-
-import java.util.stream.Stream;
+import com.ooml.codegen.models.Node;
 
 public abstract class Parser {
 
@@ -13,6 +11,6 @@ public abstract class Parser {
 		this.lexerManager = lexerManager;
 	}
 
-	public abstract Stream<ICodeGenNode> parse() throws Exception;
+	public abstract Node parse() throws Exception;
 
 }

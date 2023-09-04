@@ -19,8 +19,9 @@ public class Token {
 		SEMI_COLON,
 		EQUAL,
 		SIGN,
-		QUOTED_WORD,
 		WORD,
+		QUOTED_WORD,
+		TAG_WORD,
 		COMMA,
 		OPENING_PARENTHESIS,
 		CLOSING_PARENTHESIS,
@@ -75,6 +76,18 @@ public class Token {
 
 	public int getLineN() {
 		return this.lineN;
+	}
+
+	public boolean isComment() {
+		return this.type == TokenType.SINGLE_LINE_COMMENT || this.type == TokenType.MULTI_LINE_COMMENT;
+	}
+
+	public boolean isParenthesis() {
+		return this.type == TokenType.OPENING_PARENTHESIS || this.type == TokenType.CLOSING_PARENTHESIS;
+	}
+
+	public boolean isAccessModifier() {
+		return this.type == TokenType.SIGN || this.type == TokenType.ACCESS_MODIFIER_BLOCK;
 	}
 
 	@Override

@@ -26,6 +26,7 @@ public enum OOMLSymbols {
 	SEMI_COLON(';'),
 	TIDLE('~'),
 	AT('@'),
+	LESS_THAN('<'),
 	GREATER_THAN('>'),
 	OPENING_PARENTHESIS('('),
 	CLOSING_PARENTHESIS(')'),

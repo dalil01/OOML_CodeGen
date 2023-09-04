@@ -13,60 +13,55 @@ public abstract class LexerManager {
 
 	protected final File initialFile;
 
-	protected Token currentToken;
-
-	private final LinkedList<Token> unConsumedTokenList = new LinkedList<>();
+	private final List<Token> unConsumedTokenList = new ArrayList<>();
+	private LinkedList<Token> nextTokens = new LinkedList<>();
 
 	protected LexerManager(Lexer lexer) {
 		this.stack = new ArrayDeque<>();
-		stack.push(lexer);
+		this.stack.push(lexer);
 		this.initialFile = lexer.getFile();
 	}
 
-	public Token getCurrentToken() throws FileNotFoundException {
-		return this.currentToken == null ? this.nextToken() : this.currentToken;
-	}
-
 	public Token nextToken() throws FileNotFoundException {
-		for (Token token : this.unConsumedTokenList) {
-			if (token.getType() == TokenType.IMPORT) {
-				this.manageImport(token);
-				return this.nextToken();
-			}
-
-			this.currentToken = token;
-			this.unConsumedTokenList.removeFirst();
-
-			return this.currentToken;
-		}
-
-		if (!stack.isEmpty()) {
-			Token t = this.stack.peek().nextToken();
-
-			if (t.getType() == TokenType.EOF) {
-				this.stack.pop();
-				return this.nextToken();
-			}
-
-			if (t.getType() == TokenType.IMPORT) {
-				this.manageImport(t);
-				return this.nextToken();
-			}
-
-			this.currentToken = t;
-
-			return t;
-		}
-
-		return new Token(TokenType.EOF, this.initialFile.toPath(), 0, 0);
+		return this.nextTokenHelper(false);
 	}
 
-	public void insertToken(Token token) {
-		this.unConsumedTokenList.add(token);
+	public Token nextToken(boolean skipComment) throws FileNotFoundException {
+		return this.nextTokenHelper(skipComment);
 	}
 
-	public void insertTokens(List<Token> tokens) {
-		this.unConsumedTokenList.addAll(tokens);
+	public TokenType nextTokenType() throws FileNotFoundException {
+		return this.nextTokenHelper(false).getType();
+	}
+
+	public TokenType nextTokenType(boolean skipComment) throws FileNotFoundException {
+		return this.nextTokenHelper(skipComment).getType();
+	}
+
+	public String nextTokenValue() throws FileNotFoundException {
+		return this.nextTokenHelper(false).getValue();
+	}
+
+	public String nextTokenValue(boolean skipComment) throws FileNotFoundException {
+		return this.nextTokenHelper(skipComment).getValue();
+	}
+
+	public List<Token> consumeTokens() {
+		List<Token> tokenList = new ArrayList<>(this.unConsumedTokenList);
+		this.unConsumedTokenList.clear();
+		return tokenList;
+	}
+
+	public void restore() {
+		this.nextTokens.addAll(0, this.consumeTokens());
+	}
+
+	public void insertTokenBefore(Token token) {
+		this.nextTokens.add(0, token);
+	}
+
+	public void insertTokensBefore(List<Token> tokenList) {
+		this.nextTokens.addAll(0, tokenList);
 	}
 
 	public void forEach(BiConsumer<Integer, Token> action) throws FileNotFoundException {
@@ -81,5 +76,47 @@ public abstract class LexerManager {
 	}
 
 	protected abstract void manageImport(Token token) throws FileNotFoundException;
+
+	private Token nextTokenHelper(boolean skipComment) throws FileNotFoundException {
+		Token nextToken;
+
+		if (!this.nextTokens.isEmpty()) {
+			nextToken = this.nextTokens.removeFirst();
+			this.unConsumedTokenList.add(nextToken);
+
+			if (skipComment && nextToken.isComment()) {
+				return this.nextTokenHelper(skipComment);
+			}
+
+			return nextToken;
+		}
+
+		if (!stack.isEmpty()) {
+			nextToken = this.stack.peek().nextToken();
+
+			if (nextToken.getType() == TokenType.EOF) {
+				this.stack.pop();
+				return this.nextTokenHelper(skipComment);
+			}
+
+			if (nextToken.getType() == TokenType.IMPORT) {
+				this.manageImport(nextToken);
+				return this.nextTokenHelper(skipComment);
+			}
+
+			this.unConsumedTokenList.add(nextToken);
+
+			if (skipComment && nextToken.isComment()) {
+				return this.nextTokenHelper(skipComment);
+			}
+
+			return nextToken;
+		}
+
+		nextToken = new Token(TokenType.EOF, this.initialFile.toPath(), 0, 0);
+		this.unConsumedTokenList.add(nextToken);
+
+		return nextToken;
+	}
 
 }
